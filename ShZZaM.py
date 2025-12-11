@@ -14,7 +14,7 @@ import google.generativeai as genai
 from google.generativeai import types
 from anthropic import Anthropic, APIStatusError
 
-LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. A question must be translated into a formula with the 'conjecture' role. All other formulae must have the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
+LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other formulae must have the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
 SUMO_TERM_REQUEST:str = "Use symbols from the SUMO ontology."
 NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION
 L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Provide only the English as plain text, no explanations or summary."
@@ -110,44 +110,61 @@ def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,s
     NL2LModel:str = ""
     L2NLModel:str = ""
     SimilarityModel:str = ""
+    FileModel:str = ""
 #---Can't declare Matches:re.Match = None
 
-#----Set defaults for all models
-    if hasattr(CommandLineArguments,"model"):
-        NL2LModel = SetModel(CommandLineArguments.model)
-        L2NLModel = SetModel(CommandLineArguments.model)
-        SimilarityModel = SetModel(CommandLineArguments.model)
+#----First look if a key is specified in the file
+    Matches = re.search(r"^#\s*([A-Z]+)_API_KEY\s*=\s*(.+)",APIKeyLines,re.MULTILINE)
+    if Matches:
+        if Matches.group(1) == "OPENAI":
+            FileModel = "OpenAI"
+            OPENAI_API_KEY = Matches.group(2)
+        elif Matches.group(1) == "GOOGLE":
+            FileModel = "Google"
+            GOOGLE_API_KEY = Matches.group(2)
+        elif Matches.group(1) == "ANTHROPIC":
+            FileModel = "Anthropic"
+            ANTHROPIC_API_KEY = Matches.group(2)
+        else:
+            print(f"ERROR: {Matches.group(1)} is not a known model")
+            sys.exit(0)
+        NL2LModel = SetModel(FileModel)
+        L2NLModel = SetModel(FileModel)
+        SimilarityModel = SetModel(FileModel)
+#----Otherwise use non-file model
     else:
-        NL2LModel = SetModel(DEFAULT_NL2L_MODEL)
-        L2NLModel = SetModel(DEFAULT_L2NL_MODEL)
-        SimilarityModel = SetModel(DEFAULT_SIMILARITY_MODEL)
+#----Set for all models, either from argument or defaults
+        if hasattr(CommandLineArguments,"model"):
+            NL2LModel = SetModel(CommandLineArguments.model)
+            L2NLModel = SetModel(CommandLineArguments.model)
+            SimilarityModel = SetModel(CommandLineArguments.model)
+        else:
+            NL2LModel = SetModel(DEFAULT_NL2L_MODEL)
+            L2NLModel = SetModel(DEFAULT_L2NL_MODEL)
+            SimilarityModel = SetModel(DEFAULT_SIMILARITY_MODEL)
 #----Override for individual uses
-    if hasattr(CommandLineArguments,"nl2l_model"):
-        NL2LModel = SetModel(CommandLineArguments.nl2l_model)
-    if hasattr(CommandLineArguments,"l2nl_model"):
-        L2NLModel = SetModel(CommandLineArguments.l2nl_model)
-    if hasattr(CommandLineArguments,"similarity_model"):
-        SimilarityModel = SetModel(CommandLineArguments.similarity_model)
+        if hasattr(CommandLineArguments,"nl2l_model"):
+            NL2LModel = SetModel(CommandLineArguments.nl2l_model)
+        if hasattr(CommandLineArguments,"l2nl_model"):
+            L2NLModel = SetModel(CommandLineArguments.l2nl_model)
+        if hasattr(CommandLineArguments,"similarity_model"):
+            SimilarityModel = SetModel(CommandLineArguments.similarity_model)
 
 #----Check user has the necessary API keys
     if (re.match(r"^OpenAI",NL2LModel) or re.match(r"^OpenAI",L2NLModel) or \
-re.match(r"^OpenAI",SimilarityModel)):
-        Matches = re.search(r"#\s*OPENAI_API_KEY\s*=\s*(.+)",APIKeyLines,re.MULTILINE)
-        if Matches:
-            OPENAI_API_KEY = Matches.group(1)
-        elif "OPENAI_API_KEY" in os.environ:
+re.match(r"^OpenAI",SimilarityModel)) and len(OPENAI_API_KEY) == 0:
+        if "OPENAI_API_KEY" in os.environ:
             OPENAI_API_KEY = str(os.getenv("OPENAI_API_KEY"))
+            print("Got OPENAI_API_KEY")
         else:
             print("ERROR: OpenAI API key not in the file or environment variable OPENAI_API_KEY")
             sys.exit(0)
 
     if (re.match(r"^Google",NL2LModel) or re.match(r"^Google",L2NLModel) or \
-re.match(r"^Google",SimilarityModel)):
-        Matches = re.search(r"#\s*GOOGLE_API_KEY\s*=\s*(.+)",APIKeyLines,re.MULTILINE)
-        if Matches:
-            GOOGLE_API_KEY = Matches.group(1)
-        elif "GOOGLE_API_KEY" in os.environ:
+re.match(r"^Google",SimilarityModel)) and len(GOOGLE_API_KEY) == 0:
+        if "GOOGLE_API_KEY" in os.environ:
             GOOGLE_API_KEY = str(os.getenv("GOOGLE_API_KEY"))
+            print("Got GOOGLE_API_KEY")
         else:
             print("ERROR: Google API key not in the file or environment variable GOOGLE_API_KEY")
             sys.exit(0)
@@ -159,12 +176,10 @@ re.match(r"^Google",SimilarityModel)) and \
         print("To suppress GRPC messages set your GRPC_VERBOSITY environment variable to NONE")
 
     if (re.match(r"^Anthropic",NL2LModel) or re.match(r"^Anthropic",L2NLModel) or \
-re.match(r"^Anthropic",SimilarityModel)):
-        Matches = re.search(r"#\s*ANTHROPIC_API_KEY\s*=\s*(.+)",APIKeyLines,re.MULTILINE)
-        if Matches:
-            ANTHROPIC_API_KEY = Matches.group(1)
-        elif "ANTHROPIC_API_KEY" in os.environ:
+re.match(r"^Anthropic",SimilarityModel)) and len(ANTHROPIC_API_KEY) == 0:
+        if "ANTHROPIC_API_KEY" in os.environ:
             ANTHROPIC_API_KEY = str(os.getenv("ANTHROPIC_API_KEY"))
+            print("Got ANTHROPIC_API_KEY")
         else:
             print(
 "ERROR: Anthropic API key not in the file or environment variable ANTHROPIC_API_KEY")
@@ -659,18 +674,18 @@ RunATP(ZigZagResult.Logic,Prover,ModelFinder,ATPTimeLimit)
             BestZigZagResult = ZigZagResult
 
     if BestZigZagResult.Converged:
-        if BestZigZagResult.OriginalSimilarityScore < ZigZaggingAcceptable:
-            QuietPrint(4,0,\
-"-------------------------------------------------------------------------")
-            QuietPrint(4,0,f"No acceptable convergence after \
-{ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
-            QuietPrint(4,0,f"Printing the best ZigZag sequence result")
-
+        QuietPrint(4,0,"-------------------------------------------------------------------------")
+        if BestZigZagResult.OriginalSimilarityScore >= ZigZaggingAcceptable:
+            QuietPrint(4,0,f"Acceptable","")
+        else:
+            QuietPrint(4,0,f"No acceptable","")
+        QuietPrint(-4,0,f" convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
+        QuietPrint(4,0,f"Printing the best ZigZag sequence result")
         PrintResult(FilePath,OriginalText,ZigZagRepeats,BestZigZagResult,NL2LModel,L2NLModel,
 SimilarityModel)
     else:
         QuietPrint(4,0,"-------------------------------------------------------------------------")
-        QuietPrint(4,0,f"No convergence after {ZigZagRepeats}:{CommandLineArguments.zigzag_limit}")
+        QuietPrint(4,0,f"No convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
         SZSStatus = "NON"
         QuietPrint(4,0,"-------------------------------------------------------------------------")
 
