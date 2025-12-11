@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 -u
+#!/usr/bin/env python3
 
 import getpass
 import argparse
@@ -586,7 +586,7 @@ with similarity {ZigZagResult.LastTwoSimilarityScore:.2f}")
 {ZigZagResult.LastTwoDifferences}")
     QuietPrint(3,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The final logic is :")
-    QuietPrint(-5,0,f"{ZigZagResult.Logic}")
+    QuietPrint(-6,0,f"{ZigZagResult.Logic}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The ATP SZS status is {ZigZagResult.SZSStatus} with output\n\
 {ZigZagResult.SZSOutput}")
