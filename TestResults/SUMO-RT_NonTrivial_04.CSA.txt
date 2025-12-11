@@ -1,0 +1,465 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.90
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There are persons and events.  
+One event causes another event.  
+Injury is an event.  
+Losing consciousness is an event.  
+A person can fall asleep in an event.  
+A person can be driving in an event.  
+Jon is a person.  
+e1 and e2 are events.  
+Losing consciousness causes injury.  
+Jon was driving in event e1.  
+Jon fell asleep in event e2.  
+Is it true that event e2 does not cause injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: losing consciousness causes injury, Jon was driving, Jon fell asleep, and the question is whether Jon’s falling asleep caused an injury. The second segment restates the first in a more formal, logical framework with explicit references to events and entities, but the underlying meaning and question are essentially identical. The only difference is the level of abstraction and formalization.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(event_type,type,
+    event: $tType ).
+
+tff(causes_type,type,
+    causes: ( event * event ) > $o ).
+
+tff(injury_decl,axiom,
+    $true ).
+
+tff(injury_type,type,
+    injury: event ).
+
+tff(losing_consciousness_type,type,
+    losing_consciousness: event ).
+
+tff(fell_asleep_type,type,
+    fell_asleep: ( person * event ) > $o ).
+
+tff(driving_type,type,
+    driving: ( person * event ) > $o ).
+
+tff(jon_type,type,
+    jon: person ).
+
+tff(e1_type,type,
+    e1: event ).
+
+tff(e2_type,type,
+    e2: event ).
+
+tff(losing_consciousness_causes_injury,axiom,
+    causes(losing_consciousness,injury) ).
+
+tff(jon_driving_e1,axiom,
+    driving(jon,e1) ).
+
+tff(jon_fell_asleep_e2,axiom,
+    fell_asleep(jon,e2) ).
+
+tff(question,conjecture,
+    ~ causes(e2,injury) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define causes(X0,X1) := $true
+for all inputs,
+    define fell_asleep(X0,X1) := $true
+for all inputs,
+    define driving(X0,X1) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.95,2,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Losing consciousness causes injury.  
+Jon is driving.  
+Jon is falling asleep.  
+Is it true that falling asleep by Jon does not cause injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation—Jon driving, losing consciousness (falling asleep), and questioning whether that loss of consciousness causes injury. The only differences are in tense (“was driving” vs. “is driving,” “fell asleep” vs. “is falling asleep”) and in phrasing of the final question (“Show that…” vs. “Is it true that…”). These are stylistic and grammatical variations rather than changes in meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(event_type,type,
+    event: $tType ).
+
+tff(causes_type,type,
+    causes: ( event * event ) > $o ).
+
+tff(losing_consciousness_type,type,
+    losing_consciousness: event ).
+
+tff(injury_type,type,
+    injury: event ).
+
+tff(falling_asleep_type,type,
+    falling_asleep: person > event ).
+
+tff(driving_type,type,
+    driving: person > event ).
+
+tff(jon_type,type,
+    jon: person ).
+
+tff(ax1,axiom,
+    causes(losing_consciousness,injury) ).
+
+tff(ax2,axiom,
+    driving(jon) ).
+
+tff(ax3,axiom,
+    falling_asleep(jon) ).
+
+tff(conj,conjecture,
+    ~ causes(falling_asleep(jon),injury) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is NON with output
+None
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,True,0.95,1,True,0.95,1,NON,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.93
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Losing consciousness causes injury.  
+Jon did driving.  
+Jon did falling asleep.  
+Is it true that falling asleep does not cause injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation—Jon drives, falls asleep, and there is a question about whether that caused injury. The main difference is stylistic: the first uses natural phrasing and an imperative “Show that…,” while the second uses simplified “did driving / did falling asleep” constructions and poses the final statement as a question rather than a directive. The meaning remains nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(event_type,type,
+    event: $tType ).
+
+tff(person_type,type,
+    person: $tType ).
+
+tff(causes_type,type,
+    causes: ( event * event ) > $o ).
+
+tff(did_type,type,
+    did: ( person * event ) > $o ).
+
+tff(losing_consciousness_const,type,
+    losing_consciousness: event ).
+
+tff(injury_const,type,
+    injury: event ).
+
+tff(jon_const,type,
+    jon: person ).
+
+tff(driving_const,type,
+    driving: event ).
+
+tff(falling_asleep_const,type,
+    falling_asleep: event ).
+
+tff(ax1,axiom,
+    causes(losing_consciousness,injury) ).
+
+tff(ax2,axiom,
+    did(jon,driving) ).
+
+tff(ax3,axiom,
+    did(jon,falling_asleep) ).
+
+tff(conj,conjecture,
+    ~ causes(falling_asleep,injury) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define causes(X0,X1) := $true
+for all inputs,
+    define did(X0,X1) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.93,3,True,1.00,2,CSA,Unknown,0,0,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.97
+% The original and final NL have similarity: 0.90
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+`person` is a type.
+`jon` is a person.
+`loses_consciousness` is a property of a person.
+`has_injury` is a property of a person.
+`was_driving` is a property of a person.
+`fell_asleep` is a property of a person.
+If a person loses consciousness, then that person has an injury.
+`jon` was driving.
+`jon` fell asleep.
+Did `jon` fall asleep and not have an injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same logical situation: a person named Jon was driving, fell asleep, and there is a rule that losing consciousness causes injury. The task or question in both is to determine whether Jon’s falling asleep led to an injury or not.  
+The main difference is in form: the first is written in natural language, while the second expresses the same content in a formal, logic-like structure with explicit typing and properties. The meaning conveyed—testing whether falling asleep implies injury—is nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(jon_decl,type,
+    jon: person ).
+
+tff(loses_consciousness_decl,type,
+    loses_consciousness: person > $o ).
+
+tff(has_injury_decl,type,
+    has_injury: person > $o ).
+
+tff(was_driving_decl,type,
+    was_driving: person > $o ).
+
+tff(fell_asleep_decl,type,
+    fell_asleep: person > $o ).
+
+tff(loses_consciousness_implies_has_injury,axiom,
+    ! [X: person] :
+      ( loses_consciousness(X)
+     => has_injury(X) ) ).
+
+tff(jon_was_driving,axiom,
+    was_driving(jon) ).
+
+tff(jon_fell_asleep,axiom,
+    fell_asleep(jon) ).
+
+tff(jon_fell_asleep_and_not_has_injury_conjecture,conjecture,
+    ( fell_asleep(jon)
+    & ~ has_injury(jon) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define loses_consciousness(X0) := $true
+for all inputs,
+    define fell_asleep(X0) := $true
+for all inputs,
+    define has_injury(X0) := $true
+for all inputs,
+    define was_driving(X0) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.97,2,CSA,Unknown,1,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.90
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+"person" is a type.
+"jon" is a person.
+"losing_consciousness" is a property of a person.
+"injury" is a property of a person.
+"driving" is a property of a person.
+"fell_asleep" is a property of a person.
+Every person who is losing consciousness has an injury.
+Jon is driving.
+Jon fell asleep.
+Did Jon fall asleep and not have an injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe a scenario involving Jon, driving, falling asleep, and the relationship between losing consciousness and injury. The first is phrased in natural language and asks to show that falling asleep did not cause injury; the second formalizes the same situation in logical terms, defining types and properties and posing a similar question. The main difference is that the second text explicitly encodes the information in a logical schema, while the first uses plain English. The meaning and intent are nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(jon_declaration,type,
+    jon: person ).
+
+tff(losing_consciousness_type,type,
+    losing_consciousness: person > $o ).
+
+tff(injury_type,type,
+    injury: person > $o ).
+
+tff(driving_type,type,
+    driving: person > $o ).
+
+tff(fell_asleep_type,type,
+    fell_asleep: person > $o ).
+
+tff(every_person_losing_consciousness_has_injury,axiom,
+    ! [P: person] :
+      ( losing_consciousness(P)
+     => injury(P) ) ).
+
+tff(jon_is_driving,axiom,
+    driving(jon) ).
+
+tff(jon_fell_asleep,axiom,
+    fell_asleep(jon) ).
+
+tff(jon_fell_asleep_and_does_not_have_injury,conjecture,
+    ( fell_asleep(jon)
+    & ~ injury(jon) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define losing_consciousness(X0) := $true
+for all inputs,
+    define fell_asleep(X0) := $true
+for all inputs,
+    define injury(X0) := $true
+for all inputs,
+    define driving(X0) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.98,2,CSA,Unknown,1,0,1,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.99
+% The original and final NL have similarity: 0.90
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+`individual` is a type.
+`jon` is an individual.
+`loses_consciousness` is a property of an individual.
+`has_injury` is a property of an individual.
+`was_driving` is a property of an individual.
+`fell_asleep` is a property of an individual.
+For all individuals X, if X loses consciousness, then X has an injury.
+Jon was driving.
+Jon fell asleep.
+Did Jon fall asleep and not have an injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: a rule that losing consciousness causes injury, Jon was driving and fell asleep, and the question is whether Jon’s falling asleep led to injury. The second text expresses this in formal logical terms (types, properties, quantifiers), while the first uses natural language. The only difference is stylistic and representational, not conceptual.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(jon_type,type,
+    jon: individual ).
+
+tff(loses_consciousness_type,type,
+    loses_consciousness: individual > $o ).
+
+tff(has_injury_type,type,
+    has_injury: individual > $o ).
+
+tff(was_driving_type,type,
+    was_driving: individual > $o ).
+
+tff(fell_asleep_type,type,
+    fell_asleep: individual > $o ).
+
+tff(axiom_1,axiom,
+    ! [X: individual] :
+      ( loses_consciousness(X)
+     => has_injury(X) ) ).
+
+tff(axiom_2,axiom,
+    was_driving(jon) ).
+
+tff(axiom_3,axiom,
+    fell_asleep(jon) ).
+
+tff(conjecture_1,conjecture,
+    ( fell_asleep(jon)
+    & ~ has_injury(jon) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define loses_consciousness(X0) := $true
+for all inputs,
+    define fell_asleep(X0) := $true
+for all inputs,
+    define has_injury(X0) := $true
+for all inputs,
+    define was_driving(X0) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.99,2,CSA,Unknown,0,0,2,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

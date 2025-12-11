@@ -1,0 +1,516 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.98
+% The original and final NL have similarity: 0.98
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Terry possesses a traditional savings account.  
+Terry withdrew from the traditional savings account.  
+Terry was penalized.  
+Did Terry’s withdrawal from the traditional savings account cause Terry to be penalized?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry has a traditional savings account, makes a withdrawal, and receives a penalty, with a question about whether the withdrawal caused the penalty. The only differences are minor stylistic ones—capitalization, phrasing (“the bank penalized Terry” vs. “Terry was penalized”), and slightly more explicit wording in the second version. These do not change the meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_account,type,
+    account: $tType ).
+
+tff(type_terry,type,
+    terry: person ).
+
+tff(type_trad_sav_acc,type,
+    traditional_savings_account: account ).
+
+tff(type_possesses,type,
+    possesses: ( person * account ) > $o ).
+
+tff(type_withdrew_from,type,
+    withdrew_from: ( person * account ) > $o ).
+
+tff(type_penalized,type,
+    penalized: person > $o ).
+
+tff(type_caused,type,
+    caused: ( $o * $o ) > $o ).
+
+tff(fact1,axiom,
+    possesses(terry,traditional_savings_account) ).
+
+tff(fact2,axiom,
+    withdrew_from(terry,traditional_savings_account) ).
+
+tff(fact3,axiom,
+    penalized(terry) ).
+
+tff(question,conjecture,
+    caused(withdrew_from(terry,traditional_savings_account),penalized(terry)) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+globally flip the polarity of every occurrence of predicate "penalized"
+globally flip the polarity of every occurrence of predicate "withdrew_from"
+globally flip the polarity of every occurrence of predicate "possesses"
+for all inputs,
+    define possesses(X0,X1) := $true
+for all inputs,
+    define withdrew_from(X0,X1) := $true
+for all inputs,
+    define penalized(X0) := $true
+for all inputs,
+    define caused(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,True,0.98,1,True,0.98,1,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.98
+% The original and final NL have similarity: 0.98
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Terry possesses a traditional savings account.  
+Terry withdrew from the traditional savings account.  
+Terry was penalized.  
+Did Terry’s withdrawal from the traditional savings account cause Terry to be penalized?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry has a traditional savings account, makes a withdrawal, and receives a penalty, with a question about whether the withdrawal caused the penalty. The only differences are minor stylistic ones—capitalization, phrasing (“the bank penalized Terry” vs. “Terry was penalized”), and slightly more explicit wording in the second version. These do not change the meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_account,type,
+    account: $tType ).
+
+tff(type_possesses,type,
+    possesses: ( person * account ) > $o ).
+
+tff(type_withdrew_from,type,
+    withdrew_from: ( person * account ) > $o ).
+
+tff(type_penalized,type,
+    penalized: person > $o ).
+
+tff(type_caused,type,
+    caused: ( $o * $o ) > $o ).
+
+tff(terry_decl,type,
+    terry: person ).
+
+tff(trad_sav_acc_decl,type,
+    traditional_savings_account: account ).
+
+tff(fact1,axiom,
+    possesses(terry,traditional_savings_account) ).
+
+tff(fact2,axiom,
+    withdrew_from(terry,traditional_savings_account) ).
+
+tff(fact3,axiom,
+    penalized(terry) ).
+
+tff(question,conjecture,
+    caused(withdrew_from(terry,traditional_savings_account),penalized(terry)) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+globally flip the polarity of every occurrence of predicate "caused"
+globally flip the polarity of every occurrence of predicate "penalized"
+globally flip the polarity of every occurrence of predicate "withdrew_from"
+globally flip the polarity of every occurrence of predicate "possesses"
+for all inputs,
+    define possesses(X0,X1) := $true
+for all inputs,
+    define withdrew_from(X0,X1) := $true
+for all inputs,
+    define penalized(X0) := $true
+for all inputs,
+    define caused(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,True,0.98,1,True,0.98,1,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:3 with similarity 0.98
+% The original and final NL have similarity: 0.98
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Terry possesses a traditional savings account.  
+Event w1 is the withdrawal event of Terry from the traditional savings account.  
+Event p1 is the penalty event of Terry.  
+Does the withdrawal event w1 cause the penalty event p1?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry has a traditional savings account, makes a withdrawal, and receives a penalty, with the question asking whether the withdrawal caused the penalty. The only differences are stylistic and structural—the second text formalizes the events with labels (w1, p1) and uses more explicit event notation, but the meaning is effectively identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_account,type,
+    account: $tType ).
+
+tff(type_event,type,
+    event: $tType ).
+
+tff(type_possesses,type,
+    possesses: ( person * account ) > $o ).
+
+tff(type_traditional_savings_account,type,
+    traditional_savings_account: account ).
+
+tff(type_withdrawal_event,type,
+    withdrawal_event: ( person * account ) > event ).
+
+tff(type_penalty_event,type,
+    penalty_event: person > event ).
+
+tff(type_causes,type,
+    causes: ( event * event ) > $o ).
+
+tff(type_terry,type,
+    terry: person ).
+
+tff(type_w1,type,
+    w1: event ).
+
+tff(type_p1,type,
+    p1: event ).
+
+tff(ax1,axiom,
+    possesses(terry,traditional_savings_account) ).
+
+tff(ax2,axiom,
+    w1 = withdrawal_event(terry,traditional_savings_account) ).
+
+tff(ax3,axiom,
+    p1 = penalty_event(terry) ).
+
+tff(conj1,conjecture,
+    causes(w1,p1) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+cnf(u9,axiom,
+    w1 = withdrawal_event(terry,traditional_savings_account)).
+
+cnf(u10,axiom,
+    p1 = penalty_event(terry)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,True,0.98,1,True,0.98,3,CSA,Unknown,0,2,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Person is a type.
+Account is a type.
+Organization is a type.
+Event is a type.
+Terry is a person.
+Traditional savings account is an account.
+The bank is an organization.
+Withdrawal event function is a function that maps a person and an account to an event.
+Penalty event function is a function that maps an organization and a person to an event.
+Possesses is a predicate that applies to a person and an account.
+Happened is a predicate that applies to an event.
+Causes is a predicate that applies to two events.
+Terry possesses the traditional savings account.
+It happened that Terry withdrew from the traditional savings account.
+It happened that the bank penalized Terry.
+Does Terry's withdrawal from the traditional savings account cause the bank to penalize Terry?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry owns a traditional savings account, makes a withdrawal, the bank penalizes Terry, and the question is whether the withdrawal caused the penalty. The second segment restates the same content in a formal, logical or ontological framework, defining types, predicates, and functions explicitly. The only difference is in style and level of abstraction—semantic meaning is nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_account,type,
+    account: $tType ).
+
+tff(type_organization,type,
+    organization: $tType ).
+
+tff(type_event,type,
+    event: $tType ).
+
+tff(const_terry,type,
+    terry: person ).
+
+tff(const_traditional_savings_account,type,
+    traditional_savings_account: account ).
+
+tff(const_the_bank,type,
+    the_bank: organization ).
+
+tff(func_withdrawal_event,type,
+    withdrawal_event_func: ( person * account ) > event ).
+
+tff(func_penalty_event,type,
+    penalty_event_func: ( organization * person ) > event ).
+
+tff(pred_possesses,type,
+    possesses: ( person * account ) > $o ).
+
+tff(pred_happened,type,
+    happened: event > $o ).
+
+tff(pred_causes,type,
+    causes: ( event * event ) > $o ).
+
+tff(sentence_terry_possesses_tsa,axiom,
+    possesses(terry,traditional_savings_account) ).
+
+tff(sentence_terry_withdrew,axiom,
+    happened(withdrawal_event_func(terry,traditional_savings_account)) ).
+
+tff(sentence_bank_penalized_terry,axiom,
+    happened(penalty_event_func(the_bank,terry)) ).
+
+tff(question_withdrawal_cause_penalty,conjecture,
+    causes(withdrawal_event_func(terry,traditional_savings_account),penalty_event_func(the_bank,terry)) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define possesses(X0,X1) := $true
+for all inputs,
+    define happened(X0) := $true
+for all inputs,
+    define causes(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,True,0.95,1,True,0.95,1,CSA,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.92
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Person is a type.
+Account is a type.
+Bank is a type.
+Event is a type.
+Terry is a person.
+Traditional savings account is an account.
+The bank is a bank.
+Possesses is a relationship between a person and an account.
+Occurred is a property of an event.
+Is withdrawal from is a relationship between an event, a person, and an account.
+Is penalty for is a relationship between an event, a bank, and a person.
+Causes is a relationship between two events.
+Terry possesses the traditional savings account.
+There exists an event W such that W occurred and W is a withdrawal from the traditional savings account by Terry.
+There exists an event P such that P occurred and P is a penalty for Terry from the bank.
+Does there exist an event W and an event P such that W occurred, W is a withdrawal from the traditional savings account by Terry, P occurred, P is a penalty for Terry from the bank, and W causes P?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry has a traditional savings account, makes a withdrawal, the bank penalizes Terry, and the question is whether the withdrawal caused the penalty.  
+The first text expresses this in natural language, while the second formalizes it using logical and ontological relationships (types, events, and relations). The only difference is the level of abstraction and explicit formal structure in the second segment, but the underlying meaning is nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(account_type,type,
+    account: $tType ).
+
+tff(bank_type,type,
+    bank: $tType ).
+
+tff(event_type,type,
+    event: $tType ).
+
+tff(terry_decl,type,
+    terry: person ).
+
+tff(traditional_savings_account_decl,type,
+    traditional_savings_account: account ).
+
+tff(the_bank_decl,type,
+    the_bank: bank ).
+
+tff(possesses_decl,type,
+    possesses: ( person * account ) > $o ).
+
+tff(occurred_decl,type,
+    occurred: event > $o ).
+
+tff(is_withdrawal_from_decl,type,
+    is_withdrawal_from: ( event * person * account ) > $o ).
+
+tff(is_penalty_for_decl,type,
+    is_penalty_for: ( event * bank * person ) > $o ).
+
+tff(causes_decl,type,
+    causes: ( event * event ) > $o ).
+
+tff(terry_possesses_traditional_savings_account,axiom,
+    possesses(terry,traditional_savings_account) ).
+
+tff(exists_withdrawal_event,axiom,
+    ? [W: event] :
+      ( occurred(W)
+      & is_withdrawal_from(W,terry,traditional_savings_account) ) ).
+
+tff(exists_penalty_event,axiom,
+    ? [P: event] :
+      ( occurred(P)
+      & is_penalty_for(P,the_bank,terry) ) ).
+
+tff(question_withdrawal_causes_penalty,conjecture,
+    ? [W: event,P: event] :
+      ( occurred(W)
+      & is_withdrawal_from(W,terry,traditional_savings_account)
+      & occurred(P)
+      & is_penalty_for(P,the_bank,terry)
+      & causes(W,P) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define possesses(X0,X1) := $true
+for all inputs,
+    define is_withdrawal_from(X0,X1,X2) := $true
+for all inputs,
+    define occurred(X0) := $true
+for all inputs,
+    define is_penalty_for(X0,X1,X2) := $true
+for all inputs,
+    define causes(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,False,0.92,3,True,0.98,2,CSA,Unknown,0,2,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Terry possesses the traditional savings account.
+Terry withdrew from the traditional savings account.
+The bank penalized Terry.
+Does Terry's interaction with the traditional savings account cause the bank to penalize Terry?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation: Terry owns a traditional savings account, makes a withdrawal, and is penalized by the bank. The only difference is in phrasing—the second segment uses “interaction with the account” instead of “withdrawal,” which slightly broadens the cause being questioned. Otherwise, the meaning and sequence of events are nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(terry_type,type,
+    terry: $i ).
+
+tff(traditionalSavingsAccount_type,type,
+    traditionalSavingsAccount: $i ).
+
+tff(bank_type,type,
+    bank: $i ).
+
+tff(possesses_type,type,
+    possesses: ( $i * $i ) > $o ).
+
+tff(withdrew_type,type,
+    withdrew: ( $i * $i ) > $o ).
+
+tff(penalized_type,type,
+    penalized: ( $i * $i ) > $o ).
+
+tff(causes_type,type,
+    causes: ( $i * $i * $i * $i ) > $o ).
+
+tff(s1,axiom,
+    possesses(terry,traditionalSavingsAccount) ).
+
+tff(s2,axiom,
+    withdrew(terry,traditionalSavingsAccount) ).
+
+tff(s3,axiom,
+    penalized(bank,terry) ).
+
+tff(q1,conjecture,
+    causes(terry,traditionalSavingsAccount,bank,terry) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define possesses(X0,X1) := $true
+for all inputs,
+    define withdrew(X0,X1) := $true
+for all inputs,
+    define penalized(X0,X1) := $true
+for all inputs,
+    define causes(X0,X1,X2,X3) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_01.CSA.txt,True,0.95,3,True,0.95,1,CSA,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

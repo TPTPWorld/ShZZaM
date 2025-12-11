@@ -1,0 +1,187 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 1.00
+% The original and final NL have similarity: 1.00
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The individual left the country.
+The individual did not leave the country.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+The individual left the country.  
+The individual did not leave the country.
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments contain exactly the same sentences and meaning; the only difference is formatting (a line break or spacing).
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(left_type,type,
+    left: ( individual * country ) > $o ).
+
+tff(the_individual,type,
+    the_individual: individual ).
+
+tff(the_country,type,
+    the_country: country ).
+
+tff(sentence1,axiom,
+    left(the_individual,the_country) ).
+
+tff(sentence2,axiom,
+    ~ left(the_individual,the_country) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is UNS with output
+tff(type_def_5, type, individual: $tType).
+tff(type_def_6, type, country: $tType).
+tff(func_def_0, type, the_individual: individual).
+tff(func_def_1, type, the_country: country).
+tff(pred_def_1, type, left: (individual * country) > $o).
+tff(f5,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f3,f4])).
+tff(f4,plain,(
+  ~left(the_individual,the_country)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  ~left(the_individual,the_country)),
+  file('/tmp/L6BPaw_ciq/SOT_uhxH7B',unknown)).
+tff(f3,plain,(
+  left(the_individual,the_country)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  left(the_individual,the_country)),
+  file('/tmp/L6BPaw_ciq/SOT_uhxH7B',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,1.00,1,True,1.00,1,UNS,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The individual left the country.
+The individual did not leave the country.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is an individual named a.  
+The individual a left the country.  
+The individual a did not leave the country.
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same contradictory pair of statements about one person leaving and not leaving the country. The second segment only adds an explicit naming of the individual (“a”) but otherwise conveys the same meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(left_country_predicate,type,
+    left_country: individual > $o ).
+
+tff(a_constant,type,
+    a: individual ).
+
+tff(sentence1,axiom,
+    left_country(a) ).
+
+tff(sentence2,axiom,
+    ~ left_country(a) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is UNS with output
+tff(type_def_5, type, individual: $tType).
+tff(func_def_0, type, a: individual).
+tff(pred_def_1, type, left_country: individual > $o).
+tff(f5,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f3,f4])).
+tff(f4,plain,(
+  ~left_country(a)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  ~left_country(a)),
+  file('/tmp/iVyiPjns4h/SOT_McYYuR',unknown)).
+tff(f3,plain,(
+  left_country(a)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  left_country(a)),
+  file('/tmp/iVyiPjns4h/SOT_McYYuR',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,1,1,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 2:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The individual left the country.
+The individual did not leave the country.
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is an individual named a.  
+The individual a left the country.  
+The individual a did not leave the country.
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an individual and two contradictory statements about whether that person left the country. The second segment adds a naming detail (“individual a”) and repeats the same contradiction with slightly more explicit structure, but the core meaning—an individual both left and did not leave the country—remains nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(left_country_predicate,type,
+    left_country: individual > $o ).
+
+tff(a_constant,type,
+    a: individual ).
+
+tff(sentence1,axiom,
+    left_country(a) ).
+
+tff(sentence2,axiom,
+    ~ left_country(a) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is UNS with output
+tff(type_def_5, type, individual: $tType).
+tff(func_def_0, type, a: individual).
+tff(pred_def_1, type, left_country: individual > $o).
+tff(f5,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f3,f4])).
+tff(f4,plain,(
+  ~left_country(a)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  ~left_country(a)),
+  file('/tmp/hnxTn1R3ap/SOT_iXTywa',unknown)).
+tff(f3,plain,(
+  left_country(a)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  left_country(a)),
+  file('/tmp/hnxTn1R3ap/SOT_iXTywa',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,2,2,3,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

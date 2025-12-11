@@ -1,0 +1,591 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.82
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is a type of thing called an orange.  
+There is a type of thing called a country.  
+There is a type of thing called a product.  
+Each product may or may not be an orange.  
+Each product may or may not be duty free.  
+Each product may or may not be imported from a given country.  
+Each country may or may not impose a duty tax on a given product.  
+Taiwan is a country.  
+The United States is a country.  
+For every product, if it is an orange, then it is duty free.  
+For every product, if it is an orange, then it is imported from Taiwan.  
+Is there a product that is an orange, is imported from Taiwan, and on which the United States imposes a duty tax?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: oranges are duty‑free, imported from Taiwan, and the question is whether the United States taxes them. The first text expresses this in natural language, while the second formalizes it in logical, generalized terms. The main difference is style and explicitness—the second text defines categories and quantifiers, while the first simply states facts and asks a question. The underlying meaning and relationships are nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_orange,type,
+    orange: $tType ).
+
+tff(type_country,type,
+    country: $tType ).
+
+tff(type_product,type,
+    product: $tType ).
+
+tff(type_pred_is_orange,type,
+    is_orange: product > $o ).
+
+tff(type_pred_duty_free,type,
+    duty_free: product > $o ).
+
+tff(type_pred_imported_from,type,
+    imported_from: ( product * country ) > $o ).
+
+tff(type_pred_imposes_duty_tax,type,
+    imposes_duty_tax: ( country * product ) > $o ).
+
+tff(type_const_taiwan,type,
+    taiwan: country ).
+
+tff(type_const_united_states,type,
+    united_states: country ).
+
+tff(axiom1,axiom,
+    ! [X: product] :
+      ( is_orange(X)
+     => duty_free(X) ) ).
+
+tff(axiom2,axiom,
+    ! [X: product] :
+      ( is_orange(X)
+     => imported_from(X,taiwan) ) ).
+
+tff(conjecture1,conjecture,
+    ? [X: product] :
+      ( is_orange(X)
+      & imported_from(X,taiwan)
+      & imposes_duty_tax(united_states,X) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define is_orange(X0) := $true
+for all inputs,
+    define duty_free(X0) := $true
+for all inputs,
+    define imported_from(X0,X1) := $true
+for all inputs,
+    define imposes_duty_tax(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,False,0.82,3,True,0.95,2,CSA,Unknown,5,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.80
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is a type of thing called a thing.  
+There is a type of thing called a country.  
+There is a type of thing called a product.  
+The United States is a country.  
+Taiwan is a country.  
+Each product may or may not be an orange.  
+Each product may or may not be duty free.  
+Each product may or may not be imported from a given country.  
+Each country may or may not impose a duty tax on a given product.  
+The United States is a country.  
+Taiwan is a country.  
+All oranges are duty free.  
+All oranges are imported from Taiwan.  
+Is there a product that is an orange, is imported from Taiwan, and on which the United States imposes a duty tax?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe oranges, their duty‑free status, their import from Taiwan, and question whether the United States taxes them. The second text restates the same facts in a more formal, logical, ontology‑style way, defining entities and relationships explicitly. The first is a natural‑language version of the same scenario. Differences are mainly in style and level of abstraction, not in underlying meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(thing_type,type,
+    thing: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(product_type,type,
+    product: $tType ).
+
+tff(united_states_decl,type,
+    united_states: country ).
+
+tff(taiwan_decl,type,
+    taiwan: country ).
+
+tff(is_orange_decl,type,
+    is_orange: product > $o ).
+
+tff(duty_free_decl,type,
+    duty_free: product > $o ).
+
+tff(imported_from_decl,type,
+    imported_from: ( product * country ) > $o ).
+
+tff(imposes_duty_tax_decl,type,
+    imposes_duty_tax: ( country * product ) > $o ).
+
+tff(united_states_is_country,axiom,
+    $true ).
+
+tff(taiwan_is_country,axiom,
+    $true ).
+
+tff(all_oranges_duty_free,axiom,
+    ! [P: product] :
+      ( is_orange(P)
+     => duty_free(P) ) ).
+
+tff(all_oranges_imported_from_taiwan,axiom,
+    ! [P: product] :
+      ( is_orange(P)
+     => imported_from(P,taiwan) ) ).
+
+tff(exists_orange_imported_taiwan_duty_tax_us,conjecture,
+    ? [P: product] :
+      ( is_orange(P)
+      & imported_from(P,taiwan)
+      & imposes_duty_tax(united_states,P) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define is_orange(X0) := $true
+for all inputs,
+    define duty_free(X0) := $true
+for all inputs,
+    define imported_from(X0,X1) := $true
+for all inputs,
+    define imposes_duty_tax(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,False,0.80,3,True,0.95,2,CSA,Unknown,1,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:3 with similarity 0.96
+% The original and final NL have similarity: 0.92
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There are things, countries, and products.  
+The United States is a thing.  
+Taiwan is a thing.  
+The United States is a country.  
+Taiwan is a country.  
+Every product is either an orange or not an orange.  
+Every product is either duty-free or not duty-free.  
+Every product from every country is either imported from that country or not imported from that country.  
+Every country with every product either imposes a duty tax on that product or does not impose a duty tax on that product.  
+Every product that is an orange is duty-free.  
+Every product that is an orange is imported from Taiwan.  
+Is there a product that is an orange, imported from Taiwan, and on which the United States imposes a duty tax?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments express nearly the same logical content: oranges are duty‑free, oranges come from Taiwan, and the question is whether the United States taxes those imported oranges.  
+The second segment restates the same ideas in a more formal, logical framework, explicitly defining categories (things, countries, products) and quantifying relationships. The first segment is a natural‑language version of the same facts and question. The only minor difference is that the second text generalizes the structure and uses formal logic phrasing, while the first is a concise narrative statement.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(thing_type,type,
+    thing: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(product_type,type,
+    product: $tType ).
+
+tff(isThing_type,type,
+    isThing: thing > $o ).
+
+tff(isCountry_type,type,
+    isCountry: thing > $o ).
+
+tff(isProduct_type,type,
+    isProduct: thing > $o ).
+
+tff(isOrange_type,type,
+    isOrange: thing > $o ).
+
+tff(isDutyFree_type,type,
+    isDutyFree: thing > $o ).
+
+tff(importedFrom_type,type,
+    importedFrom: ( thing * thing ) > $o ).
+
+tff(imposesDutyTax_type,type,
+    imposesDutyTax: ( thing * thing ) > $o ).
+
+tff(unitedStates_type,type,
+    unitedStates: thing ).
+
+tff(taiwan_type,type,
+    taiwan: thing ).
+
+tff(unitedStates_decl,axiom,
+    isThing(unitedStates) ).
+
+tff(taiwan_decl,axiom,
+    isThing(taiwan) ).
+
+tff(unitedStates_country,axiom,
+    isCountry(unitedStates) ).
+
+tff(taiwan_country,axiom,
+    isCountry(taiwan) ).
+
+tff(products_orange_partition,axiom,
+    ! [P: thing] :
+      ( isProduct(P)
+     => ( isOrange(P)
+        | ~ isOrange(P) ) ) ).
+
+tff(products_dutyfree_partition,axiom,
+    ! [P: thing] :
+      ( isProduct(P)
+     => ( isDutyFree(P)
+        | ~ isDutyFree(P) ) ) ).
+
+tff(products_imported_partition,axiom,
+    ! [P: thing,C: thing] :
+      ( ( isProduct(P)
+        & isCountry(C) )
+     => ( importedFrom(P,C)
+        | ~ importedFrom(P,C) ) ) ).
+
+tff(countries_dutytax_partition,axiom,
+    ! [C: thing,P: thing] :
+      ( ( isCountry(C)
+        & isProduct(P) )
+     => ( imposesDutyTax(C,P)
+        | ~ imposesDutyTax(C,P) ) ) ).
+
+tff(oranges_dutyfree,axiom,
+    ! [P: thing] :
+      ( ( isProduct(P)
+        & isOrange(P) )
+     => isDutyFree(P) ) ).
+
+tff(oranges_from_taiwan,axiom,
+    ! [P: thing] :
+      ( ( isProduct(P)
+        & isOrange(P) )
+     => importedFrom(P,taiwan) ) ).
+
+tff(exists_orange_taiwan_us_duty,conjecture,
+    ? [P: thing] :
+      ( isProduct(P)
+      & isOrange(P)
+      & importedFrom(P,taiwan)
+      & imposesDutyTax(unitedStates,P) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define isThing(X0) := $true
+for all inputs,
+    define isDutyFree(X0) := $true
+for all inputs,
+    define importedFrom(X0,X1) := $true
+for all inputs,
+    define isOrange(X0) := $true
+for all inputs,
+    define isCountry(X0) := $true
+for all inputs,
+    define imposesDutyTax(X0,X1) := $true
+for all inputs,
+    define isProduct(X0) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,False,0.92,3,True,0.96,3,CSA,Unknown,3,2,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.96
+% The original and final NL have similarity: 0.85
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+"individual" is a type.
+"is orange" is a property of individuals.
+"is duty free product" is a property of individuals.
+Taiwan is an individual.
+The oranges is an individual.
+"imported from" is a relationship between two individuals.
+United States is an individual.
+"duty tax" is a relationship between two individuals.
+For every individual X, if X is orange, then X is a duty free product.
+The oranges are orange.
+The oranges are imported from Taiwan.
+Does the United States have a duty tax on the oranges?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same factual situation: oranges are duty‑free, imported from Taiwan, and there is a question about whether the United States will impose a duty tax on them. The second segment restates the same content in a formal, logical or ontology‑style representation, defining individuals, properties, and relationships. The main difference is stylistic and structural rather than semantic—the second text is more abstract and formalized, while the first is natural language.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(is_orange_type,type,
+    is_orange: individual > $o ).
+
+tff(is_duty_free_product_type,type,
+    is_duty_free_product: individual > $o ).
+
+tff(taiwan_type,type,
+    taiwan: individual ).
+
+tff(the_oranges_type,type,
+    the_oranges: individual ).
+
+tff(imported_from_type,type,
+    imported_from: ( individual * individual ) > $o ).
+
+tff(united_states_type,type,
+    united_states: individual ).
+
+tff(duty_tax_type,type,
+    duty_tax: ( individual * individual ) > $o ).
+
+tff(axiom_1,axiom,
+    ! [X: individual] :
+      ( is_orange(X)
+     => is_duty_free_product(X) ) ).
+
+tff(axiom_2,axiom,
+    is_orange(the_oranges) ).
+
+tff(axiom_3,axiom,
+    imported_from(the_oranges,taiwan) ).
+
+tff(conjecture_1,conjecture,
+    duty_tax(united_states,the_oranges) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define is_orange(X0) := $true
+for all inputs,
+    define is_duty_free_product(X0) := $true
+for all inputs,
+    define imported_from(X0,X1) := $true
+for all inputs,
+    define duty_tax(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,False,0.85,3,True,0.96,2,CSA,Unknown,3,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.92
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+"product" is a type.
+"country" is a type.
+"duty_free" is a property of a product.
+"imported_from" is a relation between a product and a country.
+"tax" is a relation between a country and a product.
+"is_orange" is a property of a product.
+"taiwan" is a country.
+"united_states" is a country.
+All oranges are duty-free.
+All oranges are imported from Taiwan.
+Are all products that are oranges and imported from Taiwan taxed by the United States?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: oranges are duty-free, imported from Taiwan, and there is a question about whether the United States taxes them.  
+The main difference is in form: the first is written in natural language, while the second expresses the same facts and question in a more formal, ontology-like structure with explicit type and relation definitions. The meaning conveyed is nearly identical, but the second adds meta-information about data types and relations.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(product_type,type,
+    product: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(duty_free_type,type,
+    duty_free: product > $o ).
+
+tff(imported_from_type,type,
+    imported_from: ( product * country ) > $o ).
+
+tff(tax_type,type,
+    tax: ( country * product ) > $o ).
+
+tff(is_orange_type,type,
+    is_orange: product > $o ).
+
+tff(taiwan_declaration,type,
+    taiwan: country ).
+
+tff(united_states_declaration,type,
+    united_states: country ).
+
+tff(all_oranges_duty_free,axiom,
+    ! [P: product] :
+      ( is_orange(P)
+     => duty_free(P) ) ).
+
+tff(all_oranges_imported_from_taiwan,axiom,
+    ! [P: product] :
+      ( is_orange(P)
+     => imported_from(P,taiwan) ) ).
+
+tff(united_states_tax_question,conjecture,
+    ! [P: product] :
+      ( ( is_orange(P)
+        & imported_from(P,taiwan) )
+     => tax(united_states,P) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define is_orange(X0) := $true
+for all inputs,
+    define duty_free(X0) := $true
+for all inputs,
+    define imported_from(X0,X1) := $true
+for all inputs,
+    define tax(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,False,0.92,3,True,0.95,2,CSA,Unknown,2,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+All oranges are a duty free product.
+Oranges were imported from Taiwan.
+Will the United States duty tax the oranges from Taiwan?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Product is a type.
+Country is a type.
+Taiwan is a country.
+The United States is a country.
+The product 'the oranges' exists.
+A product can be an orange.
+A product can be duty-free.
+A product can be imported from a country.
+A country can have a duty tax on a product.
+If a product is an orange, then it is a duty-free product.
+The product 'the oranges' is an orange.
+The product 'the oranges' is imported from Taiwan.
+Does the United States have a duty tax on the product 'the oranges'?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments express nearly the same meaning: oranges are duty-free, they are imported from Taiwan, and there is a question about whether the United States will apply a duty tax on them.  
+The second segment restates the first in a more formal, logical, ontology-like structure, explicitly defining types and relationships. The only minor difference is that the second text generalizes the concepts (product, country) and uses a more abstract representation, while the first is a natural-language narrative.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_product,type,
+    product: $tType ).
+
+tff(type_country,type,
+    country: $tType ).
+
+tff(decl_taiwan,type,
+    taiwan: country ).
+
+tff(decl_united_states,type,
+    united_states: country ).
+
+tff(decl_the_oranges,type,
+    the_oranges: product ).
+
+tff(decl_orange,type,
+    orange: product > $o ).
+
+tff(decl_duty_free_product,type,
+    duty_free_product: product > $o ).
+
+tff(decl_imported_from,type,
+    imported_from: ( product * country ) > $o ).
+
+tff(decl_duty_tax,type,
+    duty_tax: ( country * product ) > $o ).
+
+tff(s1_axiom,axiom,
+    ! [X: product] :
+      ( orange(X)
+     => duty_free_product(X) ) ).
+
+tff(s2_axiom_is_orange,axiom,
+    orange(the_oranges) ).
+
+tff(s2_axiom_imported,axiom,
+    imported_from(the_oranges,taiwan) ).
+
+tff(s3_conjecture,conjecture,
+    duty_tax(united_states,the_oranges) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define orange(X0) := $true
+for all inputs,
+    define duty_free_product(X0) := $true
+for all inputs,
+    define imported_from(X0,X1) := $true
+for all inputs,
+    define duty_tax(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_02.CSA.txt,True,0.95,3,True,0.95,1,CSA,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

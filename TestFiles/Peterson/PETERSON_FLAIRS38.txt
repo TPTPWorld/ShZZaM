@@ -1,0 +1,11 @@
+Usage of generative AI needs to be authorized by one’s immediate superior.
+Usage respects legal as well as institutional norms.
+Usage of generative AI is properly declared.
+Input and output do not violate intellectual property.
+Input does not contain any personal information.
+Research using human-related data has received approbation from the ethics board.
+User understands how the tool works as well as its epistemic limitations.
+Usage of generative AI tools is consistent with what these tools are.
+Usage respects pedagogical alignment between learning objectives, pedagogical activities as well as evaluation strategies.
+Output is carefully and critically analyzed.
+User possesses the required expertise and competencies to fulfill the aforementioned principles.

@@ -1,0 +1,738 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.93
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Exporting is the result of investing.  
+The United States exported oranges to France.  
+Importing led to food shortages.  
+Is there an event that caused exporting?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+The two segments are nearly identical in meaning. Minor differences include small wording changes (“a result” vs. “the result”), omission of “of oranges by foreign countries” in the third sentence, and a slightly rephrased final question. These do not significantly alter the overall meaning, which remains focused on the relationship between investing, exporting, and importing.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_event,type,
+    event: $tType ).
+
+tff(type_country,type,
+    country: $tType ).
+
+tff(type_product,type,
+    product: $tType ).
+
+tff(type_exporting,type,
+    exporting: event ).
+
+tff(type_investing,type,
+    investing: event ).
+
+tff(type_importing,type,
+    importing: event ).
+
+tff(type_united_states,type,
+    united_states: country ).
+
+tff(type_france,type,
+    france: country ).
+
+tff(type_oranges,type,
+    oranges: product ).
+
+tff(type_result_of,type,
+    result_of: ( event * event ) > $o ).
+
+tff(type_exported_to,type,
+    exported_to: ( country * product * country ) > $o ).
+
+tff(type_led_to,type,
+    led_to: ( event * event ) > $o ).
+
+tff(type_caused,type,
+    caused: ( event * event ) > $o ).
+
+tff(type_food_shortages,type,
+    food_shortages: event ).
+
+tff(ax1,axiom,
+    result_of(exporting,investing) ).
+
+tff(ax2,axiom,
+    exported_to(united_states,oranges,france) ).
+
+tff(ax3,axiom,
+    led_to(importing,food_shortages) ).
+
+tff(conj1,conjecture,
+    ? [E: event] : caused(E,exporting) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define result_of(X0,X1) := $true
+for all inputs,
+    define exported_to(X0,X1,X2) := $true
+for all inputs,
+    define led_to(X0,X1) := $true
+for all inputs,
+    define caused(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,False,0.93,3,True,0.98,2,CSA,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Exporting was the result of investing.  
+The United States exported oranges to France.  
+Importing led to food shortages at home.  
+Did investing cause exporting?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+The two segments are nearly identical in meaning. Both state that exporting results from investing, describe the U.S. exporting oranges to France, and note that importing caused domestic food shortages. The only differences are minor wording changes (“was the result of” vs. “is a result of,” “the importing of oranges by foreign countries” vs. “importing”), and a rephrased final question (“What caused the exporting?” vs. “Did investing cause exporting?”). These do not significantly alter the overall meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_investment,type,
+    investment: $tType ).
+
+tff(type_country,type,
+    country: $tType ).
+
+tff(type_product,type,
+    product: $tType ).
+
+tff(type_event,type,
+    event: $tType ).
+
+tff(type_exporting,type,
+    exporting: event ).
+
+tff(type_investing,type,
+    investing: event ).
+
+tff(type_importing,type,
+    importing: event ).
+
+tff(type_united_states,type,
+    united_states: country ).
+
+tff(type_france,type,
+    france: country ).
+
+tff(type_oranges,type,
+    oranges: product ).
+
+tff(result_of,type,
+    result_of: ( event * event ) > $o ).
+
+tff(exported_to,type,
+    exported_to: ( country * product * country ) > $o ).
+
+tff(led_to,type,
+    led_to: ( event * event ) > $o ).
+
+tff(food_shortages_at_home,type,
+    food_shortages_at_home: event ).
+
+tff(caused,type,
+    caused: ( event * event ) > $o ).
+
+tff(ax1,axiom,
+    result_of(exporting,investing) ).
+
+tff(ax2,axiom,
+    exported_to(united_states,oranges,france) ).
+
+tff(ax3,axiom,
+    led_to(importing,food_shortages_at_home) ).
+
+tff(conj1,conjecture,
+    caused(investing,exporting) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define result_of(X0,X1) := $true
+for all inputs,
+    define exported_to(X0,X1,X2) := $true
+for all inputs,
+    define led_to(X0,X1) := $true
+for all inputs,
+    define caused(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,True,0.95,3,True,0.95,1,CSA,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.93
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Exporting is the result of investing.  
+The United States exported oranges to France.  
+Importing led to food shortages.  
+Did investing cause exporting?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+The two segments are nearly identical in meaning. Minor differences include wording (“a result” vs. “the result”), omission of “of oranges by foreign countries” in the second text, and slight rephrasing of the final question. These changes slightly reduce precision but do not alter the overall meaning significantly.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_investing,type,
+    investing: $i ).
+
+tff(type_exporting,type,
+    exporting: $i ).
+
+tff(type_importing,type,
+    importing: $i ).
+
+tff(type_united_states,type,
+    united_states: $i ).
+
+tff(type_oranges,type,
+    oranges: $i ).
+
+tff(type_france,type,
+    france: $i ).
+
+tff(type_food_shortages,type,
+    food_shortages: $i ).
+
+tff(type_result_of,type,
+    result_of: ( $i * $i ) > $o ).
+
+tff(type_exported_to,type,
+    exported_to: ( $i * $i * $i ) > $o ).
+
+tff(type_led_to,type,
+    led_to: ( $i * $i ) > $o ).
+
+tff(type_cause,type,
+    cause: ( $i * $i ) > $o ).
+
+tff(ax1,axiom,
+    result_of(exporting,investing) ).
+
+tff(ax2,axiom,
+    exported_to(united_states,oranges,france) ).
+
+tff(ax3,axiom,
+    led_to(importing,food_shortages) ).
+
+tff(conj1,conjecture,
+    cause(investing,exporting) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define result_of(X0,X1) := $true
+for all inputs,
+    define exported_to(X0,X1,X2) := $true
+for all inputs,
+    define led_to(X0,X1) := $true
+for all inputs,
+    define cause(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,False,0.93,3,True,0.98,2,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+If an event is an exporting event, then there is an investing event that causes it.
+The event 'export_us_oranges_france' is an exporting event.
+United States is the exporter for the event 'export_us_oranges_france'.
+Oranges are the item for the event 'export_us_oranges_france'.
+France is the importer for the event 'export_us_oranges_france'.
+The home country is United States.
+If an event is an importing event of oranges by a foreign country, then that importing event causes a food shortage event in the home country.
+Is there anything that causes the event 'export_us_oranges_france'?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same causal and factual relationships: exporting results from investing, the U.S. exports oranges to France, and foreign importing of oranges causes domestic shortages. The second text expresses these ideas in a more formal, logical, event-based representation, while the first uses natural language sentences. The only minor difference is stylistic and structural, not semantic.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(united_states_type,type,
+    united_states: $i ).
+
+tff(oranges_type,type,
+    oranges: $i ).
+
+tff(france_type,type,
+    france: $i ).
+
+tff(home_country_type,type,
+    home_country: $i ).
+
+tff(export_us_oranges_france_type,type,
+    export_us_oranges_france: $i ).
+
+tff(is_exporting_type,type,
+    is_exporting: $i > $o ).
+
+tff(is_investing_type,type,
+    is_investing: $i > $o ).
+
+tff(causes_type,type,
+    causes: ( $i * $i ) > $o ).
+
+tff(exporter_type,type,
+    exporter: ( $i * $i ) > $o ).
+
+tff(item_type,type,
+    item: ( $i * $i ) > $o ).
+
+tff(importer_type,type,
+    importer: ( $i * $i ) > $o ).
+
+tff(is_foreign_country_type,type,
+    is_foreign_country: $i > $o ).
+
+tff(importing_event_type,type,
+    importing_event: ( $i * $i * $i ) > $o ).
+
+tff(food_shortage_event_type,type,
+    food_shortage_event: ( $i * $i ) > $o ).
+
+tff(sentence1_axiom,axiom,
+    ! [E_exp: $i] :
+      ( is_exporting(E_exp)
+     => ? [E_inv: $i] :
+          ( is_investing(E_inv)
+          & causes(E_inv,E_exp) ) ) ).
+
+tff(sentence2_event_decl_axiom,axiom,
+    is_exporting(export_us_oranges_france) ).
+
+tff(sentence2_exporter_axiom,axiom,
+    exporter(export_us_oranges_france,united_states) ).
+
+tff(sentence2_item_axiom,axiom,
+    item(export_us_oranges_france,oranges) ).
+
+tff(sentence2_importer_axiom,axiom,
+    importer(export_us_oranges_france,france) ).
+
+tff(home_country_definition_axiom,axiom,
+    home_country = united_states ).
+
+tff(sentence3_axiom,axiom,
+    ! [E_imp: $i] :
+      ( ? [C: $i] :
+          ( is_foreign_country(C)
+          & importing_event(E_imp,oranges,C) )
+     => ? [E_fs: $i] :
+          ( food_shortage_event(E_fs,home_country)
+          & causes(E_imp,E_fs) ) ) ).
+
+tff(sentence4_conjecture,conjecture,
+    ? [C: $i] : causes(C,export_us_oranges_france) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+fof(f28,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f27,f25])).
+fof(f25,plain,(
+  ~is_exporting(export_us_oranges_france)),
+  inference(consistent_polarity_flipping,[],[f21])).
+fof(f21,plain,(
+  is_exporting(export_us_oranges_france)),
+  inference(cnf_transformation,[],[f2])).
+fof(f2,axiom,(
+  is_exporting(export_us_oranges_france)),
+  file('/tmp/lRg0p1ABeg/SOT_Kd9sFA',unknown)).
+fof(f27,plain,(
+  is_exporting(export_us_oranges_france)),
+  inference(resolution,[],[f24,f26])).
+fof(f26,plain,(
+  ( ! [X0] : (causes(X0,export_us_oranges_france)) )),
+  inference(consistent_polarity_flipping,[],[f23])).
+fof(f23,plain,(
+  ( ! [X0] : (~causes(X0,export_us_oranges_france)) )),
+  inference(cnf_transformation,[],[f19])).
+fof(f19,plain,(
+  ! [X0] : ~causes(X0,export_us_oranges_france)),
+  inference(ennf_transformation,[],[f11])).
+fof(f11,plain,(
+  ~? [X0] : causes(X0,export_us_oranges_france)),
+  inference(rectify,[],[f9])).
+fof(f9,negated_conjecture,(
+  ~? [X3] : causes(X3,export_us_oranges_france)),
+  inference(negated_conjecture,[status(cth)],[f8])).
+fof(f8,conjecture,(
+  ? [X3] : causes(X3,export_us_oranges_france)),
+  file('/tmp/lRg0p1ABeg/SOT_Kd9sFA',unknown)).
+fof(f24,plain,(
+  ( ! [X0] : (~causes(sK0(X0),X0) | is_exporting(X0)) )),
+  inference(consistent_polarity_flipping,[],[f20])).
+fof(f20,plain,(
+  ( ! [X0] : (~is_exporting(X0) | causes(sK0(X0),X0)) )),
+  inference(cnf_transformation,[],[f18])).
+fof(f18,plain,(
+  ! [X0] : (? [X1] : causes(X1,X0) | ~is_exporting(X0))),
+  inference(ennf_transformation,[],[f17])).
+fof(f17,plain,(
+  ! [X0] : (is_exporting(X0) => ? [X1] : causes(X1,X0))),
+  inference(pure_predicate_removal,[],[f1])).
+fof(f1,axiom,(
+  ! [X0] : (is_exporting(X0) => ? [X1] : (causes(X1,X0) & is_investing(X1)))),
+  file('/tmp/lRg0p1ABeg/SOT_Kd9sFA',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,3,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.92
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Event is a type.
+Country is a type.
+Good is a type.
+Investing activity is an event.
+Exporting activity is an event.
+United States is a country.
+France is a country.
+Oranges are a good.
+Foreign oranges importing event is an event.
+Food shortages at home event is an event.
+Causes is a relation between two events.
+Exported is a relation between a country, a good, and a country.
+Investing activity causes exporting activity.
+The United States exported oranges to France.
+Foreign oranges importing event causes food shortages at home event.
+Does there exist an event X such that X causes exporting activity?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: investing leads to exporting, the U.S. exports oranges to France, and foreign importing of oranges causes domestic food shortages. The second segment restates this in a more formal, ontology-like structure, explicitly labeling entities (event, country, good) and relations (causes, exported). The main difference is stylistic and structural—the second text formalizes the relationships rather than narrating them—but the underlying meaning and causal relationships are nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(event_type,type,
+    event: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(good_type,type,
+    good: $tType ).
+
+tff(investing_activity_decl,type,
+    investing_activity: event ).
+
+tff(exporting_activity_decl,type,
+    exporting_activity: event ).
+
+tff(united_states_decl,type,
+    united_states: country ).
+
+tff(france_decl,type,
+    france: country ).
+
+tff(oranges_decl,type,
+    oranges: good ).
+
+tff(foreign_oranges_importing_event_decl,type,
+    foreign_oranges_importing_event: event ).
+
+tff(food_shortages_at_home_event_decl,type,
+    food_shortages_at_home_event: event ).
+
+tff(causes_type,type,
+    causes: ( event * event ) > $o ).
+
+tff(exported_type,type,
+    exported: ( country * good * country ) > $o ).
+
+tff(investing_causes_exporting,axiom,
+    causes(investing_activity,exporting_activity) ).
+
+tff(us_exported_oranges_to_france,axiom,
+    exported(united_states,oranges,france) ).
+
+tff(foreign_oranges_importing_causes_food_shortages,axiom,
+    causes(foreign_oranges_importing_event,food_shortages_at_home_event) ).
+
+tff(exists_event_causes_exporting,conjecture,
+    ? [X: event] : causes(X,exporting_activity) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, event: $tType).
+tff(type_def_6, type, country: $tType).
+tff(type_def_7, type, good: $tType).
+tff(func_def_0, type, investing_activity: event).
+tff(func_def_1, type, exporting_activity: event).
+tff(func_def_2, type, united_states: country).
+tff(func_def_3, type, france: country).
+tff(func_def_4, type, oranges: good).
+tff(func_def_5, type, foreign_oranges_importing_event: event).
+tff(func_def_6, type, food_shortages_at_home_event: event).
+tff(pred_def_1, type, causes: (event * event) > $o).
+tff(pred_def_2, type, exported: (country * good * country) > $o).
+tff(f11,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f8,f10])).
+tff(f10,plain,(
+  ( ! [X0 : event] : (~causes(X0,exporting_activity)) )),
+  inference(cnf_transformation,[],[f7])).
+tff(f7,plain,(
+  ! [X0 : event] : ~causes(X0,exporting_activity)),
+  inference(ennf_transformation,[],[f5])).
+tff(f5,negated_conjecture,(
+  ~? [X0 : event] : causes(X0,exporting_activity)),
+  inference(negated_conjecture,[status(cth)],[f4])).
+tff(f4,conjecture,(
+  ? [X0 : event] : causes(X0,exporting_activity)),
+  file('/tmp/hbfVwJdn1w/SOT_dwnTcM',unknown)).
+tff(f8,plain,(
+  causes(investing_activity,exporting_activity)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  causes(investing_activity,exporting_activity)),
+  file('/tmp/hbfVwJdn1w/SOT_dwnTcM',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,False,0.92,3,True,0.98,2,THM,Unknown,9,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.99
+% The original and final NL have similarity: 0.92
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Exporting is a result of investing.
+The United States exported oranges to France.
+The importing of oranges by foreign countries led to food shortages at home.
+What caused the exporting?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+country is a type.
+good is a type.
+event is a type.
+united_states is a country.
+france is a country.
+oranges is a good.
+home_country is a country.
+event_us_exported_oranges_france is an event.
+foreign_countries_import_oranges is a proposition.
+is_exporting_event is a property of events.
+is_investing_event is a property of events.
+caused is a relation between two events.
+exporter_of is a relation between an event and a country.
+item_of is a relation between an event and a good.
+importer_of is a relation between an event and a country.
+food_shortages is a property of countries.
+For every event E, if E is an exporting event, then there exists an event I such that I is an investing event and I caused E.
+event_us_exported_oranges_france is an exporting event.
+The United States is the exporter of event_us_exported_oranges_france, oranges are the item of event_us_exported_oranges_france, and France is the importer of event_us_exported_oranges_france.
+foreign_countries_import_oranges is true if and only if there exists a country C and an event E such that C is not home_country, E is an exporting event, oranges are the item of E, and C is the importer of E.
+If foreign_countries_import_oranges is true, then home_country has food shortages.
+Is there an event X such that X caused event_us_exported_oranges_france?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same scenario: the U.S. exported oranges to France, foreign imports of oranges caused domestic shortages, and the question asks what caused the exporting. The second segment restates this in formal logical terms, defining types, relations, and propositions. The main difference is that the second text is a structured logical representation rather than a natural-language narrative, but the underlying meaning and causal relationships are nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(country_type,type,
+    country: $tType ).
+
+tff(good_type,type,
+    good: $tType ).
+
+tff(event_type,type,
+    event: $tType ).
+
+tff(united_states_type,type,
+    united_states: country ).
+
+tff(france_type,type,
+    france: country ).
+
+tff(oranges_type,type,
+    oranges: good ).
+
+tff(home_country_type,type,
+    home_country: country ).
+
+tff(event_us_exported_oranges_france_type,type,
+    event_us_exported_oranges_france: event ).
+
+tff(foreign_countries_import_oranges_type,type,
+    foreign_countries_import_oranges: $o ).
+
+tff(is_exporting_event_type,type,
+    is_exporting_event: event > $o ).
+
+tff(is_investing_event_type,type,
+    is_investing_event: event > $o ).
+
+tff(caused_type,type,
+    caused: ( event * event ) > $o ).
+
+tff(exporter_of_type,type,
+    exporter_of: ( event * country ) > $o ).
+
+tff(item_of_type,type,
+    item_of: ( event * good ) > $o ).
+
+tff(importer_of_type,type,
+    importer_of: ( event * country ) > $o ).
+
+tff(food_shortages_type,type,
+    food_shortages: country > $o ).
+
+tff(exporting_event_implies_investing_event,axiom,
+    ! [E: event] :
+      ( is_exporting_event(E)
+     => ? [I: event] :
+          ( is_investing_event(I)
+          & caused(I,E) ) ) ).
+
+tff(event_us_exported_oranges_france_is_exporting_event,axiom,
+    is_exporting_event(event_us_exported_oranges_france) ).
+
+tff(event_us_exported_oranges_france_details,axiom,
+    ( exporter_of(event_us_exported_oranges_france,united_states)
+    & item_of(event_us_exported_oranges_france,oranges)
+    & importer_of(event_us_exported_oranges_france,france) ) ).
+
+tff(foreign_countries_import_oranges_definition,axiom,
+    ( foreign_countries_import_oranges
+  <=> ? [C: country,E: event] :
+        ( ( C != home_country )
+        & is_exporting_event(E)
+        & item_of(E,oranges)
+        & importer_of(E,C) ) ) ).
+
+tff(foreign_countries_import_oranges_implies_food_shortages,axiom,
+    ( foreign_countries_import_oranges
+   => food_shortages(home_country) ) ).
+
+tff(question_event_caused_us_exported_oranges_france,conjecture,
+    ? [X: event] : caused(X,event_us_exported_oranges_france) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, country: $tType).
+tff(type_def_6, type, good: $tType).
+tff(type_def_7, type, event: $tType).
+tff(func_def_0, type, united_states: country).
+tff(func_def_1, type, france: country).
+tff(func_def_2, type, oranges: good).
+tff(func_def_3, type, home_country: country).
+tff(func_def_4, type, event_us_exported_oranges_france: event).
+tff(func_def_5, type, sK0: event > event).
+tff(pred_def_2, type, is_exporting_event: event > $o).
+tff(pred_def_3, type, is_investing_event: event > $o).
+tff(pred_def_4, type, caused: (event * event) > $o).
+tff(pred_def_5, type, exporter_of: (event * country) > $o).
+tff(pred_def_6, type, item_of: (event * good) > $o).
+tff(pred_def_7, type, importer_of: (event * country) > $o).
+tff(pred_def_8, type, food_shortages: country > $o).
+tff(f25,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f24,f22])).
+tff(f22,plain,(
+  is_exporting_event(event_us_exported_oranges_france)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  is_exporting_event(event_us_exported_oranges_france)),
+  file('/tmp/x6G8Dy4zj3/SOT_vtBHFT',unknown)).
+tff(f24,plain,(
+  ~is_exporting_event(event_us_exported_oranges_france)),
+  inference(resolution,[],[f21,f23])).
+tff(f23,plain,(
+  ( ! [X0 : event] : (~caused(X0,event_us_exported_oranges_france)) )),
+  inference(cnf_transformation,[],[f18])).
+tff(f18,plain,(
+  ! [X0 : event] : ~caused(X0,event_us_exported_oranges_france)),
+  inference(ennf_transformation,[],[f9])).
+tff(f9,plain,(
+  ~? [X0 : event] : caused(X0,event_us_exported_oranges_france)),
+  inference(rectify,[],[f7])).
+tff(f7,negated_conjecture,(
+  ~? [X3 : event] : caused(X3,event_us_exported_oranges_france)),
+  inference(negated_conjecture,[status(cth)],[f6])).
+tff(f6,conjecture,(
+  ? [X3 : event] : caused(X3,event_us_exported_oranges_france)),
+  file('/tmp/x6G8Dy4zj3/SOT_vtBHFT',unknown)).
+tff(f21,plain,(
+  ( ! [X0 : event] : (caused(sK0(X0),X0) | ~is_exporting_event(X0)) )),
+  inference(cnf_transformation,[],[f20])).
+tff(f20,plain,(
+  ! [X0 : event] : (caused(sK0(X0),X0) | ~is_exporting_event(X0))),
+  inference(skolemisation,[status(esa),new_symbols(skolem,[sK0])],[f17,f19])).
+tff(f19,plain,(
+  ! [X0 : event] : (? [X1 : event] : caused(X1,X0) => caused(sK0(X0),X0))),
+  introduced(definition,[],[choice_axiom])).
+tff(f17,plain,(
+  ! [X0 : event] : (? [X1 : event] : caused(X1,X0) | ~is_exporting_event(X0))),
+  inference(ennf_transformation,[],[f16])).
+tff(f16,plain,(
+  ! [X0 : event] : (is_exporting_event(X0) => ? [X1 : event] : caused(X1,X0))),
+  inference(pure_predicate_removal,[],[f1])).
+tff(f1,axiom,(
+  ! [X0 : event] : (is_exporting_event(X0) => ? [X1 : event] : (caused(X1,X0) & is_investing_event(X1)))),
+  file('/tmp/x6G8Dy4zj3/SOT_vtBHFT',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/03-Exporting.THM.txt,False,0.92,3,True,0.99,2,THM,Unknown,4,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

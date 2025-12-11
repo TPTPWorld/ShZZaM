@@ -1,0 +1,5 @@
+If a country is a member of NATO, it will protect any member that is attacked.
+Sweden is a member of NATO.
+Germany is a member of NATO
+Russia attacked Germany.
+Will Sweden protect Germany?

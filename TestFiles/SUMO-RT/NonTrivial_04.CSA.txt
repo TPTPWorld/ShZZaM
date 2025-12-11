@@ -1,0 +1,4 @@
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.

@@ -1,0 +1,2 @@
+The tornado damaged the house.
+The tornado did not damage the house.

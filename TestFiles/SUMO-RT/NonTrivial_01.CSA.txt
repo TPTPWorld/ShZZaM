@@ -1,0 +1,4 @@
+Terry possesses a Traditional Savings Account.
+Terry withdrew from the Traditional Savings Account.
+The bank penalized Terry.
+Did the withdrawal cause a penalty?

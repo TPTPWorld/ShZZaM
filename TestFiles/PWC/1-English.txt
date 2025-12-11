@@ -1,0 +1,13 @@
+It is necessary to ensure that the collection of personal data is limited
+only to the minimal extent necessary to provide the service.
+
+The processing of a user's personal data is only permissible with the
+user's explicit consent. Such consent must be clear, informed, and
+revocable at any time.
+
+User data must not be shared with third parties unless explicit permission
+from the user is obtained.
+
+Appropriate technical and organizational measures must be used to protect
+personal data from unauthorized or unlawful processing and against
+accidental loss, destruction, or damage.

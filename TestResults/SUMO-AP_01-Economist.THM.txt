@@ -1,0 +1,506 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.90
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is a person called the economist.  
+The economist feels concern.  
+Is there a person who feels concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an economist who experiences concern and then pose a question about who feels concern. The second segment adds a clarifying statement introducing “a person called the economist” and rephrases the question slightly, but the meaning—identifying the economist as the one who feels concern—remains nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(feels_concern_type,type,
+    feels_concern: person > $o ).
+
+tff(economist_decl,type,
+    economist: person ).
+
+tff(economist_exists,axiom,
+    $true ).
+
+tff(economist_feels_concern,axiom,
+    feels_concern(economist) ).
+
+tff(question,conjecture,
+    ? [X: person] : feels_concern(X) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(func_def_0, type, economist: person).
+tff(pred_def_1, type, feels_concern: person > $o).
+tff(f8,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f6,f7])).
+tff(f7,plain,(
+  ( ! [X0 : person] : (~feels_concern(X0)) )),
+  inference(cnf_transformation,[],[f5])).
+tff(f5,plain,(
+  ! [X0 : person] : ~feels_concern(X0)),
+  inference(ennf_transformation,[],[f4])).
+tff(f4,negated_conjecture,(
+  ~? [X0 : person] : feels_concern(X0)),
+  inference(negated_conjecture,[status(cth)],[f3])).
+tff(f3,conjecture,(
+  ? [X0 : person] : feels_concern(X0)),
+  file('/tmp/E6vXtxpra9/SOT_9Fdp4z',unknown)).
+tff(f6,plain,(
+  feels_concern(economist)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  feels_concern(economist)),
+  file('/tmp/E6vXtxpra9/SOT_9Fdp4z',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.90,3,True,1.00,2,THM,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:5 with similarity 1.00
+% The original and final NL have similarity: 0.80
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There exists at least one person.  
+The economist feels concern.  
+Is there a person who feels concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an economist who feels concern and then pose a question about who or whether someone feels concern. The second segment adds an explicit existential statement (“There exists at least one person”) and rephrases the question slightly, but the core meaning—an economist experiencing concern and inquiry about that feeling—is largely the same.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_economist,type,
+    economist: person ).
+
+tff(type_feels_concern,type,
+    feels_concern: person > $o ).
+
+tff(existence_of_person,axiom,
+    ? [X: person] : $true ).
+
+tff(economist_feels_concern,axiom,
+    feels_concern(economist) ).
+
+tff(question_person_feels_concern,conjecture,
+    ? [X: person] : feels_concern(X) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(func_def_0, type, economist: person).
+tff(pred_def_1, type, feels_concern: person > $o).
+tff(f9,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f7,f8])).
+tff(f8,plain,(
+  ( ! [X0 : person] : (~feels_concern(X0)) )),
+  inference(cnf_transformation,[],[f6])).
+tff(f6,plain,(
+  ! [X0 : person] : ~feels_concern(X0)),
+  inference(ennf_transformation,[],[f4])).
+tff(f4,negated_conjecture,(
+  ~? [X0 : person] : feels_concern(X0)),
+  inference(negated_conjecture,[status(cth)],[f3])).
+tff(f3,conjecture,(
+  ? [X0 : person] : feels_concern(X0)),
+  file('/tmp/PO_8OrqJfT/SOT_TMuOrx',unknown)).
+tff(f7,plain,(
+  feels_concern(economist)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  feels_concern(economist)),
+  file('/tmp/PO_8OrqJfT/SOT_TMuOrx',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.80,3,True,1.00,5,THM,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.90
+% NL2L model:       OpenAI---gpt-5-chat-latest
+% L2NL model:       OpenAI---gpt-5-chat-latest
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+There is a person called the economist.  
+The economist feels concern.  
+Is there a person who feels concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an economist who experiences concern and then pose a question about who feels concern. The second segment adds an explicit statement introducing “a person called the economist” and rephrases the question slightly, but the meaning—identifying the economist as the one who feels concern—remains nearly identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(feels_concern_type,type,
+    feels_concern: person > $o ).
+
+tff(economist_decl,type,
+    economist: person ).
+
+tff(economist_exists,axiom,
+    $true ).
+
+tff(economist_feels_concern,axiom,
+    feels_concern(economist) ).
+
+tff(exists_person_feels_concern,conjecture,
+    ? [X: person] : feels_concern(X) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(func_def_0, type, economist: person).
+tff(pred_def_1, type, feels_concern: person > $o).
+tff(f8,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f6,f7])).
+tff(f7,plain,(
+  ( ! [X0 : person] : (~feels_concern(X0)) )),
+  inference(cnf_transformation,[],[f5])).
+tff(f5,plain,(
+  ! [X0 : person] : ~feels_concern(X0)),
+  inference(ennf_transformation,[],[f4])).
+tff(f4,negated_conjecture,(
+  ~? [X0 : person] : feels_concern(X0)),
+  inference(negated_conjecture,[status(cth)],[f3])).
+tff(f3,conjecture,(
+  ? [X0 : person] : feels_concern(X0)),
+  file('/tmp/zKOZqyHGMM/SOT_vqMrE4',unknown)).
+tff(f6,plain,(
+  feels_concern(economist)),
+  inference(cnf_transformation,[],[f2])).
+tff(f2,axiom,(
+  feels_concern(economist)),
+  file('/tmp/zKOZqyHGMM/SOT_vqMrE4',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.90,3,True,1.00,2,THM,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.80
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+`e` is a type.
+The property `entity` applies to elements of type `e`.
+The property `person` applies to elements of type `e`.
+The property `economist` applies to elements of type `e`.
+The property `felt_concern` applies to elements of type `e`.
+Every economist is a person.
+Every person is an entity.
+There exists an economist.
+There is at most one economist.
+There is an economist who felt concern.
+Is there a person who felt concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an economist who felt concern and then ask whether someone (a person) felt concern. The second segment formalizes the same idea in logical terms, adding explicit type and property declarations and quantifiers, while the first expresses it in natural language. The main difference is that the second text is more detailed and formal, but the underlying meaning—an economist felt concern and a question about who or whether a person felt concern—is essentially the same.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(e_type,type,
+    e: $tType ).
+
+tff(entity_type,type,
+    entity: e > $o ).
+
+tff(person_type,type,
+    person: e > $o ).
+
+tff(economist_type,type,
+    economist: e > $o ).
+
+tff(felt_concern_type,type,
+    felt_concern: e > $o ).
+
+tff(every_economist_is_a_person,axiom,
+    ! [X: e] :
+      ( economist(X)
+     => person(X) ) ).
+
+tff(every_person_is_an_entity,axiom,
+    ! [X: e] :
+      ( person(X)
+     => entity(X) ) ).
+
+tff(there_exists_an_economist,axiom,
+    ? [X: e] : economist(X) ).
+
+tff(there_is_at_most_one_economist,axiom,
+    ! [X: e,Y: e] :
+      ( ( economist(X)
+        & economist(Y) )
+     => ( X = Y ) ) ).
+
+tff(an_economist_felt_concern,axiom,
+    ? [X: e] :
+      ( economist(X)
+      & felt_concern(X) ) ).
+
+tff(is_there_a_person_who_felt_concern,conjecture,
+    ? [X: e] :
+      ( person(X)
+      & felt_concern(X) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, e: $tType).
+tff(func_def_0, type, sK0: e).
+tff(func_def_1, type, sK1: e).
+tff(pred_def_1, type, entity: e > $o).
+tff(pred_def_2, type, person: e > $o).
+tff(pred_def_3, type, economist: e > $o).
+tff(pred_def_4, type, felt_concern: e > $o).
+tff(f26,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f25,f23])).
+tff(f23,plain,(
+  ~person(sK1)),
+  inference(resolution,[],[f21,f22])).
+tff(f22,plain,(
+  ( ! [X0 : e] : (~felt_concern(X0) | ~person(X0)) )),
+  inference(cnf_transformation,[],[f12])).
+tff(f12,plain,(
+  ! [X0 : e] : (~felt_concern(X0) | ~person(X0))),
+  inference(ennf_transformation,[],[f7])).
+tff(f7,negated_conjecture,(
+  ~? [X0 : e] : (felt_concern(X0) & person(X0))),
+  inference(negated_conjecture,[status(cth)],[f6])).
+tff(f6,conjecture,(
+  ? [X0 : e] : (felt_concern(X0) & person(X0))),
+  file('/tmp/_49T7HOf5D/SOT_imNX8B',unknown)).
+tff(f21,plain,(
+  felt_concern(sK1)),
+  inference(cnf_transformation,[],[f16])).
+tff(f16,plain,(
+  felt_concern(sK1) & economist(sK1)),
+  inference(skolemisation,[status(esa),new_symbols(skolem,[sK1])],[f5,f15])).
+tff(f15,plain,(
+  ? [X0 : e] : (felt_concern(X0) & economist(X0)) => (felt_concern(sK1) & economist(sK1))),
+  introduced(definition,[],[choice_axiom])).
+tff(f5,axiom,(
+  ? [X0 : e] : (felt_concern(X0) & economist(X0))),
+  file('/tmp/_49T7HOf5D/SOT_imNX8B',unknown)).
+tff(f25,plain,(
+  person(sK1)),
+  inference(resolution,[],[f17,f20])).
+tff(f20,plain,(
+  economist(sK1)),
+  inference(cnf_transformation,[],[f16])).
+tff(f17,plain,(
+  ( ! [X0 : e] : (~economist(X0) | person(X0)) )),
+  inference(cnf_transformation,[],[f9])).
+tff(f9,plain,(
+  ! [X0 : e] : (person(X0) | ~economist(X0))),
+  inference(ennf_transformation,[],[f1])).
+tff(f1,axiom,(
+  ! [X0 : e] : (economist(X0) => person(X0))),
+  file('/tmp/_49T7HOf5D/SOT_imNX8B',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.80,3,True,0.98,2,THM,Unknown,1,2,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.85
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+Person is a type.
+Feeling is a type.
+Economist is a person.
+Concern is a feeling.
+Felt is a predicate that relates a person and a feeling.
+Is_economist is a predicate that describes a person.
+Is_concern is a predicate that describes a feeling.
+The economist is an economist.
+The concern is a concern.
+The economist felt the concern.
+Is there a person who felt the concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe an economist experiencing concern and then ask who or what entity felt that concern. The second segment, however, expands the first into a more formal, logical or ontological representation, explicitly defining types and predicates. The meaning is essentially the same, but the second adds meta-level structure and definitions not present in the first.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(feeling_type,type,
+    feeling: $tType ).
+
+tff(economist_type,type,
+    economist: person ).
+
+tff(concern_type,type,
+    concern: feeling ).
+
+tff(felt_predicate_type,type,
+    felt: ( person * feeling ) > $o ).
+
+tff(is_economist_predicate_type,type,
+    is_economist: person > $o ).
+
+tff(is_concern_predicate_type,type,
+    is_concern: feeling > $o ).
+
+tff(economist_is_economist_axiom,axiom,
+    is_economist(economist) ).
+
+tff(concern_is_concern_axiom,axiom,
+    is_concern(concern) ).
+
+tff(economist_felt_concern_axiom,axiom,
+    felt(economist,concern) ).
+
+tff(question,conjecture,
+    ? [X: person] : felt(X,concern) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(type_def_6, type, feeling: $tType).
+tff(func_def_0, type, economist: person).
+tff(func_def_1, type, concern: feeling).
+tff(pred_def_1, type, felt: (person * feeling) > $o).
+tff(pred_def_2, type, is_economist: person > $o).
+tff(pred_def_3, type, is_concern: feeling > $o).
+tff(f11,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f9,f10])).
+tff(f10,plain,(
+  ( ! [X0 : person] : (~felt(X0,concern)) )),
+  inference(cnf_transformation,[],[f8])).
+tff(f8,plain,(
+  ! [X0 : person] : ~felt(X0,concern)),
+  inference(ennf_transformation,[],[f5])).
+tff(f5,negated_conjecture,(
+  ~? [X0 : person] : felt(X0,concern)),
+  inference(negated_conjecture,[status(cth)],[f4])).
+tff(f4,conjecture,(
+  ? [X0 : person] : felt(X0,concern)),
+  file('/tmp/E_JItZcNOW/SOT_YiWyw9',unknown)).
+tff(f9,plain,(
+  felt(economist,concern)),
+  inference(cnf_transformation,[],[f3])).
+tff(f3,axiom,(
+  felt(economist,concern)),
+  file('/tmp/E_JItZcNOW/SOT_YiWyw9',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.85,3,True,0.95,2,THM,Unknown,1,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.97
+% The original and final NL have similarity: 0.85
+% NL2L model:       Google---gemini-2.5-flash
+% L2NL model:       Google---gemini-2.5-flash
+% Similarity model: OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+
+% -------------------------------------------------------------------------
+% The final NL is :
+`person` is a type.
+`state` is a type.
+`felt` is a predicate that takes a `person` and a `state`.
+`economist` is a person.
+`concern` is a state.
+The economist felt concern.
+Is there a person who felt concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same event—an economist experiencing concern—and both end with a question about who (or whether someone) felt concern. The second segment, however, adds explicit type declarations and logical structure, making it more formal and meta-linguistic. The first is a simple natural-language statement and question, while the second embeds the same content in a typed logical framework.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(state_type,type,
+    state: $tType ).
+
+tff(felt_type,type,
+    felt: ( person * state ) > $o ).
+
+tff(economist_constant_type,type,
+    economist: person ).
+
+tff(concern_constant_type,type,
+    concern: state ).
+
+tff(economist_felt_concern,axiom,
+    felt(economist,concern) ).
+
+tff(person_felt_concern_conjecture,conjecture,
+    ? [X: person] : felt(X,concern) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(type_def_6, type, state: $tType).
+tff(func_def_0, type, economist: person).
+tff(func_def_1, type, concern: state).
+tff(pred_def_1, type, felt: (person * state) > $o).
+tff(f7,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f5,f6])).
+tff(f6,plain,(
+  ( ! [X0 : person] : (~felt(X0,concern)) )),
+  inference(cnf_transformation,[],[f4])).
+tff(f4,plain,(
+  ! [X0 : person] : ~felt(X0,concern)),
+  inference(ennf_transformation,[],[f3])).
+tff(f3,negated_conjecture,(
+  ~? [X0 : person] : felt(X0,concern)),
+  inference(negated_conjecture,[status(cth)],[f2])).
+tff(f2,conjecture,(
+  ? [X0 : person] : felt(X0,concern)),
+  file('/tmp/XWX8rA5ncD/SOT_utm_8c',unknown)).
+tff(f5,plain,(
+  felt(economist,concern)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  felt(economist,concern)),
+  file('/tmp/XWX8rA5ncD/SOT_utm_8c',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.85,3,True,0.97,2,THM,Unknown,12,3,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest

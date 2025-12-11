@@ -1,0 +1,2 @@
+A bird is a subclass of animal.
+A bird is not a subclass of animal.
