@@ -14,6 +14,7 @@ import google.generativeai as genai
 from google.generativeai import types
 from anthropic import Anthropic, APIStatusError
 
+NORMALIZATION_INSTRUCTION:str = "Rewrite the following sentences to an unambiguous, precise, fixed point form, such that if I asked you to rewrite again nothing would change. Provide all the rewritten sentence as plain text, no explanations or summary."
 LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other formulae must have the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
 SUMO_TERM_REQUEST:str = "Use symbols from the SUMO ontology."
 NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION
@@ -29,6 +30,7 @@ GOOGLE_API_KEY:str = ""
 DEFAULT_ANTHROPIC_MODEL:str = "claude-sonnet-4-5"
 ANTHROPIC_API_KEY:str = ""
 
+DEFAULT_NORMALIZATION_MODEL = "OpenAI---" + DEFAULT_OPENAI_MODEL
 DEFAULT_NL2L_MODEL = "OpenAI---" + DEFAULT_OPENAI_MODEL
 DEFAULT_L2NL_MODEL = "OpenAI---" + DEFAULT_OPENAI_MODEL
 DEFAULT_SIMILARITY_MODEL = "OpenAI---" + DEFAULT_OPENAI_MODEL
@@ -107,6 +109,7 @@ def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,s
     global GOOGLE_API_KEY
     global ANTHROPIC_API_KEY
 
+    NormalizationModel:str = ""
     NL2LModel:str = ""
     L2NLModel:str = ""
     SimilarityModel:str = ""
@@ -128,6 +131,7 @@ def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,s
         else:
             print(f"ERROR: {Matches.group(1)} is not a known model")
             sys.exit(0)
+        NormalizationModel = SetModel(FileModel)
         NL2LModel = SetModel(FileModel)
         L2NLModel = SetModel(FileModel)
         SimilarityModel = SetModel(FileModel)
@@ -135,14 +139,18 @@ def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,s
     else:
 #----Set for all models, either from argument or defaults
         if hasattr(CommandLineArguments,"model"):
+            NormalizationModel = SetModel(CommandLineArguments.model)
             NL2LModel = SetModel(CommandLineArguments.model)
             L2NLModel = SetModel(CommandLineArguments.model)
             SimilarityModel = SetModel(CommandLineArguments.model)
         else:
+            NormalizationModel = SetModel(DEFAULT_NORMALIZATION_MODEL)
             NL2LModel = SetModel(DEFAULT_NL2L_MODEL)
             L2NLModel = SetModel(DEFAULT_L2NL_MODEL)
             SimilarityModel = SetModel(DEFAULT_SIMILARITY_MODEL)
 #----Override for individual uses
+        if hasattr(CommandLineArguments,"normalization_model"):
+            NormalizationModel = SetModel(CommandLineArguments.normalization_model)
         if hasattr(CommandLineArguments,"nl2l_model"):
             NL2LModel = SetModel(CommandLineArguments.nl2l_model)
         if hasattr(CommandLineArguments,"l2nl_model"):
@@ -151,41 +159,41 @@ def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,s
             SimilarityModel = SetModel(CommandLineArguments.similarity_model)
 
 #----Check user has the necessary API keys
-    if (re.match(r"^OpenAI",NL2LModel) or re.match(r"^OpenAI",L2NLModel) or \
-re.match(r"^OpenAI",SimilarityModel)) and len(OPENAI_API_KEY) == 0:
+    if (re.match(r"^OpenAI",NormalizationModel) or re.match(r"^OpenAI",NL2LModel) or \
+re.match(r"^OpenAI",L2NLModel) or re.match(r"^OpenAI",SimilarityModel)) and \
+len(OPENAI_API_KEY) == 0:
         if "OPENAI_API_KEY" in os.environ:
             OPENAI_API_KEY = str(os.getenv("OPENAI_API_KEY"))
-            print("Got OPENAI_API_KEY")
         else:
             print("ERROR: OpenAI API key not in the file or environment variable OPENAI_API_KEY")
             sys.exit(0)
 
-    if (re.match(r"^Google",NL2LModel) or re.match(r"^Google",L2NLModel) or \
-re.match(r"^Google",SimilarityModel)) and len(GOOGLE_API_KEY) == 0:
+    if (re.match(r"^Google",NormalizationModel) or re.match(r"^Google",NL2LModel) or \
+re.match(r"^Google",L2NLModel) or re.match(r"^Google",SimilarityModel)) and \
+len(GOOGLE_API_KEY) == 0:
         if "GOOGLE_API_KEY" in os.environ:
             GOOGLE_API_KEY = str(os.getenv("GOOGLE_API_KEY"))
-            print("Got GOOGLE_API_KEY")
         else:
             print("ERROR: Google API key not in the file or environment variable GOOGLE_API_KEY")
             sys.exit(0)
 
 #----Make sure there is no mess in the output
-    if (re.match(r"^Google",NL2LModel) or re.match(r"^Google",L2NLModel) or \
-re.match(r"^Google",SimilarityModel)) and \
+    if (re.match(r"^Google",NormalizationModel) or re.match(r"^Google",NL2LModel) or \
+re.match(r"^Google",L2NLModel) or re.match(r"^Google",SimilarityModel)) and \
 (not "GRPC_VERBOSITY" in os.environ or os.getenv("GRPC_VERBOSITY") != "NONE"):
         print("To suppress GRPC messages set your GRPC_VERBOSITY environment variable to NONE")
 
-    if (re.match(r"^Anthropic",NL2LModel) or re.match(r"^Anthropic",L2NLModel) or \
-re.match(r"^Anthropic",SimilarityModel)) and len(ANTHROPIC_API_KEY) == 0:
+    if (re.match(r"^Anthropic",NormalizationModel) or re.match(r"^Anthropic",NL2LModel) or \
+re.match(r"^Anthropic",L2NLModel) or re.match(r"^Anthropic",SimilarityModel)) and \
+len(ANTHROPIC_API_KEY) == 0:
         if "ANTHROPIC_API_KEY" in os.environ:
             ANTHROPIC_API_KEY = str(os.getenv("ANTHROPIC_API_KEY"))
-            print("Got ANTHROPIC_API_KEY")
         else:
             print(
 "ERROR: Anthropic API key not in the file or environment variable ANTHROPIC_API_KEY")
             sys.exit(0)
 
-    return NL2LModel,L2NLModel,SimilarityModel
+    return NormalizationModel,NL2LModel,L2NLModel,SimilarityModel
 #--------------------------------------------------------------------------------------------------
 # Requires environment variable ANTHROPIC_API_KEY
 def CallAnthropic(Instruction:str,Content:str,ModelName:str) -> str:
@@ -215,6 +223,7 @@ def CallOpenAI(Instruction:str,Content:str,ModelName:str) -> str:
 
     Client = OpenAI(api_key=OPENAI_API_KEY)
 
+# print(f"Calling OpenAI with\n{Instruction}\n{Content}")
     try:
         OpenAIResponse = Client.chat.completions.create(
             model = ModelName,
@@ -252,7 +261,9 @@ def CallLLM(Model:str,Content:str,Task:str) -> str:
     Instruction:str = ""
     Matches:Optional[Match[str]] = None
 
-    if Task == "NL2L":
+    if Task == "NORMALIZATION":
+        Instruction = NORMALIZATION_INSTRUCTION
+    elif Task == "NL2L":
         Instruction = NL2L_INSTRUCTION
     elif Task == "L2NL":
         Instruction = L2NL_INSTRUCTION
@@ -405,14 +416,18 @@ def ParseCommandLine() -> Namespace:
     Parser.add_argument("-q","--quietness",type=int,default=3,
         help="Output suppression, 0=none,5=max. Default %(default)s")
     Parser.add_argument("-M","--model",type=str,default=argparse.SUPPRESS,
-        help="Model for NL2L, L2NL, and similarity. \
+        help="Model for normalization, NL2L, L2NL, and similarity. \
 Format is Company[---Model], Company is OpenAI or Google or Anthropic, ---Model is optional.")
+    Parser.add_argument("-F","--normalization_model",type=str,default=argparse.SUPPRESS,
+        help="Model for NL normalization. Default " + DEFAULT_NORMALIZATION_MODEL)
     Parser.add_argument("-N","--nl2l_model",type=str,default=argparse.SUPPRESS,
         help="Model for NL to L conversion. Default " + DEFAULT_NL2L_MODEL)
     Parser.add_argument("-L","--l2nl_model",type=str,default=argparse.SUPPRESS,
         help="Model for L to NL conversion. Default " + DEFAULT_L2NL_MODEL)
     Parser.add_argument("-S","--similarity_model",type=str,default=argparse.SUPPRESS,
         help="Model for NL similarity measurement. Default " + DEFAULT_SIMILARITY_MODEL)
+    Parser.add_argument("-n","--no_normalize",action="store_false",default=False,
+        help="Don't normalize the text. Default %(default)s.")
     Parser.add_argument("-a","--similarity_acceptance",type=float,default=0.74,
         help="Similarity required to accept one ZigZag. Default %(default)s.")
     Parser.add_argument("-c","--similarity_convergence",type=float,default=0.94,
@@ -576,30 +591,33 @@ LastTwoDifferences,NewText,OriginalSimilarityScore,OriginalDifferences,Logic,\
 TotalSyntaxCorrections,TotalTypeCorrections,TotalSimilarityCorrections)
 
 #--------------------------------------------------------------------------------------------------
-def PrintResult(FilePath:str,OriginalText:str,ZigZagRepeats:int,ZigZagResult:ZigZagResultType,\
-NL2LModel:str,L2NLModel:str,SimilarityModel:str):
+def PrintResult(FilePath:str,OriginalText:str,NormalizedText:str,ZigZagRepeats:int,
+ZigZagResult:ZigZagResultType,NL2LModel:str,L2NLModel:str,SimilarityModel:str):
 
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"Converged at ZigZag number {ZigZagRepeats}:{ZigZagResult.ZigZagNumber} \
 with similarity {ZigZagResult.LastTwoSimilarityScore:.2f}")
     QuietPrint(5,0,f"The original and final NL have similarity: \
 {ZigZagResult.OriginalSimilarityScore:.2f}")
-    QuietPrint(5,0,f"NL2L model:       {NL2LModel}")
-    QuietPrint(5,0,f"L2NL model:       {L2NLModel}")
-    QuietPrint(5,0,f"Similarity model: {SimilarityModel}")
+    QuietPrint(5,0,f"Normalization model: {NormalizationModel}")
+    QuietPrint(5,0,f"NL2L model:          {NL2LModel}")
+    QuietPrint(5,0,f"L2NL model:          {L2NLModel}")
+    QuietPrint(5,0,f"Similarity model:    {SimilarityModel}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The original NL is :\n{OriginalText}")
+    QuietPrint(5,0,"-------------------------------------------------------------------------")
+    QuietPrint(5,0,f"The normalized NL is :\n{NormalizedText}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The final NL is :\n{ZigZagResult.FinalText}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The differences between the original and final NL are:\n\
 {ZigZagResult.OriginalDifferences}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
-    QuietPrint(3,0,f"The penultimate NL is :\n{ZigZagResult.PenultimateText}")
-    QuietPrint(3,0,"-------------------------------------------------------------------------")
-    QuietPrint(3,0,f"The differences between the penultimate and final NL are:\n \
+    QuietPrint(2,0,f"The penultimate NL is :\n{ZigZagResult.PenultimateText}")
+    QuietPrint(2,0,"-------------------------------------------------------------------------")
+    QuietPrint(2,0,f"The differences between the penultimate and final NL are:\n \
 {ZigZagResult.LastTwoDifferences}")
-    QuietPrint(3,0,"-------------------------------------------------------------------------")
+    QuietPrint(2,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"The final logic is :")
     QuietPrint(-6,0,f"{ZigZagResult.Logic}")
     QuietPrint(5,0,"-------------------------------------------------------------------------")
@@ -624,7 +642,9 @@ def main():
     ZigZaggingAcceptable:float = 0.0
     ZigZaggingLimit:int = 0
     PrintCSV:bool = False
+    NormalizeText:bool = True
 
+    NormalizationModel:str = ""
     NL2LModel:str = ""
     L2NLModel:str = ""
     SimilarityModel:str = ""
@@ -646,6 +666,7 @@ def main():
     ZigZaggingAcceptable = CommandLineArguments.zigzagging_acceptable
     ZigZaggingLimit = CommandLineArguments.zigzagging_limit
     PrintCSV = CommandLineArguments.values
+    NormalizeText = not CommandLineArguments.no_normalize
 
     with open(FilePath,"r",encoding="utf-8") as FileHandle:
         for FileLine in FileHandle:
@@ -656,7 +677,16 @@ def main():
             else:
                OriginalText += FileLine
 
-    NL2LModel,L2NLModel,SimilarityModel = GetModels(CommandLineArguments,APIKeyLines)
+    NormalizationModel,NL2LModel,L2NLModel,SimilarityModel = GetModels(\
+CommandLineArguments,APIKeyLines)
+
+    if NormalizeText:
+        NormalizedText = CallLLM(NormalizationModel,OriginalText,"NORMALIZATION")
+        QuietPrint(3,0,"-------------------------------------------------------------------------")
+        QuietPrint(3,0,f"Original text:\n{OriginalText}")
+        QuietPrint(3,0,"-------------------------------------------------------------------------")
+        QuietPrint(3,0,f"NormalizedText text:\n{NormalizedText}")
+        QuietPrint(3,0,"-------------------------------------------------------------------------")
 
     ZigZagRepeats = 0
     BestZigZagSimilarity = 0.0
@@ -665,8 +695,8 @@ BestZigZagResult.OriginalSimilarityScore < ZigZaggingAcceptable:
         ZigZagRepeats += 1
         QuietPrint(4,0,f"---- ZigZag sequence {ZigZagRepeats} to improve on original similarity \
 {BestZigZagResult.OriginalSimilarityScore:.2f}, need similarity {ZigZaggingAcceptable:.2f}")
-        ZigZagResult = ZigZagToConvergence(CommandLineArguments,NL2LModel,L2NLModel,\
-SimilarityModel,OriginalText,ATPTimeLimit)
+        ZigZagResult = ZigZagToConvergence(CommandLineArguments,NL2LModel,L2NLModel,
+SimilarityModel,NormalizedText,ATPTimeLimit)
         if ZigZagResult.Converged and \
 ZigZagResult.OriginalSimilarityScore > BestZigZagResult.OriginalSimilarityScore:
             ZigZagResult.SZSStatus,ZigZagResult.SZSOutput = \
@@ -681,8 +711,8 @@ RunATP(ZigZagResult.Logic,Prover,ModelFinder,ATPTimeLimit)
             QuietPrint(4,0,f"No acceptable","")
         QuietPrint(-4,0,f" convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
         QuietPrint(4,0,f"Printing the best ZigZag sequence result")
-        PrintResult(FilePath,OriginalText,ZigZagRepeats,BestZigZagResult,NL2LModel,L2NLModel,
-SimilarityModel)
+        PrintResult(FilePath,OriginalText,NormalizedText,ZigZagRepeats,BestZigZagResult,NL2LModel,
+L2NLModel,SimilarityModel)
     else:
         QuietPrint(4,0,"-------------------------------------------------------------------------")
         QuietPrint(4,0,f"No convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
