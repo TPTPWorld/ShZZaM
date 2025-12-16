@@ -15,7 +15,7 @@ from google.generativeai import types
 from anthropic import Anthropic, APIStatusError
 
 NORMALIZATION_INSTRUCTION:str = "Rewrite the following sentences to an unambiguous, precise, fixed point form, such that if I asked you to rewrite again nothing would change. Provide all the rewritten sentence as plain text, no explanations or summary."
-LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other formulae must have the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
+LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other sentence must be translated into formulae with the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
 SUMO_TERM_REQUEST:str = "Use symbols from the SUMO ontology."
 NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION
 L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Provide only the English as plain text, no explanations or summary."
@@ -561,7 +561,7 @@ CompareNLs(SimilarityModel,OriginalText,NewText)
 {SimilarityAcceptable:.2f}. Zig again.")
                     ZigCorrectionNumber += 1
                     TotalSimilarityCorrections += 1
-                    QuietPrint(4,2,f"Doing Zag (L2NL) for similarity error {SimilarityCheckNumber} \
+                    QuietPrint(4,2,f"Doing Zig (NL2L) for similarity error {SimilarityCheckNumber} \
 after NL2L {ZigZagNumber}")
                     Logic = CallLLM(NL2LModel,OldText,"SimilarityError")
                     QuietPrint(1,4,f"The similarity corrected logic from {NL2LModel} is\n{Logic}")
@@ -592,7 +592,8 @@ TotalSyntaxCorrections,TotalTypeCorrections,TotalSimilarityCorrections)
 
 #--------------------------------------------------------------------------------------------------
 def PrintResult(FilePath:str,OriginalText:str,NormalizedText:str,ZigZagRepeats:int,
-ZigZagResult:ZigZagResultType,NL2LModel:str,L2NLModel:str,SimilarityModel:str):
+ZigZagResult:ZigZagResultType,NormalizationModel:str,NL2LModel:str,L2NLModel:str,
+SimilarityModel:str):
 
     QuietPrint(5,0,"-------------------------------------------------------------------------")
     QuietPrint(5,0,f"Converged at ZigZag number {ZigZagRepeats}:{ZigZagResult.ZigZagNumber} \
@@ -711,8 +712,8 @@ RunATP(ZigZagResult.Logic,Prover,ModelFinder,ATPTimeLimit)
             QuietPrint(4,0,f"No acceptable","")
         QuietPrint(-4,0,f" convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
         QuietPrint(4,0,f"Printing the best ZigZag sequence result")
-        PrintResult(FilePath,OriginalText,NormalizedText,ZigZagRepeats,BestZigZagResult,NL2LModel,
-L2NLModel,SimilarityModel)
+        PrintResult(FilePath,OriginalText,NormalizedText,ZigZagRepeats,BestZigZagResult,
+NormalizationModel,NL2LModel,L2NLModel,SimilarityModel)
     else:
         QuietPrint(4,0,"-------------------------------------------------------------------------")
         QuietPrint(4,0,f"No convergence after {ZigZagRepeats}:{ZigZaggingLimit} ZigZag sequences")
