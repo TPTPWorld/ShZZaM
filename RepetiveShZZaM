@@ -4,12 +4,13 @@ onintr cleanup
 set Repeats = $argv[1]
 shift
 
-source shzzam_venv/bin/activate.csh >& /dev/null 
+source ~/Systems/ShZZaM---0.1/shzzam_venv/bin/activate.csh >& /dev/null 
 foreach TestFile ($argv)
     set ResultFile = "TestResults/`echo $TestFile | sed -e 's/TestFiles\///' -e 's#/#_#g'`"
     rm -f $ResultFile
     touch $ResultFile
-    foreach Model (OpenAI Google)
+#    foreach Model (OpenAI Google Anthropic)
+    foreach Model (OpenAI )
         set Count = 1
         while ($Count <= $Repeats)
             @ Count++

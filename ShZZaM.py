@@ -18,7 +18,7 @@ NORMALIZATION_INSTRUCTION:str = "Rewrite the following sentences to an unambiguo
 LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other sentences must be translated into formulae with the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
 SUMO_TERM_REQUEST:str = "Use symbols from the SUMO ontology."
 NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION
-L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Provide only the English as plain text, no explanations or summary."
+L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Use very natural English language, no logic formalisms. Provide only the English as plain text, no explanations or summary."
 SIMLARITY_INSTRUCTION:str = "Tell me how similar in meaning these two test segments are, as a real number in the range 0.0 to 1.0. Output only the number on the first line, then a explanation of any differences on following lines."
 
 DEFAULT_OPENAI_MODEL:str = "gpt-5-chat-latest"
@@ -52,6 +52,7 @@ SZSAbbreviations = {
     "CounterSatisfiable": "CSA",
     "Unsatisfiable": "UNS",
     "Satisfiable": "SAT",
+    "ContradictoryAxioms": "CAX",
     "Timeout": "TMO",
     "GaveUp": "GUP",
     "Unknown": "UNK"
@@ -102,7 +103,7 @@ def SetModel(ModelRequested:str) -> str:
         else:
             return "OpenAI---" + DEFAULT_OPENAI_MODEL
 #--------------------------------------------------------------------------------------------------
-def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,str]:
+def GetModels(CommandLineArguments:Namespace,APIKeyLines:str) -> tuple[str,str,str,str]:
 
 #----API keys are global
     global OPENAI_API_KEY
@@ -453,8 +454,9 @@ Format is Company[---Model], Company is OpenAI or Google or Anthropic, ---Model 
 
     return Parser.parse_args()
 #--------------------------------------------------------------------------------------------------
-def ZigZagToConvergence(CommandLineArguments:Namespace,NL2LModel:str,L2NLModel:str,
-SimilarityModel:str,OriginalText:str,ATPTimeLimit:int) -> ZigZagResultType:
+def ZigZagToConvergence(CommandLineArguments:Namespace,NormalizationModel:str,NL2LModel:str,
+L2NLModel:str,SimilarityModel:str,OriginalText:str,NormalizeText:bool,ATPTimeLimit:int) -> \
+ZigZagResultType:
 
 #----These are set by command line parameters
     SimilarityAcceptable:float = 0.0
@@ -549,6 +551,10 @@ after NL2L {ZigZagNumber}")
                 NewText = CallLLM(L2NLModel,Logic,"L2NL")
                 QuietPrint(1,2,f"The language from {L2NLModel} at L2NL number {ZigZagNumber} is\n \
 {NewText}")
+                if NormalizeText:
+                    NewText = CallLLM(NormalizationModel,NewText,"NORMALIZATION")
+                    QuietPrint(1,2,f"The normalized language from {L2NLModel} at L2NL number \
+{ZigZagNumber} is\n {NewText}")
                 SimilarityCheckNumber += 1
                 QuietPrint(4,2,f"Doing original similarity check {SimilarityCheckNumber} \
 after L2NL {ZigZagNumber}")
@@ -688,6 +694,8 @@ CommandLineArguments,APIKeyLines)
         QuietPrint(3,0,"-------------------------------------------------------------------------")
         QuietPrint(3,0,f"NormalizedText text:\n{NormalizedText}")
         QuietPrint(3,0,"-------------------------------------------------------------------------")
+    else:
+        NormalizedText = OriginalText
 
     ZigZagRepeats = 0
     BestZigZagSimilarity = 0.0
@@ -696,8 +704,8 @@ BestZigZagResult.OriginalSimilarityScore < ZigZaggingAcceptable:
         ZigZagRepeats += 1
         QuietPrint(4,0,f"---- ZigZag sequence {ZigZagRepeats} to improve on original similarity \
 {BestZigZagResult.OriginalSimilarityScore:.2f}, need similarity {ZigZaggingAcceptable:.2f}")
-        ZigZagResult = ZigZagToConvergence(CommandLineArguments,NL2LModel,L2NLModel,
-SimilarityModel,NormalizedText,ATPTimeLimit)
+        ZigZagResult = ZigZagToConvergence(CommandLineArguments,NormalizationModel,NL2LModel,
+L2NLModel,SimilarityModel,NormalizedText,NormalizeText,ATPTimeLimit)
         if ZigZagResult.Converged and \
 ZigZagResult.OriginalSimilarityScore > BestZigZagResult.OriginalSimilarityScore:
             ZigZagResult.SZSStatus,ZigZagResult.SZSOutput = \
