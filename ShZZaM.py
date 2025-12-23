@@ -14,11 +14,11 @@ import google.generativeai as genai
 from google.generativeai import types
 from anthropic import Anthropic, APIStatusError
 
-NORMALIZATION_INSTRUCTION:str = "Rewrite the following sentences to an unambiguous, precise, fixed point form, such that if I asked you to rewrite again nothing would change. Provide all the rewritten sentence as plain text, no explanations or summary."
+NORMALIZATION_INSTRUCTION:str = "Rewrite the following sentences to a clear, fixed point form, such that if I asked you to rewrite again nothing would change. All aspects must be included in the rewritten form. Add background knowledge if necessary to clarify the scenario. Provide all the rewritten sentences as plain text, no explanations or summary."
 LOGIC_FORMAT_INSTRUCTION:str = "Use annotated tff formulae. Every sentence must be translated. Questions must be translated into formulae with the 'conjecture' role. All other sentences must be translated into formulae with the 'axiom' role. All the necessary type declarations must be provided. Declare each type in a separate annotated formula. Remember that variables start uppercase, and all other symbols start lowercase. Remember that the connectives are ~ for negation, | for disjunction, & for conjunction, => for implication, <=> for equivalence, = for equality, != for inequality. Put parentheses around all binary formulae. Output only the TPTP TFF result, no explanations and no comments lines. Use plain text, not markdown."
 SUMO_TERM_REQUEST:str = "Use symbols from the SUMO ontology."
-NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION
-L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Use very natural English language, no logic formalisms. Provide only the English as plain text, no explanations or summary."
+NL2L_INSTRUCTION:str = "Translate this English into TPTP typed first-order logic." + LOGIC_FORMAT_INSTRUCTION 
+L2NL_INSTRUCTION:str = "Translate this TPTP typed first-order logic into natural English. Formulae with the 'conjecture' role must be expressed as questions. All other formulae must be expressed as statements of fact. Provide only the English as plain text, one sentence per line, no blank lines, no explanations or summary."
 SIMLARITY_INSTRUCTION:str = "Tell me how similar in meaning these two test segments are, as a real number in the range 0.0 to 1.0. Output only the number on the first line, then a explanation of any differences on following lines."
 
 DEFAULT_OPENAI_MODEL:str = "gpt-5-chat-latest"
@@ -85,7 +85,7 @@ def QuietPrint(Level:int,Indent:int,Message:str,End="\n") -> None:
             print("%---- DEBUG -----")
         elif Level == 1:
             print("%---- DETAIL ----")
-        if Level >= 0:
+        if Level >= 2:
             print("% ",end='')
         print(Message,end=End)
         if Level == 0 or Level == 1:
@@ -214,7 +214,10 @@ def CallAnthropic(Instruction:str,Content:str,ModelName:str) -> str:
                 }
             ]
         )
-        return Message.content[0].text or ""
+        if hasattr(Message.content[0],"text"):
+            return Message.content[0].text
+        else:
+            return ""
     except Exception as e:
         print(f"ERROR: Calling Anthropic: {e}")
         sys.exit(0)
@@ -551,10 +554,10 @@ after NL2L {ZigZagNumber}")
                 NewText = CallLLM(L2NLModel,Logic,"L2NL")
                 QuietPrint(1,2,f"The language from {L2NLModel} at L2NL number {ZigZagNumber} is\n \
 {NewText}")
-                if NormalizeText:
-                    NewText = CallLLM(NormalizationModel,NewText,"NORMALIZATION")
-                    QuietPrint(1,2,f"The normalized language from {L2NLModel} at L2NL number \
-{ZigZagNumber} is\n {NewText}")
+#                if NormalizeText:
+#                    NewText = CallLLM(NormalizationModel,NewText,"NORMALIZATION")
+#                    QuietPrint(1,2,f"The normalized language from {L2NLModel} at L2NL number \
+#{ZigZagNumber} is\n {NewText}")
                 SimilarityCheckNumber += 1
                 QuietPrint(4,2,f"Doing original similarity check {SimilarityCheckNumber} \
 after L2NL {ZigZagNumber}")
@@ -683,6 +686,7 @@ def main():
                     APIKeyLines += FileLine
             else:
                OriginalText += FileLine
+    OriginalText = OriginalText.strip()
 
     NormalizationModel,NL2LModel,L2NLModel,SimilarityModel = GetModels(\
 CommandLineArguments,APIKeyLines)
