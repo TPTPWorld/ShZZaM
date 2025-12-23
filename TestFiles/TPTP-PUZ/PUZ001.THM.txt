@@ -1,0 +1,10 @@
+Someone who lives in Dreadbury Mansion killed Aunt Agatha.
+Agatha, the butler, and Charles are three different people who live in Dreadbury Mansion, and
+are the only people who live in the mansion.
+A killer always hates the victim, and is never richer than the victim.
+Charles hates no one that Aunt Agatha hates.
+Agatha hates everyone except the butler.
+The butler hates everyone not richer than Aunt Agatha.
+The butler hates everyone Aunt Agatha hates.
+No one hates everyone.
+Agatha is not the butler. Who killed Aunt Agatha?

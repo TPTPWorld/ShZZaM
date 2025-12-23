@@ -1,0 +1,5 @@
+Jon is the only human. 
+Garfield, Arlene, and Nermal are the only cats. 
+Jon owns Garfield and does not own Arlene. 
+All cats love Garfield. 
+Does Jon owns every cat that is not Arlene and loves Garfield?

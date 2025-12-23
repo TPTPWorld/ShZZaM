@@ -1,0 +1,10 @@
+Every student is enrolled in at least one course. 
+Every professor teaches at least one course. 
+Every course has at least one student enrolled. 
+Every course has at least one professor teaching. 
+The coordinator of a course teaches the course. 
+If a student is enrolled in a course then the student is taught by every professor who teaches the 
+course. 
+Michael is enrolled in CSC410. 
+Victor is the coordinator of CSC410. 
+Is Michael taught by Victor?

@@ -1,0 +1,8 @@
+Three interns are residents of the same hospital.
+On only one day of the week are all three interns on call.
+No intern is on call on three consecutiveutive days.
+No two interns are off on the same day more than once a week.
+The first intern is off on Sunday, Tuesday, and Thursday. 
+The second intern is off on Thursday and Saturday. 
+The third intern is off on Sunday.
+Which day of the week are all three interns on call?

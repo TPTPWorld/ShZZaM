@@ -1,0 +1,18 @@
+There are 5 houses, 5 people, 5 colors, 5 drinks, 5 games, and 4 pets. 
+Each house has a person, a color, a drink, and game, and all but one of the houses has a pet.
+House 1 is at the left end and house 5 is at the right end.
+The Englishman lives in the Red house. 
+The White house is left of the Green house. 
+The Italian has a Guppy. 
+Lemonade is drunk in the Green house. 
+The Swede lives in the house where Coffee is drunk. 
+The Toad lives in the house where Backgammon is played. 
+Racquetball is played in the yellow house. 
+Milk is drunk in the third house. 
+The Russian lives in the first house. 
+The Camel lives next to the house where Quoits is played. 
+The Rat lives next to the house where Racquetball is played. 
+Solitaire is played in the house where vodka is drunk. 
+The American lives in the house where Charades is played. 
+The Russian lives next to the Blue house.
+The problem is to match each house with as many properties as possible.

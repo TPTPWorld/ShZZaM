@@ -1,0 +1,18 @@
+There are five consecutive houses, each of a different color and inhabited by men of different 
+nationalities. 
+They each own a different pet, have a different favorite drink and drive a different car.
+The Englishman lives in the red house.
+The Spaniard owns the dog.
+Coffee is drunk in the green house.
+The Ukrainian drinks tea.
+The green house is immediately to the right of the ivory house.
+The Porsche driver owns snails.
+The Masserati is driven by the man who lives in the yellow house.
+Milk is drunk in the middle house.
+The Norwegian lives in the first house on the left.
+The man who drives a Saab lives in the house next to the man with the fox.
+The Masserati is driven by the man in the house next to the house where the horse is kept.
+The Honda driver drinks orange juice.
+The Japanese drives a Jaguar.
+The Norwegian lives next to the blue house.
+Who owns the Zebra?

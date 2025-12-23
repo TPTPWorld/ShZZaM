@@ -1,0 +1,8 @@
+Garfield is a cat and Odie is a dog. 
+Cats and dogs are pets. 
+Jon is a human. 
+Every pet has a human owner. 
+Jon owns Garfield and Odie, and they are the only cat and dog he owns. 
+If a dog chases a cat, then the cat's owner hates the dog's owner. 
+Odie has chased Garfield. 
+Does Jon hate himself?

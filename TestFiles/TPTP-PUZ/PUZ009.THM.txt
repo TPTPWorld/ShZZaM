@@ -1,0 +1,11 @@
+On the idland there are knights who always tell the truth, and knaves who always lie.
+In another curious incident, when the husband arrived on an island looking for Oona, he met 5 
+natives A,B,C,D,E who all guessed his purpose and grinned at meeting him. They said:
+A: Oona is on this island. 
+B: Oona is not on this island.
+C: Oona was here yesterday. 
+D: Oona is not here today, and she was not here yesterday. 
+E: Either D is a knave or C is a knight.
+The logician thought for a while, but could get nowhere. 
+At this point A said: Either E is a knave or C is a knight. 
+Is Oona on the island?

@@ -1,0 +1,5 @@
+Assume that a chemical compound C is made by pouring the elements A and B into the same beaker. 
+The two elements A and B are not acid. 
+It is possible that after making the compound C it results in an acid. 
+Is it possible that pouring element A results not in an acid, and pouring A and B in the beaker 
+results in an acid?

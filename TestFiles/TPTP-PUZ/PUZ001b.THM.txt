@@ -1,0 +1,12 @@
+Splot moves diagonally.
+Split moves diagonally.
+Splat moves diagonally.
+And if anything moves diagonally, it must be one of Splot, Split, or Splat.
+If some thing B bamboozles a target T, then B also shmutzes T, and B is not smaller than T.
+Whenever Splat shmutzes some Y, Splot does not shmutze Y.
+For any thing Y ≠ Split, Splot shmutzes Y.
+If Y is not smaller than Splot, then Split shmutzes Y.
+Whenever Splot shmutzes some Y, Split shmutzes Y as well.
+For each potential shmutzer X, there exists at least one thing that X does not shmutze.
+Splot, Split, and Splat are all different individuals.
+Who bamboozled Splot?

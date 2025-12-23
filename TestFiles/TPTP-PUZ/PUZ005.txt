@@ -1,0 +1,5 @@
+Lion lies on Monday, Tuesday and Wednesday. 
+Unicorn lies on Thursday, Friday and Saturday. 
+Both tell truth on other days. 
+Both say yesterday was one of their lying days. 
+Is today Thursday?

@@ -1,0 +1,9 @@
+Splot, Split, and Splat move diagonally in the plain, and are the only things that move in such a way
+A thing that bamboozles always shmutzes its target, and is never smaller than its target
+Splat shmutzes nothing that Splot shmutzes
+Splot shmutzes everything except Split
+Split shmutzes everything not smaller than Splot
+Split shmutzes everything Splot shmutzes
+Nothing shmutzes everything
+Splot is not Split, Split is not Splat, Splat is not Splot
+Who bamboozled Splot?

@@ -1,0 +1,10 @@
+There are three boxes A, B, and C on a table. 
+Each box contains apples or bananas or oranges. 
+No two boxes contain the same thing. 
+Each box has a label that says that the box contains apples, or says that the box contains bananas, or says that the box contains oranges. 
+No box contains what its label says. 
+The label on box A says apples.
+The label on box B says oranges. 
+The label on box C says bananas. 
+Box B contains apples. 
+What do the other two boxes contain?

@@ -1,0 +1,6 @@
+There is a barbers' club that obeys the following three conditions:
+(1) If any member A has shaved any other member B - whether himself or another - then all members 
+have shaved A, though not necessarily at the same time.
+(2) Four of the members are named Guido, Lorenzo, Petrucio, and Cesare.
+(3) Guido has shaved Cesare.
+Has Petrucio has shaved Lorenzo?

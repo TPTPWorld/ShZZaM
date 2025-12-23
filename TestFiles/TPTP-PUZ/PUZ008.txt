@@ -1,0 +1,5 @@
+There are 3 missionaries, 3 cannibals, and a boat on the west bank of a river.
+All wish to cross, but the boat holds at most 2 people.
+If the cannibals ever outnumber the missionaries on either bank of the river the outnumbered
+missionaries will be eaten. 
+Can they all safely cross the river?

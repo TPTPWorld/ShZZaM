@@ -1,0 +1,8 @@
+Here's the situation: human observers in this exclusive club on Ganymede can't distinguish Martians
+from Venusians, males from females, except for the fact that Venusian women and Martian men always
+tell the truth, and Venusian men and Martian women always lie.
+Ork says "Bog is from Venus".
+Bog says "Ork is from Mars".
+Ork says "Bog is male".
+Bog says "Ork is female". 
+Is Bog a female?

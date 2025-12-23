@@ -1,0 +1,12 @@
+Five Knowheyans, A, B, C, D, and E, work in Metropolisas.
+One is an Airfoil Technician, one a Communications Consultant, one a Space Planner, one a Lunar 
+Energy Engineer, and one a Synthetic Food Nutrionist. 
+No two of them are the same age. 
+The Knowheyan interpreter explains about the jobs and ages of these five inhabitants, as follows:
+1. The Communications Consultant is not younger than any of the other four.
+2. D is not as old as A and not as young as B, who is not as old as the Lunar Energy Engineer, 
+but not as young as C.
+3. The Airfoil Technician is not younger than the Space Planner, who is not younger than the 
+Synthetic Food Nutrionist.
+4. C is not the yougest of the five.
+What is the job of each of the five Knowheyans?

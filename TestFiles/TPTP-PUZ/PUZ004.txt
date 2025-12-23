@@ -1,0 +1,10 @@
+All the dated letters in this room are written on blue paper.
+None of them are in black ink except those that are written in the third person.
+I have not filed any of them that I can read.
+None of them that are written on one sheet are undated.
+All of them that are not crossed are in black ink. 
+All of them written by Brown begin with "Dear Sir"
+All of them written on blue paper are filed.
+None of them written on more than one sheet are crossed.
+None of them that begin with "Dear Sir" are written in third person.
+Can letters by Brown be read?
