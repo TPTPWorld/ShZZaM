@@ -1,317 +1,222 @@
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 3:1 with similarity 0.95
-% The original and final NL have similarity: 0.90
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 1:2 with similarity 0.99
+% The original and final NL have similarity: 0.95
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 The tornado damaged the house.
 The tornado did not damage the house.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+1. The tornado caused damage to the house.  
+2. The tornado caused no damage to the house.
 % -------------------------------------------------------------------------
 % The final NL is :
-There is a type of thing called a tornado.  
-There is a type of thing called a house.  
-There is a relation called damage between a tornado and a house.  
-There is a specific tornado called t1.  
-There is a specific house called h1.  
-Tornado t1 causes damage to house h1.  
-Tornado t1 does not cause damage to house h1.
+There is a type of things called t.  
+There is a type of things called h.  
+There is a type of things called damage.  
+There is a relation called caused that holds between a t, a damage, and an h.  
+There is an individual t1 of type t.  
+There is an individual h1 of type h.  
+There is an individual damage1 of type damage.  
+t1 caused damage1 to h1.  
+t1 did not cause damage1 to h1.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same entities (a tornado and a house) and the same contradictory pair of propositions: one asserting that the tornado damages the house and one denying it. The second segment expresses this in a more formal, logical style, explicitly defining the entities and relation, but the underlying meaning—two conflicting statements about damage—is nearly identical. The small difference lies in the second segment’s meta‑level framing (it talks about “a relation called damage” rather than directly narrating an event).
+Both segments describe the same situation: a tornado (t1) and a house (h1), with two contradictory statements about whether the tornado caused damage to the house. The second segment expresses the same content in a more formal, logical style, introducing types and relations explicitly. The only minor difference is that the second segment abstracts the natural language into a logical schema, but the underlying meaning—two conflicting assertions about causation—is essentially identical.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(tornado_type,type,
-    tornado: $tType ).
+tff(t_type,type,
+    t: $tType ).
 
-tff(house_type,type,
-    house: $tType ).
-
-tff(damage_type,type,
-    damage: ( tornado * house ) > $o ).
-
-tff(t1_type,type,
-    t1: tornado ).
-
-tff(h1_type,type,
-    h1: house ).
-
-tff(fact1,axiom,
-    damage(t1,h1) ).
-
-tff(fact2,axiom,
-    ~ damage(t1,h1) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, tornado: $tType).
-tff(type_def_6, type, house: $tType).
-tff(func_def_0, type, t1: tornado).
-tff(func_def_1, type, h1: house).
-tff(pred_def_1, type, damage: (tornado * house) > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~damage(t1,h1)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~damage(t1,h1)),
-  file('/tmp/5n6OE9DTOB/SOT_f4gZV2',unknown)).
-tff(f3,plain,(
-  damage(t1,h1)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  damage(t1,h1)),
-  file('/tmp/5n6OE9DTOB/SOT_f4gZV2',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,False,0.90,3,True,0.95,1,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 0.98
-% The original and final NL have similarity: 0.90
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-The tornado damaged the house.
-The tornado did not damage the house.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-There is a type called tornado.  
-There is a type called house.  
-There is a relation called damage between a tornado and a house.  
-There is a specific tornado called t1.  
-There is a specific house called h1.  
-Tornado t1 damages house h1.  
-Tornado t1 does not damage house h1.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same factual content: a tornado, a house, and two contradictory statements—one asserting damage and one denying it. The second segment expresses this in a formal, logical style with explicit entities and relations, while the first uses natural language sentences. The meaning conveyed is nearly identical, differing mainly in representation and explicitness.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(tornado_type,type,
-    tornado: $tType ).
-
-tff(house_type,type,
-    house: $tType ).
+tff(h_type,type,
+    h: $tType ).
 
 tff(damage_type,type,
-    damage: ( tornado * house ) > $o ).
+    damage: $tType ).
+
+tff(caused_type,type,
+    caused: ( t * damage * h ) > $o ).
 
 tff(t1_decl,type,
-    t1: tornado ).
+    t1: t ).
 
 tff(h1_decl,type,
-    h1: house ).
+    h1: h ).
 
-tff(t1_damages_h1,axiom,
-    damage(t1,h1) ).
+tff(damage1_decl,type,
+    damage1: damage ).
 
-tff(t1_not_damages_h1,axiom,
-    ~ damage(t1,h1) ).
+tff(fact1,axiom,
+    caused(t1,damage1,h1) ).
+
+tff(fact2,axiom,
+    ~ caused(t1,damage1,h1) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is UNS with output
-tff(type_def_5, type, tornado: $tType).
-tff(type_def_6, type, house: $tType).
-tff(func_def_0, type, t1: tornado).
-tff(func_def_1, type, h1: house).
-tff(pred_def_1, type, damage: (tornado * house) > $o).
+tff(type_def_5, type, t: $tType).
+tff(type_def_6, type, h: $tType).
+tff(type_def_7, type, damage: $tType).
+tff(func_def_0, type, t1: t).
+tff(func_def_1, type, h1: h).
+tff(func_def_2, type, damage1: damage).
+tff(pred_def_1, type, caused: (t * damage * h) > $o).
 tff(f5,plain,(
   $false),
   inference(subsumption_resolution,[],[f3,f4])).
 tff(f4,plain,(
-  ~damage(t1,h1)),
+  ~caused(t1,damage1,h1)),
   inference(cnf_transformation,[],[f2])).
 tff(f2,axiom,(
-  ~damage(t1,h1)),
-  file('/tmp/nisYb5UD8c/SOT_ca0cWB',unknown)).
+  ~caused(t1,damage1,h1)),
+  file('/tmp/11pO8_yOmQ/SOT_yQSRWe',unknown)).
 tff(f3,plain,(
-  damage(t1,h1)),
+  caused(t1,damage1,h1)),
   inference(cnf_transformation,[],[f1])).
 tff(f1,axiom,(
-  damage(t1,h1)),
-  file('/tmp/nisYb5UD8c/SOT_ca0cWB',unknown)).
+  caused(t1,damage1,h1)),
+  file('/tmp/11pO8_yOmQ/SOT_yQSRWe',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,False,0.90,3,True,0.98,2,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,True,0.95,1,True,0.99,2,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 2:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:2 with similarity 0.95
+% The original and final NL have similarity: 0.90
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 The tornado damaged the house.
 The tornado did not damage the house.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The specific tornado caused physical damage to the specific house.
+The specific tornado did not cause physical damage to the specific house.
 % -------------------------------------------------------------------------
 % The final NL is :
-There is a tornado called t1.  
-There is a house called h1.  
-Tornado t1 damaged house h1.  
-Tornado t1 did not damage house h1.
+House is a type.
+Tornado is a type.
+Specific tornado is a tornado.
+Specific house is a house.
+Cause physical damage is a relation between a tornado and a house.
+Specific tornado causes physical damage to specific house.
+Specific tornado does not cause physical damage to specific house.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both describe the same situation: a tornado and a house, with two contradictory statements about whether damage occurred. The second segment is a more formal, symbolic restatement of the first, introducing labels (t1, h1) but preserving the same meaning content. The only difference is the explicit naming and structure, not the underlying semantics.
+Both segments describe the same entities (a specific tornado and a specific house) and the same two contradictory statements about whether the tornado caused physical damage to the house. The second segment simply restates the same information in a more formal, ontological style, defining the types and relations explicitly. The meaning conveyed—both the positive and negative causal statements—is essentially the same, so the similarity is very high though not perfect due to the definitional framing.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(tornado_type,type,
-    tornado: $tType ).
-
 tff(house_type,type,
     house: $tType ).
 
-tff(damage_type,type,
-    damage: ( tornado * house ) > $o ).
+tff(tornado_type,type,
+    tornado: $tType ).
 
-tff(t1_type,type,
-    t1: tornado ).
+tff(specific_tornado_declaration,type,
+    specific_tornado: tornado ).
 
-tff(h1_type,type,
-    h1: house ).
+tff(specific_house_declaration,type,
+    specific_house: house ).
 
-tff(tornado_damaged_house,axiom,
-    damage(t1,h1) ).
+tff(cause_physical_damage_type,type,
+    cause_physical_damage: ( tornado * house ) > $o ).
 
-tff(tornado_not_damaged_house,axiom,
-    ~ damage(t1,h1) ).
+tff(specific_tornado_causes_physical_damage_to_specific_house,axiom,
+    cause_physical_damage(specific_tornado,specific_house) ).
+
+tff(specific_tornado_does_not_cause_physical_damage_to_specific_house,axiom,
+    ~ cause_physical_damage(specific_tornado,specific_house) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is UNS with output
-tff(type_def_5, type, tornado: $tType).
-tff(type_def_6, type, house: $tType).
-tff(func_def_0, type, t1: tornado).
-tff(func_def_1, type, h1: house).
-tff(pred_def_1, type, damage: (tornado * house) > $o).
+tff(type_def_5, type, house: $tType).
+tff(type_def_6, type, tornado: $tType).
+tff(func_def_0, type, specific_tornado: tornado).
+tff(func_def_1, type, specific_house: house).
+tff(pred_def_1, type, cause_physical_damage: (tornado * house) > $o).
 tff(f5,plain,(
   $false),
   inference(subsumption_resolution,[],[f3,f4])).
 tff(f4,plain,(
-  ~damage(t1,h1)),
+  ~cause_physical_damage(specific_tornado,specific_house)),
   inference(cnf_transformation,[],[f2])).
 tff(f2,axiom,(
-  ~damage(t1,h1)),
-  file('/tmp/7KipYs_blc/SOT_QlJw6o',unknown)).
+  ~cause_physical_damage(specific_tornado,specific_house)),
+  file('/tmp/pOij4X8QYY/SOT_CvxM0y',unknown)).
 tff(f3,plain,(
-  damage(t1,h1)),
+  cause_physical_damage(specific_tornado,specific_house)),
   inference(cnf_transformation,[],[f1])).
 tff(f1,axiom,(
-  damage(t1,h1)),
-  file('/tmp/7KipYs_blc/SOT_QlJw6o',unknown)).
+  cause_physical_damage(specific_tornado,specific_house)),
+  file('/tmp/pOij4X8QYY/SOT_CvxM0y',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,False,0.90,3,True,0.95,2,UNS,Unknown,3,2,2,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:3 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.80
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 The tornado damaged the house.
 The tornado did not damage the house.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The tornado damaged the house.
+The tornado did not damage the house.
 % -------------------------------------------------------------------------
 % The final NL is :
-individual is a type.
-tornado is an individual.
-house is an individual.
-damaged is a predicate taking two individuals.
-tornado damaged house.
-Is it not the case that tornado damaged house?
+Tornado is an individual.
+House is an individual.
+Damaged is a relation between two individuals that yields a truth value.
+The tornado damaged the house.
+The tornado did not damage the house.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same logical situation: a tornado and a house, with one statement asserting “tornado damaged house” and another negating it. The first segment uses natural language; the second expresses the same content in a formal, logical style. The only minor difference is that the second explicitly defines the entities and predicates, while the first assumes them implicitly.
+Both segments express the same factual content about a tornado and a house—specifically, that there are two contrasting statements about whether the tornado damaged the house. The second segment, however, adds explicit meta‑information defining “tornado,” “house,” and “damaged” as logical entities and relations, making it more formal and explanatory. The first segment only states the events themselves.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(individual_type,type,
-    individual: $tType ).
-
 tff(tornado_type,type,
-    tornado: individual ).
+    tornado: $i ).
 
 tff(house_type,type,
-    house: individual ).
+    house: $i ).
 
 tff(damaged_type,type,
-    damaged: ( individual * individual ) > $o ).
+    damaged: ( $i * $i ) > $o ).
 
-tff(axiom_tornado_damaged_house,axiom,
+tff(axiom1,axiom,
     damaged(tornado,house) ).
 
-tff(conjecture_not_tornado_damaged_house,conjecture,
+tff(axiom2,axiom,
     ~ damaged(tornado,house) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define damaged(X0,X1) := $true
+% The ATP SZS status is UNS with output
+fof(f5,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f3,f4])).
+fof(f4,plain,(
+  ~damaged(tornado,house)),
+  inference(cnf_transformation,[],[f2])).
+fof(f2,axiom,(
+  ~damaged(tornado,house)),
+  file('/tmp/gBQxeCfgwd/SOT_4otysa',unknown)).
+fof(f3,plain,(
+  damaged(tornado,house)),
+  inference(cnf_transformation,[],[f1])).
+fof(f1,axiom,(
+  damaged(tornado,house)),
+  file('/tmp/gBQxeCfgwd/SOT_4otysa',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,True,0.95,1,True,0.95,3,CSA,Unknown,0,3,6,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:2 with similarity 0.98
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-The tornado damaged the house.
-The tornado did not damage the house.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-Tornado is a type.
-House is a type.
-Damaged is a predicate that relates a tornado and a house.
-Tornado_constant is a tornado.
-House_constant is a house.
-Tornado_constant damaged house_constant.
-Is it not the case that tornado_constant damaged house_constant?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same logical situation: a tornado, a house, and two contradictory statements—one asserting damage and one denying it. The first uses natural language; the second expresses the same content in a formal, logical style. The only difference is that the second explicitly defines the types and predicates, while the first simply narrates them.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(tornado_type,type,
-    tornado: $tType ).
-
-tff(house_type,type,
-    house: $tType ).
-
-tff(damaged_type,type,
-    damaged: ( tornado * house ) > $o ).
-
-tff(tornado_constant_type,type,
-    tornado_constant: tornado ).
-
-tff(house_constant_type,type,
-    house_constant: house ).
-
-tff(tornado_constant_damaged_house_constant,axiom,
-    damaged(tornado_constant,house_constant) ).
-
-tff(question,conjecture,
-    ~ damaged(tornado_constant,house_constant) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define damaged(X0,X1) := $true
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,True,0.95,1,True,0.98,2,CSA,Unknown,0,1,1,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction2.UNS.txt,False,0.80,3,True,1.00,2,UNS,Unknown,0,0,15,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

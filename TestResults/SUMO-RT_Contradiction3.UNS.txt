@@ -1,21 +1,25 @@
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 1.00
-% The original and final NL have similarity: 1.00
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 1:3 with similarity 1.00
+% The original and final NL have similarity: 0.95
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 The individual left the country.
 The individual did not leave the country.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+1. The individual left the country.  
+2. The individual remained in the country.
 % -------------------------------------------------------------------------
 % The final NL is :
-The individual left the country.  
-The individual did not leave the country.
+Individual a left country b.  
+Individual a remained in country b.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments contain exactly the same sentences and meaning; the only difference is formatting (a line break or spacing).
+Both sets describe the same two propositions: one about an individual leaving a country and one about the same individual staying. The only differences are stylistic—use of variables “a” and “b” instead of “the individual” and “the country.” The meaning is nearly identical.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(individual_type,type,
@@ -24,19 +28,84 @@ tff(individual_type,type,
 tff(country_type,type,
     country: $tType ).
 
+tff(a_decl,type,
+    a: individual ).
+
+tff(b_decl,type,
+    b: country ).
+
 tff(left_type,type,
     left: ( individual * country ) > $o ).
 
-tff(the_individual,type,
-    the_individual: individual ).
-
-tff(the_country,type,
-    the_country: country ).
+tff(remained_type,type,
+    remained: ( individual * country ) > $o ).
 
 tff(sentence1,axiom,
-    left(the_individual,the_country) ).
+    left(a,b) ).
 
 tff(sentence2,axiom,
+    remained(a,b) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is SAT with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+globally flip the polarity of every occurrence of predicate "left"
+for all inputs,
+    define left(X0,X1) := $true
+for all inputs,
+    define remained(X0,X1) := $true
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,1,True,1.00,3,SAT,Unknown,0,3,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:2 with similarity 0.98
+% The original and final NL have similarity: 0.95
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The individual left the country.
+The individual did not leave the country.
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The individual left the country.
+The individual did not leave the country.
+% -------------------------------------------------------------------------
+% The final NL is :
+Individual is a type.
+Country is a type.
+Left is a predicate taking an individual and a country.
+The_individual is an individual.
+The_country is a country.
+The_individual left the_country.
+The_individual did not leave the_country.
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments express the same two propositions: one where an individual leaves a country and one where the individual does not. The second segment simply formalizes the first using logical or typed‑predicate notation, but the underlying meaning is nearly identical. The only difference is that the second text explicitly defines the types and predicates, while the first uses natural language.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(individual_type,type,
+    individual: $tType ).
+
+tff(country_type,type,
+    country: $tType ).
+
+tff(left_predicate_type,type,
+    left: ( individual * country ) > $o ).
+
+tff(the_individual_declaration,type,
+    the_individual: individual ).
+
+tff(the_country_declaration,type,
+    the_country: country ).
+
+tff(the_individual_left_the_country,axiom,
+    left(the_individual,the_country) ).
+
+tff(the_individual_did_not_leave_the_country,axiom,
     ~ left(the_individual,the_country) ).
 
 %
@@ -55,133 +124,85 @@ tff(f4,plain,(
   inference(cnf_transformation,[],[f2])).
 tff(f2,axiom,(
   ~left(the_individual,the_country)),
-  file('/tmp/L6BPaw_ciq/SOT_uhxH7B',unknown)).
+  file('/tmp/S_W7T01UmM/SOT_vv5eyT',unknown)).
 tff(f3,plain,(
   left(the_individual,the_country)),
   inference(cnf_transformation,[],[f1])).
 tff(f1,axiom,(
   left(the_individual,the_country)),
-  file('/tmp/L6BPaw_ciq/SOT_uhxH7B',unknown)).
+  file('/tmp/S_W7T01UmM/SOT_vv5eyT',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,1.00,1,True,1.00,1,UNS,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,1,True,0.98,2,UNS,Unknown,1,3,9,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-The individual left the country.
-The individual did not leave the country.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-There is an individual named a.  
-The individual a left the country.  
-The individual a did not leave the country.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same contradictory pair of statements about one person leaving and not leaving the country. The second segment only adds an explicit naming of the individual (“a”) but otherwise conveys the same meaning.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(individual_type,type,
-    individual: $tType ).
-
-tff(left_country_predicate,type,
-    left_country: individual > $o ).
-
-tff(a_constant,type,
-    a: individual ).
-
-tff(sentence1,axiom,
-    left_country(a) ).
-
-tff(sentence2,axiom,
-    ~ left_country(a) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, individual: $tType).
-tff(func_def_0, type, a: individual).
-tff(pred_def_1, type, left_country: individual > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~left_country(a)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~left_country(a)),
-  file('/tmp/iVyiPjns4h/SOT_McYYuR',unknown)).
-tff(f3,plain,(
-  left_country(a)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  left_country(a)),
-  file('/tmp/iVyiPjns4h/SOT_McYYuR',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,1,1,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 2:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.90
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 The individual left the country.
 The individual did not leave the country.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+An individual departed from a country, crossing its borders to exit its territory.
+An individual did not depart from a country and remained within its borders or territory.
 % -------------------------------------------------------------------------
 % The final NL is :
-There is an individual named a.  
-The individual a left the country.  
-The individual a did not leave the country.
+Individual i departed from country c.
+Individual i crossed the borders of country c.
+Individual i exited the territory of country c.
+Either individual i did not depart from country c and remained within the borders of country c, or individual i remained within the territory of country c.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe an individual and two contradictory statements about whether that person left the country. The second segment adds a naming detail (“individual a”) and repeats the same contradiction with slightly more explicit structure, but the core meaning—an individual both left and did not leave the country—remains nearly identical.
+Both segments describe the same two contrasting situations: one where a person leaves a country (departing, crossing borders, exiting territory) and one where the person does not leave (remaining within borders or territory). The second segment is more formal and structured, using variable-like notation (“individual i,” “country c”) and explicitly restating the “not departed” condition in two equivalent ways, but the underlying meaning is nearly identical.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(individual_type,type,
-    individual: $tType ).
+    individual: $tpt ).
 
-tff(left_country_predicate,type,
-    left_country: individual > $o ).
+tff(country_type,type,
+    country: $tpt ).
 
-tff(a_constant,type,
-    a: individual ).
+tff(i_decl,type,
+    i: individual ).
 
-tff(sentence1,axiom,
-    left_country(a) ).
+tff(c_decl,type,
+    c: country ).
 
-tff(sentence2,axiom,
-    ~ left_country(a) ).
+tff(departed_from_decl,type,
+    departed_from: ( individual * country ) > $o ).
+
+tff(crossed_borders_of_decl,type,
+    crossed_borders_of: ( individual * country ) > $o ).
+
+tff(exited_territory_of_decl,type,
+    exited_territory_of: ( individual * country ) > $o ).
+
+tff(remained_within_borders_of_decl,type,
+    remained_within_borders_of: ( individual * country ) > $o ).
+
+tff(remained_within_territory_of_decl,type,
+    remained_within_territory_of: ( individual * country ) > $o ).
+
+tff(ax1,axiom,
+    departed_from(i,c) ).
+
+tff(ax2,axiom,
+    crossed_borders_of(i,c) ).
+
+tff(ax3,axiom,
+    exited_territory_of(i,c) ).
+
+tff(ax4,axiom,
+    ( ( ~ departed_from(i,c)
+      & remained_within_borders_of(i,c) )
+    | remained_within_territory_of(i,c) ) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, individual: $tType).
-tff(func_def_0, type, a: individual).
-tff(pred_def_1, type, left_country: individual > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~left_country(a)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~left_country(a)),
-  file('/tmp/hnxTn1R3ap/SOT_iXTywa',unknown)).
-tff(f3,plain,(
-  left_country(a)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  left_country(a)),
-  file('/tmp/hnxTn1R3ap/SOT_iXTywa',unknown)).
+% The ATP SZS status is NON with output
+None
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,2,2,3,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction3.UNS.txt,False,0.90,3,True,1.00,2,NON,Unknown,0,0,1,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

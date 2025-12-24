@@ -738,8 +738,8 @@ NormalizationModel,NL2LModel,L2NLModel,SimilarityModel)
 {BestZigZagResult.OriginalSimilarityScore:.2f},{ZigZagRepeats},{BestZigZagResult.Converged},\
 {BestZigZagResult.LastTwoSimilarityScore:.2f},{BestZigZagResult.ZigZagNumber},\
 {BestZigZagResult.SZSStatus},Unknown,{BestZigZagResult.SyntaxCorrections},\
-{BestZigZagResult.TypeCorrections},{BestZigZagResult.SimilarityCorrections},{NL2LModel},\
-{L2NLModel},{SimilarityModel}")
+{BestZigZagResult.TypeCorrections},{BestZigZagResult.SimilarityCorrections},{NormalizationModel},\
+{NL2LModel},{L2NLModel},{SimilarityModel}")
 #--------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     main()

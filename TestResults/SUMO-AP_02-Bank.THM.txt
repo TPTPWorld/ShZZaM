@@ -1,0 +1,470 @@
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 2:1 with similarity 0.97
+% The original and final NL have similarity: 0.97
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+John was in noncompliance with the bank overdraft policy.
+The charging of a fee led to a deposit.
+As a result of the deposit, the bank reduced the penalty.
+What led to a deposit?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+- John violated the bank’s overdraft policy.  
+- The bank charged an overdraft fee, which prompted a deposit.  
+- The bank reduced the penalty after receiving the deposit.  
+- What caused the deposit to occur?
+% -------------------------------------------------------------------------
+% The final NL is :
+John violated the overdraft policy.  
+The bank charged the overdraft fee and the overdraft fee prompted deposit1.  
+The bank reduced penalty1 after receiving deposit1.  
+Was there something that caused deposit1?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+The two segments are nearly identical in meaning. The only differences are minor wording and formatting changes: the second text uses variable-like labels (“deposit1,” “penalty1”) and slightly altered phrasing (“Was there something that caused deposit1?” instead of “What caused the deposit to occur?”). These do not change the underlying meaning or logical relationships.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_person,type,
+    person: $tType ).
+
+tff(type_institution,type,
+    institution: $tType ).
+
+tff(type_policy,type,
+    policy: $tType ).
+
+tff(type_fee,type,
+    fee: $tType ).
+
+tff(type_deposit,type,
+    deposit: $tType ).
+
+tff(type_penalty,type,
+    penalty: $tType ).
+
+tff(john_decl,type,
+    john: person ).
+
+tff(bank_decl,type,
+    bank: institution ).
+
+tff(overdraft_policy_decl,type,
+    overdraft_policy: policy ).
+
+tff(overdraft_fee_decl,type,
+    overdraft_fee: fee ).
+
+tff(deposit_decl,type,
+    deposit1: deposit ).
+
+tff(penalty_decl,type,
+    penalty1: penalty ).
+
+tff(violated,type,
+    violated: ( person * policy ) > $o ).
+
+tff(charged,type,
+    charged: ( institution * fee ) > $o ).
+
+tff(prompted,type,
+    prompted: ( fee * deposit ) > $o ).
+
+tff(reduced_after_receiving,type,
+    reduced_after_receiving: ( institution * penalty * deposit ) > $o ).
+
+tff(caused,type,
+    caused: ( $i * deposit ) > $o ).
+
+tff(s1,axiom,
+    violated(john,overdraft_policy) ).
+
+tff(s2,axiom,
+    ( charged(bank,overdraft_fee)
+    & prompted(overdraft_fee,deposit1) ) ).
+
+tff(s3,axiom,
+    reduced_after_receiving(bank,penalty1,deposit1) ).
+
+tff(q1,conjecture,
+    ? [X: $i] : caused(X,deposit1) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define violated(X0,X1) := $true
+for all inputs,
+    define charged(X0,X1) := $true
+for all inputs,
+    define prompted(X0,X1) := $true
+for all inputs,
+    define reduced_after_receiving(X0,X1,X2) := $true
+for all inputs,
+    define caused(X0,X1) := $false
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/02-Bank.THM.txt,True,0.97,2,True,0.97,1,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 2:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+John was in noncompliance with the bank overdraft policy.
+The charging of a fee led to a deposit.
+As a result of the deposit, the bank reduced the penalty.
+What led to a deposit?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+John's bank account balance fell below zero, thereby violating the terms established in the bank's overdraft policy, which governs account balances below zero.
+The bank's action of charging an overdraft fee to John's account directly resulted in John making a deposit.
+As a direct consequence of John's completed deposit, the bank reduced the penalty previously imposed upon John.
+What specific action or event directly caused the deposit to be made into the account?
+% -------------------------------------------------------------------------
+% The final NL is :
+"Account balance" is a function that maps two individuals to an individual.
+"Zero" is an individual.
+"Fell below zero" is a relation between two individuals.
+"Violates" is a relation between two individuals.
+"Overdraft policy" is an individual.
+"Governs" is a relation between three individuals.
+"Overdraft fee" is an individual.
+"Charged" is a relation between three individuals.
+"Deposit made" is a relation between two individuals.
+"Directly resulted in" is a relation between two propositions.
+"Reduced penalty" is a relation between two individuals.
+"Penalty" is an individual.
+"Imposed upon" is a relation between two individuals.
+"John constant" is an individual.
+"Bank constant" is an individual.
+John constant's account balance at Bank constant fell below zero.
+If John constant's account balance at Bank constant fell below zero, then it violates the overdraft policy.
+The overdraft policy governs John constant's account balance at Bank constant with respect to zero.
+Bank constant charging an overdraft fee to John constant's account balance at Bank constant directly resulted in John constant making a deposit into John constant's account balance at Bank constant.
+That John constant made a deposit into John constant's account balance at Bank constant directly resulted in Bank constant reducing the penalty.
+What proposition X directly resulted in John constant making a deposit into John constant's account balance at Bank constant?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+The two segments express nearly identical content: both describe John’s account falling below zero, violating an overdraft policy, the bank charging a fee, John making a deposit, and the bank reducing a penalty. The main difference is in form: the first is written in natural language, while the second formalizes the same relationships using logical or semantic notation (defining individuals, relations, and propositions). The meaning conveyed—especially the causal chain and the final question about what caused the deposit—is essentially the same.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(account_balance,type,
+    account_balance: ( $i * $i ) > $i ).
+
+tff(zero,type,
+    zero: $i ).
+
+tff(fell_below_zero,type,
+    fell_below_zero: ( $i * $i ) > $o ).
+
+tff(violates,type,
+    violates: ( $i * $i ) > $o ).
+
+tff(overdraft_policy,type,
+    overdraft_policy: $i ).
+
+tff(governs,type,
+    governs: ( $i * $i * $i ) > $o ).
+
+tff(overdraft_fee,type,
+    overdraft_fee: $i ).
+
+tff(charged,type,
+    charged: ( $i * $i * $i ) > $o ).
+
+tff(deposit_made,type,
+    deposit_made: ( $i * $i ) > $o ).
+
+tff(directly_resulted_in,type,
+    directly_resulted_in: ( $o * $o ) > $o ).
+
+tff(reduced_penalty,type,
+    reduced_penalty: ( $i * $i ) > $o ).
+
+tff(penalty,type,
+    penalty: $i ).
+
+tff(imposed_upon,type,
+    imposed_upon: ( $i * $i ) > $o ).
+
+tff(john_constant,type,
+    john_constant: $i ).
+
+tff(bank_constant,type,
+    bank_constant: $i ).
+
+tff(john_bank_account_balance_fell_below_zero,axiom,
+    fell_below_zero(account_balance(john_constant,bank_constant),zero) ).
+
+tff(violation_of_terms,axiom,
+    ( fell_below_zero(account_balance(john_constant,bank_constant),zero)
+   => violates(account_balance(john_constant,bank_constant),overdraft_policy) ) ).
+
+tff(overdraft_policy_governs,axiom,
+    governs(overdraft_policy,account_balance(john_constant,bank_constant),zero) ).
+
+tff(bank_charging_fee_resulted_in_deposit,axiom,
+    directly_resulted_in(charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)),deposit_made(john_constant,account_balance(john_constant,bank_constant))) ).
+
+tff(deposit_consequence_reduced_penalty,axiom,
+    directly_resulted_in(deposit_made(john_constant,account_balance(john_constant,bank_constant)),reduced_penalty(bank_constant,penalty)) ).
+
+tff(query_cause_of_deposit,conjecture,
+    ? [X: $o] : directly_resulted_in((X),deposit_made(john_constant,account_balance(john_constant,bank_constant))) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(pred_def_6, type, directly_resulted_in: ($o * $o) > $o).
+tff(f85,plain,(
+  $false),
+  inference(avatar_sat_refutation,[],[f80,f82,f84])).
+tff(f84,plain,(
+  ~spl0_2),
+  inference(avatar_contradiction_clause,[],[f83])).
+tff(f83,plain,(
+  $false | ~spl0_2),
+  inference(subsumption_resolution,[],[f51,f43])).
+tff(f43,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f40,f39])).
+tff(f39,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f28,f33])).
+tff(f33,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | directly_resulted_in($true,$false)),
+  inference(consistent_polarity_flipping,[],[f24])).
+tff(f24,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($true,$false)),
+  inference(cnf_transformation,[],[f12])).
+tff(f12,plain,(
+  ! [X0 : $o] : ~directly_resulted_in(X0,deposit_made(john_constant,account_balance(john_constant,bank_constant)))),
+  inference(ennf_transformation,[],[f8])).
+tff(f8,plain,(
+  ~? [X0 : $o] : directly_resulted_in(X0,deposit_made(john_constant,account_balance(john_constant,bank_constant)))),
+  inference(rectify,[],[f7])).
+tff(f7,negated_conjecture,(
+  ~? [X0 : $o] : directly_resulted_in(X0,deposit_made(john_constant,account_balance(john_constant,bank_constant)))),
+  inference(negated_conjecture,[status(cth)],[f6])).
+tff(f6,conjecture,(
+  ? [X0 : $o] : directly_resulted_in(X0,deposit_made(john_constant,account_balance(john_constant,bank_constant)))),
+  file('/tmp/dmz_RaOMZx/SOT_WPfrlu',unknown)).
+tff(f28,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($true,$false)),
+  inference(consistent_polarity_flipping,[],[f13])).
+tff(f13,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | directly_resulted_in($true,$false)),
+  inference(cnf_transformation,[],[f4])).
+tff(f4,axiom,(
+  directly_resulted_in(charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)),deposit_made(john_constant,account_balance(john_constant,bank_constant)))),
+  file('/tmp/dmz_RaOMZx/SOT_WPfrlu',unknown)).
+tff(f40,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f27,f34])).
+tff(f34,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | directly_resulted_in($false,$false)),
+  inference(consistent_polarity_flipping,[],[f23])).
+tff(f23,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($false,$false)),
+  inference(cnf_transformation,[],[f12])).
+tff(f27,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($false,$false)),
+  inference(consistent_polarity_flipping,[],[f14])).
+tff(f14,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | directly_resulted_in($false,$false)),
+  inference(cnf_transformation,[],[f4])).
+tff(f51,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~spl0_2),
+  inference(avatar_component_clause,[],[f50])).
+tff(f50,definition,(
+  spl0_2 <=> deposit_made(john_constant,account_balance(john_constant,bank_constant))),
+  introduced(definition,[new_symbols(naming,[spl0_2])],[avatar_definition])).
+tff(f82,plain,(
+  ~spl0_7),
+  inference(avatar_contradiction_clause,[],[f81])).
+tff(f81,plain,(
+  $false | ~spl0_7),
+  inference(subsumption_resolution,[],[f77,f44])).
+tff(f44,plain,(
+  ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f41,f39])).
+tff(f41,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f26,f35])).
+tff(f35,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | directly_resulted_in($true,$true)),
+  inference(consistent_polarity_flipping,[],[f22])).
+tff(f22,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($true,$true)),
+  inference(cnf_transformation,[],[f12])).
+tff(f26,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($true,$true)),
+  inference(consistent_polarity_flipping,[],[f15])).
+tff(f15,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | directly_resulted_in($true,$true)),
+  inference(cnf_transformation,[],[f4])).
+tff(f77,plain,(
+  charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | ~spl0_7),
+  inference(avatar_component_clause,[],[f76])).
+tff(f76,definition,(
+  spl0_7 <=> charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  introduced(definition,[new_symbols(naming,[spl0_7])],[avatar_definition])).
+tff(f80,plain,(
+  spl0_7 | spl0_2),
+  inference(avatar_split_clause,[],[f42,f50,f76])).
+tff(f42,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant))),
+  inference(subsumption_resolution,[],[f25,f36])).
+tff(f36,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | directly_resulted_in($false,$true)),
+  inference(consistent_polarity_flipping,[],[f21])).
+tff(f21,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($false,$true)),
+  inference(cnf_transformation,[],[f12])).
+tff(f25,plain,(
+  deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | ~directly_resulted_in($false,$true)),
+  inference(consistent_polarity_flipping,[],[f16])).
+tff(f16,plain,(
+  ~deposit_made(john_constant,account_balance(john_constant,bank_constant)) | charged(bank_constant,overdraft_fee,account_balance(john_constant,bank_constant)) | directly_resulted_in($false,$true)),
+  inference(cnf_transformation,[],[f4])).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/02-Bank.THM.txt,True,0.95,2,True,0.95,1,THM,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+John was in noncompliance with the bank overdraft policy.
+The charging of a fee led to a deposit.
+As a result of the deposit, the bank reduced the penalty.
+What led to a deposit?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+John failed to maintain a minimum balance in his bank account, which violated the bank's overdraft policy.
+
+The bank charged John an overdraft fee, and this fee caused John to make a deposit into his account.
+
+After John made the deposit into his account, the bank reduced the overdraft penalty that had been assessed.
+
+What caused John to make a deposit into his account?
+% -------------------------------------------------------------------------
+% The final NL is :
+John failed to maintain the minimum balance for John's account.
+John violated the overdraft policy.
+John's account charged John the overdraft fee.
+The overdraft fee caused John to make John's deposit into John's account.
+John made John's deposit into John's account.
+John's deposit occurred after something regarding John's account.
+John's account had the overdraft penalty reduced.
+The overdraft penalty was assessed.
+Does there exist something that caused John to make John's deposit into John's account?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same sequence of events: John fails to maintain a minimum balance, violates the overdraft policy, is charged a fee, makes a deposit as a result of that fee, and then the bank reduces the penalty. The only differences are stylistic and structural — the second text repeats “John” and “John’s account” more often and phrases the question slightly differently (“Does there exist something that caused…” instead of “What caused…”). The underlying meaning and causal relationships are essentially identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tprop ).
+
+tff(account_type,type,
+    account: $tprop ).
+
+tff(policy_type,type,
+    policy: $tprop ).
+
+tff(fee_type,type,
+    fee: $tprop ).
+
+tff(deposit_type,type,
+    deposit: $tprop ).
+
+tff(penalty_type,type,
+    penalty: $tprop ).
+
+tff(john_decl,type,
+    john: person ).
+
+tff(johns_account_decl,type,
+    johns_account: account ).
+
+tff(overdraft_policy_decl,type,
+    overdraft_policy: policy ).
+
+tff(overdraft_fee_decl,type,
+    overdraft_fee: fee ).
+
+tff(johns_deposit_decl,type,
+    johns_deposit: deposit ).
+
+tff(overdraft_penalty_decl,type,
+    overdraft_penalty: penalty ).
+
+tff(failed_to_maintain_minimum_balance_decl,type,
+    failed_to_maintain_minimum_balance: ( person * account ) > $o ).
+
+tff(violated_decl,type,
+    violated: ( person * policy ) > $o ).
+
+tff(charged_decl,type,
+    charged: ( account * person * fee ) > $o ).
+
+tff(caused_to_make_deposit_decl,type,
+    caused_to_make_deposit: ( fee * person * deposit * account ) > $o ).
+
+tff(made_deposit_decl,type,
+    made_deposit: ( person * deposit * account ) > $o ).
+
+tff(after_deposit_decl,type,
+    after_deposit: ( deposit * account ) > $o ).
+
+tff(reduced_decl,type,
+    reduced: ( account * penalty ) > $o ).
+
+tff(assessed_decl,type,
+    assessed: penalty > $o ).
+
+tff(axiom1,axiom,
+    failed_to_maintain_minimum_balance(john,johns_account) ).
+
+tff(axiom2,axiom,
+    violated(john,overdraft_policy) ).
+
+tff(axiom3,axiom,
+    charged(johns_account,john,overdraft_fee) ).
+
+tff(axiom4,axiom,
+    caused_to_make_deposit(overdraft_fee,john,johns_deposit,johns_account) ).
+
+tff(axiom5,axiom,
+    made_deposit(john,johns_deposit,johns_account) ).
+
+tff(axiom6,axiom,
+    after_deposit(johns_deposit,johns_account) ).
+
+tff(axiom7,axiom,
+    reduced(johns_account,overdraft_penalty) ).
+
+tff(axiom8,axiom,
+    assessed(overdraft_penalty) ).
+
+tff(conjecture,conjecture,
+    ? [X] : caused_to_make_deposit(X,john,johns_deposit,johns_account) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is NON with output
+None
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/02-Bank.THM.txt,True,0.95,1,True,0.95,1,NON,Unknown,0,0,0,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

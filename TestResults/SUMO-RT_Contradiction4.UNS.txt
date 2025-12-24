@@ -1,243 +1,105 @@
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 2:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-A bird is a subclass of animal.
-A bird is not a subclass of animal.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-There is a subclass relationship between bird and animal.  
-There is not a subclass relationship between bird and animal.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical contradiction: one statement affirms a subclass relationship between bird and animal, and the other denies it. The only difference is wording—“A bird is a subclass of animal” versus “There is a subclass relationship between bird and animal.” The meaning conveyed is nearly identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(type_entity,type,
-    entity: $tType ).
-
-tff(type_subclass,type,
-    subclass: ( entity * entity ) > $o ).
-
-tff(type_animal,type,
-    animal: entity ).
-
-tff(type_bird,type,
-    bird: entity ).
-
-tff(ax1,axiom,
-    subclass(bird,animal) ).
-
-tff(ax2,axiom,
-    ~ subclass(bird,animal) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, entity: $tType).
-tff(func_def_0, type, animal: entity).
-tff(func_def_1, type, bird: entity).
-tff(pred_def_1, type, subclass: (entity * entity) > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~subclass(bird,animal)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~subclass(bird,animal)),
-  file('/tmp/QxtK2XVokx/SOT_UC4egD',unknown)).
-tff(f3,plain,(
-  subclass(bird,animal)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  subclass(bird,animal)),
-  file('/tmp/QxtK2XVokx/SOT_UC4egD',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,0,7,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % Converged at ZigZag number 1:1 with similarity 0.95
 % The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 A bird is a subclass of animal.
 A bird is not a subclass of animal.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The assertion that a bird is a subclass of animal is imprecise; in biological taxonomy, birds (Class Aves) are formally designated as a Class within the Kingdom Animalia, not a Subclass.
+In biological taxonomy, a bird is not formally classified as a subclass of animal, but rather as a Class (Aves) within the Kingdom Animalia.
 % -------------------------------------------------------------------------
 % The final NL is :
-There is a subclass relationship between bird and animal.  
-There is not a subclass relationship between bird and animal.
+It is imprecise that a bird is a subclass of an animal.
+A bird is formally designated as a class, and that class is within the kingdom Animalia.
+A bird is not formally classified as a subclass of an animal.
+A bird is formally designated as the class Aves, and the class Aves is within the kingdom Animalia.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments express the same logical contradiction: one statement affirms a subclass relationship between bird and animal, and the other denies it. The wording differs slightly (“A bird is a subclass of animal” vs. “There is a subclass relationship between bird and animal”), but the meaning is nearly identical.
+Both segments convey the same factual content: that calling a bird a subclass of animal is inaccurate, and that birds are formally classified as the class Aves within the kingdom Animalia. The second segment is more repetitive and slightly rephrased, but it does not introduce new information or change the meaning. The minor difference lies in style and redundancy, not substance.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(type_entity,type,
-    entity: $tType ).
-
-tff(type_subclass,type,
-    subclass: ( entity * entity ) > $o ).
-
-tff(bird,type,
-    bird: entity ).
-
-tff(animal,type,
-    animal: entity ).
-
-tff(ax1,axiom,
-    subclass(bird,animal) ).
-
-tff(ax2,axiom,
-    ~ subclass(bird,animal) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, entity: $tType).
-tff(func_def_0, type, bird: entity).
-tff(func_def_1, type, animal: entity).
-tff(pred_def_1, type, subclass: (entity * entity) > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~subclass(bird,animal)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~subclass(bird,animal)),
-  file('/tmp/5AyQ8ZKBh1/SOT_yaRM4K',unknown)).
-tff(f3,plain,(
-  subclass(bird,animal)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  subclass(bird,animal)),
-  file('/tmp/5AyQ8ZKBh1/SOT_yaRM4K',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-A bird is a subclass of animal.
-A bird is not a subclass of animal.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-There is a subclass relationship between bird and animal.  
-There is not a subclass relationship between bird and animal.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical contradiction: one statement affirms a subclass relationship between bird and animal, and the other denies it. The only difference is wording—“A bird is a subclass of animal” versus “There is a subclass relationship between bird and animal.” The meaning conveyed is nearly identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(type_entity,type,
-    entity: $tType ).
-
-tff(type_subclass,type,
-    subclass: ( entity * entity ) > $o ).
-
-tff(bird,type,
-    bird: entity ).
-
-tff(animal,type,
-    animal: entity ).
-
-tff(ax1,axiom,
-    subclass(bird,animal) ).
-
-tff(ax2,axiom,
-    ~ subclass(bird,animal) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, entity: $tType).
-tff(func_def_0, type, bird: entity).
-tff(func_def_1, type, animal: entity).
-tff(pred_def_1, type, subclass: (entity * entity) > $o).
-tff(f5,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f3,f4])).
-tff(f4,plain,(
-  ~subclass(bird,animal)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~subclass(bird,animal)),
-  file('/tmp/mFjJj789dy/SOT_F2yLSf',unknown)).
-tff(f3,plain,(
-  subclass(bird,animal)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  subclass(bird,animal)),
-  file('/tmp/mFjJj789dy/SOT_F2yLSf',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 2:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-A bird is a subclass of animal.
-A bird is not a subclass of animal.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-Bird is a subclass of animal.
-Bird is not a subclass of animal.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-The two segments differ only in the presence or absence of the article “A” before “bird.” This minor grammatical variation does not change the meaning; both express the same contradictory pair of statements about birds and animals.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(animal_type,type,
-    animal: $i ).
-
 tff(bird_type,type,
     bird: $i ).
 
-tff(subclass_type,type,
-    subclass: ( $i * $i ) > $o ).
+tff(animal_type,type,
+    animal: $i ).
 
-tff(sentence1,axiom,
-    subclass(bird,animal) ).
+tff(class_constant_type,type,
+    class: $i ).
 
-tff(sentence2,axiom,
-    ~ subclass(bird,animal) ).
+tff(aves_type,type,
+    aves: $i ).
+
+tff(animalia_type,type,
+    animalia: $i ).
+
+tff(biological_taxonomy_type,type,
+    biological_taxonomy: $i ).
+
+tff(subclass_of_function_type,type,
+    subclass_of: $i > $i ).
+
+tff(kingdom_function_type,type,
+    kingdom: $i > $i ).
+
+tff(class_of_function_type,type,
+    class_of: $i > $i ).
+
+tff(kingdom_of_function_type,type,
+    kingdom_of: $i > $i ).
+
+tff(is_a_predicate,type,
+    is_a: ( $i * $i ) > $o ).
+
+tff(is_formally_designated_as_predicate,type,
+    is_formally_designated_as: ( $i * $i ) > $o ).
+
+tff(within_predicate,type,
+    within: ( $i * $i ) > $o ).
+
+tff(is_imprecise_predicate,type,
+    is_imprecise: $o > $o ).
+
+tff(is_not_formally_classified_as_predicate,type,
+    is_not_formally_classified_as: ( $i * $i ) > $o ).
+
+tff(a_bird_is_a_subclass_of_animal,axiom,
+    is_imprecise(is_a(bird,subclass_of(animal))) ).
+
+tff(birds_are_formally_designated_as_a_class_within_the_kingdom_animalia,axiom,
+    ( is_formally_designated_as(bird,class)
+    & within(class,kingdom(animalia)) ) ).
+
+tff(in_biological_taxonomy_a_bird_is_not_formally_classified_as_a_subclass_of_animal,axiom,
+    is_not_formally_classified_as(bird,subclass_of(animal)) ).
+
+tff(but_rather_as_a_class_aves_within_the_kingdom_animalia,axiom,
+    ( is_formally_designated_as(bird,class_of(aves))
+    & within(class_of(aves),kingdom_of(animalia)) ) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-fof(f5,plain,(
-  $false),
-  inference(global_subsumption,[],[f4,f3])).
-fof(f3,plain,(
-  subclass(bird,animal)),
-  inference(cnf_transformation,[],[f1])).
-fof(f1,axiom,(
-  subclass(bird,animal)),
-  file('/tmp/wHOS4T5a_S/SOT_ciKlSX',unknown)).
-fof(f4,plain,(
-  ~subclass(bird,animal)),
-  inference(cnf_transformation,[],[f2])).
-fof(f2,axiom,(
-  ~subclass(bird,animal)),
-  file('/tmp/wHOS4T5a_S/SOT_ciKlSX',unknown)).
+% The ATP SZS status is SAT with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+globally flip the polarity of every occurrence of predicate "within"
+globally flip the polarity of every occurrence of predicate "is_formally_designated_as"
+globally flip the polarity of every occurrence of predicate "is_a"
+for all inputs,
+    define is_formally_designated_as(X0,X1) := $true
+for all inputs,
+    define within(X0,X1) := $true
+for all inputs,
+    define is_imprecise(X0) := $true
+for all inputs,
+    define is_not_formally_classified_as(X0,X1) := $true
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,0,1,4,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,True,0.95,1,True,0.95,1,SAT,Unknown,0,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction4.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

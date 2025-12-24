@@ -1,83 +1,25 @@
 % -------------------------------------------------------------------------
 % Converged at ZigZag number 1:1 with similarity 0.95
 % The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 Robert imagined a ball.
 Robert did not imagine a ball.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+1. Robert imagined a ball.  
+2. Robert did not imagine a ball.
 % -------------------------------------------------------------------------
 % The final NL is :
-Robert imagines the ball.  
-Robert does not imagine the ball.
+Robert imagined the ball.  
+Robert did not imagine the ball.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same pair of contrasting statements—one where Robert imagines a ball and one where he does not. The only difference is tense: “imagined” (past) versus “imagines” (present). This small grammatical shift slightly changes the time frame but not the core meaning.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(type_individual,type,
-    individual: $tType ).
-
-tff(type_imagines,type,
-    imagines: ( individual * individual ) > $o ).
-
-tff(type_robert,type,
-    robert: individual ).
-
-tff(type_ball,type,
-    ball: individual ).
-
-tff(ax1,axiom,
-    imagines(robert,ball) ).
-
-tff(ax2,axiom,
-    ~ imagines(robert,ball) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, individual: $tType).
-tff(func_def_0, type, robert: individual).
-tff(func_def_1, type, ball: individual).
-tff(pred_def_1, type, imagines: (individual * individual) > $o).
-tff(f5,plain,(
-  $false),
-  inference(global_subsumption,[],[f4,f3])).
-tff(f3,plain,(
-  imagines(robert,ball)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  imagines(robert,ball)),
-  file('/tmp/ePmWDhmXlz/SOT_ZhOt6c',unknown)).
-tff(f4,plain,(
-  ~imagines(robert,ball)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~imagines(robert,ball)),
-  file('/tmp/ePmWDhmXlz/SOT_ZhOt6c',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,0,1,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-Robert imagined a ball.
-Robert did not imagine a ball.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-Robert imagines the ball.  
-Robert does not imagine the ball.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical contrast: one sentence affirms that Robert imagines a ball, and the next denies it. The only differences are tense (“imagined” vs. “imagines”) and article choice (“a” vs. “the”), which slightly change temporal focus and specificity but not the core meaning.
+The two segments differ only in the use of “a ball” versus “the ball.” Both describe the same pair of contrasting statements about Robert imagining or not imagining a ball. The definite article “the” implies a specific ball, while “a” implies any ball, but the overall meaning and structure are nearly identical.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(type_person,type,
@@ -86,8 +28,8 @@ tff(type_person,type,
 tff(type_object,type,
     object: $tType ).
 
-tff(type_imagines,type,
-    imagines: ( person * object ) > $o ).
+tff(type_imagined,type,
+    imagined: ( person * object ) > $o ).
 
 tff(type_robert,type,
     robert: person ).
@@ -95,11 +37,11 @@ tff(type_robert,type,
 tff(type_ball,type,
     ball: object ).
 
-tff(fact1,axiom,
-    imagines(robert,ball) ).
+tff(sentence1,axiom,
+    imagined(robert,ball) ).
 
-tff(fact2,axiom,
-    ~ imagines(robert,ball) ).
+tff(sentence2,axiom,
+    ~ imagined(robert,ball) ).
 
 %
 % -------------------------------------------------------------------------
@@ -108,206 +50,138 @@ tff(type_def_5, type, person: $tType).
 tff(type_def_6, type, object: $tType).
 tff(func_def_0, type, robert: person).
 tff(func_def_1, type, ball: object).
-tff(pred_def_1, type, imagines: (person * object) > $o).
+tff(pred_def_1, type, imagined: (person * object) > $o).
 tff(f5,plain,(
   $false),
   inference(subsumption_resolution,[],[f3,f4])).
 tff(f4,plain,(
-  ~imagines(robert,ball)),
+  ~imagined(robert,ball)),
   inference(cnf_transformation,[],[f2])).
 tff(f2,axiom,(
-  ~imagines(robert,ball)),
-  file('/tmp/Ko1dWco2FJ/SOT_7kg0Yk',unknown)).
+  ~imagined(robert,ball)),
+  file('/tmp/5HPRdYI_HY/SOT_Jn3p5e',unknown)).
 tff(f3,plain,(
-  imagines(robert,ball)),
+  imagined(robert,ball)),
   inference(cnf_transformation,[],[f1])).
 tff(f1,axiom,(
-  imagines(robert,ball)),
-  file('/tmp/Ko1dWco2FJ/SOT_7kg0Yk',unknown)).
+  imagined(robert,ball)),
+  file('/tmp/5HPRdYI_HY/SOT_Jn3p5e',unknown)).
 % -------------------------------------------------------------------------
 RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,True,0.95,1,True,0.95,1,UNS,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 2:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 2:1 with similarity 1.00
+% The original and final NL have similarity: 1.00
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 Robert imagined a ball.
 Robert did not imagine a ball.
-
 % -------------------------------------------------------------------------
-% The final NL is :
-Robert imagined the ball.  
-Robert did not imagine the ball.
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-The two segments differ only in the use of the definite article “the” versus the indefinite article “a.” Both describe the same pair of contradictory statements about Robert imagining a ball, so their meanings are almost identical. The small difference is that “the ball” implies a specific ball already known to the reader, while “a ball” refers to any ball in general.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(type_individual,type,
-    individual: $tType ).
-
-tff(type_imagines,type,
-    imagines: ( individual * individual ) > $o ).
-
-tff(type_robert,type,
-    robert: individual ).
-
-tff(type_ball,type,
-    ball: individual ).
-
-tff(ax_robert_imagined_ball,axiom,
-    imagines(robert,ball) ).
-
-tff(ax_robert_not_imagined_ball,axiom,
-    ~ imagines(robert,ball) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is UNS with output
-tff(type_def_5, type, individual: $tType).
-tff(func_def_0, type, robert: individual).
-tff(func_def_1, type, ball: individual).
-tff(pred_def_1, type, imagines: (individual * individual) > $o).
-tff(f7,plain,(
-  $false),
-  inference(resolution,[],[f6,f5])).
-tff(f5,plain,(
-  ~imagines(robert,ball)),
-  inference(consistent_polarity_flipping,[],[f3])).
-tff(f3,plain,(
-  imagines(robert,ball)),
-  inference(cnf_transformation,[],[f1])).
-tff(f1,axiom,(
-  imagines(robert,ball)),
-  file('/tmp/6FomZRjdyk/SOT_lkjq1P',unknown)).
-tff(f6,plain,(
-  imagines(robert,ball)),
-  inference(consistent_polarity_flipping,[],[f4])).
-tff(f4,plain,(
-  ~imagines(robert,ball)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  ~imagines(robert,ball)),
-  file('/tmp/6FomZRjdyk/SOT_lkjq1P',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,True,0.95,2,True,0.95,1,UNS,Unknown,0,1,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:3 with similarity 0.95
-% The original and final NL have similarity: 0.90
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
+% The normalized NL is :
 Robert imagined a ball.
 Robert did not imagine a ball.
-
 % -------------------------------------------------------------------------
 % The final NL is :
-'individual' is a type.
-'robert' is an individual.
-'ball' is an individual.
-'imagined' is a binary relation between individuals.
-Robert is equal to Robert.
-Ball is equal to Ball.
-Robert imagined Ball.
-Is it not the case that Robert imagined Ball?
+Robert imagined a ball.
+Robert did not imagine a ball.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same logical content: a statement that Robert imagined a ball and its negation. The second segment expresses this in a more formal, logical style, explicitly defining terms and relations, while the first uses plain English sentences. The meaning—asserting and then denying the same proposition—is essentially the same, hence the high similarity.
+The two text segments are identical in wording and meaning; there are no differences.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(individual_type,type,
-    individual: $tType ).
-
+% Type declarations
 tff(robert_type,type,
-    robert: individual ).
+    robert: $i ).
 
 tff(ball_type,type,
-    ball: individual ).
+    ball: $i ).
 
 tff(imagined_type,type,
-    imagined: ( individual * individual ) > $o ).
+    imagined: ( $i * $i ) > $o ).
 
-tff(robert_equals_robert,axiom,
-    robert = robert ).
-
-tff(ball_equals_ball,axiom,
-    ball = ball ).
-
-tff(robert_imagined_ball,axiom,
+% Axioms and Conjectures
+tff(robert_imagined_a_ball,axiom,
     imagined(robert,ball) ).
 
-tff(not_robert_imagined_ball,conjecture,
+tff(robert_did_not_imagine_a_ball,axiom,
     ~ imagined(robert,ball) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define imagined(X0,X1) := $true
+% The ATP SZS status is UNS with output
+fof(f5,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f3,f4])).
+fof(f4,plain,(
+  ~imagined(robert,ball)),
+  inference(cnf_transformation,[],[f2])).
+fof(f2,axiom,(
+  ~imagined(robert,ball)),
+  file('/tmp/eIsBrCGOAM/SOT_tY4SRL',unknown)).
+fof(f3,plain,(
+  imagined(robert,ball)),
+  inference(cnf_transformation,[],[f1])).
+fof(f1,axiom,(
+  imagined(robert,ball)),
+  file('/tmp/eIsBrCGOAM/SOT_tY4SRL',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,False,0.90,3,True,0.95,3,CSA,Unknown,0,1,8,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,False,0.00,3,False,0.00,0,NON,Unknown,0,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,True,1.00,2,True,1.00,1,UNS,Unknown,0,0,2,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:3 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:2 with similarity 1.00
+% The original and final NL have similarity: 0.90
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 Robert imagined a ball.
 Robert did not imagine a ball.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+Robert imagined a ball.
+Robert did not imagine a ball.
 % -------------------------------------------------------------------------
 % The final NL is :
 Person is a type.
 Object is a type.
 Robert is a person.
 Ball is an object.
-Imagined is a predicate that takes a person and an object.
-Robert imagined the ball.
-Is it not the case that Robert imagined the ball?
+Imagined is a relation between a person and an object.
+Robert imagined ball.
+Robert did not imagine ball.
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same pair of propositions: one asserting that Robert imagined a ball, and one denying it. The second segment adds explicit type information (person, object, predicate structure) and rephrases the negation as a question, but the underlying meanings—affirmation and negation of the same event—are nearly identical.
+Both segments describe the same pair of propositions: that Robert imagined a ball and that Robert did not imagine a ball. The second segment adds explicit type information and formalizes the relation “imagined” between a person and an object, but the core meaning—asserting and denying the same event—is the same. The difference lies only in the added ontological structure and explicit typing, not in the underlying content.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(person_type,type,
-    person: $tType ).
+    person: $tptp_type ).
 
 tff(object_type,type,
-    object: $tType ).
+    object: $tptp_type ).
 
-tff(robert_declaration,type,
+tff(robert_decl,type,
     robert: person ).
 
-tff(ball_declaration,type,
+tff(ball_decl,type,
     ball: object ).
 
-tff(imagined_predicate,type,
+tff(imagined_decl,type,
     imagined: ( person * object ) > $o ).
 
 tff(axiom1,axiom,
-    ? [X: object] :
-      ( ( X = ball )
-      & imagined(robert,X) ) ).
+    imagined(robert,ball) ).
 
-tff(conjecture1,conjecture,
-    ~ ? [X: object] :
-        ( ( X = ball )
-        & imagined(robert,X) ) ).
+tff(axiom2,axiom,
+    ~ imagined(robert,ball) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-cnf(u13,negated_conjecture,
-    sK0 = sK1).
+% The ATP SZS status is NON with output
+None
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,True,0.95,1,True,0.95,3,CSA,Unknown,7,5,3,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/Contradiction1.UNS.txt,False,0.90,3,True,1.00,2,NON,Unknown,0,0,3,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

@@ -1,6 +1,6 @@
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 3:3 with similarity 0.97
-% The original and final NL have similarity: 0.95
+% Converged at ZigZag number 3:3 with similarity 0.98
+% The original and final NL have similarity: 0.90
 % Normalization model: OpenAI---gpt-5-chat-latest
 % NL2L model:          OpenAI---gpt-5-chat-latest
 % L2NL model:          OpenAI---gpt-5-chat-latest
@@ -16,13 +16,13 @@ Who felt concern?
 % -------------------------------------------------------------------------
 % The final NL is :
 There is a type called person.  
-There is an individual called economist who is a person.  
-There is a property called feels_concern that applies to persons.  
-It is true that the economist feels concern.  
+Economist is a person.  
+Feeling concern is a property that can apply to a person.  
+The economist feels concern.  
 Is there a person who feels concern?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe an economist who feels concern and then ask who feels concern. The second segment expresses the same meaning in a more formal, logical style, explicitly defining types and properties, while the first is a natural-language version. The difference lies in formality and explicit ontology, not in underlying meaning.
+Both segments describe an economist experiencing concern and then pose a question about who (or whether someone) feels concern. The second segment, however, adds explicit logical structure—defining “person,” linking “economist” to “person,” and formalizing “feeling concern” as a property—so it is more detailed and abstract, while the first is a simple narrative and question.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(person_type,type,
@@ -31,47 +31,360 @@ tff(person_type,type,
 tff(economist_type,type,
     economist: person ).
 
-tff(feels_concern_type,type,
-    feels_concern: person > $o ).
-
-tff(economist_is_person,axiom,
-    $true ).
-
-tff(feeling_concern_property,axiom,
-    $true ).
+tff(feel_concern_type,type,
+    feel_concern: person > $o ).
 
 tff(economist_feels_concern,axiom,
-    feels_concern(economist) ).
+    feel_concern(economist) ).
 
 tff(exists_person_feels_concern,conjecture,
-    ? [X: person] : feels_concern(X) ).
+    ? [X: person] : feel_concern(X) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is THM with output
 tff(type_def_5, type, person: $tType).
 tff(func_def_0, type, economist: person).
-tff(pred_def_1, type, feels_concern: person > $o).
-tff(f9,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f7,f8])).
-tff(f8,plain,(
-  ( ! [X0 : person] : (~feels_concern(X0)) )),
-  inference(cnf_transformation,[],[f6])).
-tff(f6,plain,(
-  ! [X0 : person] : ~feels_concern(X0)),
-  inference(ennf_transformation,[],[f5])).
-tff(f5,negated_conjecture,(
-  ~? [X0 : person] : feels_concern(X0)),
-  inference(negated_conjecture,[status(cth)],[f4])).
-tff(f4,conjecture,(
-  ? [X0 : person] : feels_concern(X0)),
-  file('/tmp/wZCUiuVfcM/SOT_5mMvmr',unknown)).
+tff(pred_def_1, type, feel_concern: person > $o).
 tff(f7,plain,(
-  feels_concern(economist)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  feels_concern(economist)),
-  file('/tmp/wZCUiuVfcM/SOT_5mMvmr',unknown)).
+  $false),
+  inference(resolution,[],[f5,f6])).
+tff(f6,plain,(
+  ( ! [X0 : person] : (~feel_concern(X0)) )),
+  inference(cnf_transformation,[],[f4])).
+tff(f4,plain,(
+  ! [X0 : person] : ~feel_concern(X0)),
+  inference(ennf_transformation,[],[f3])).
+tff(f3,negated_conjecture,(
+  ~? [X0 : person] : feel_concern(X0)),
+  inference(negated_conjecture,[status(cth)],[f2])).
+tff(f2,conjecture,(
+  ? [X0 : person] : feel_concern(X0)),
+  file('/tmp/_JNc0GjZKH/SOT_q4QOU6',unknown)).
+tff(f5,plain,(
+  feel_concern(economist)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  feel_concern(economist)),
+  file('/tmp/_JNc0GjZKH/SOT_q4QOU6',unknown)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,True,0.95,3,True,0.97,3,THM,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.90,3,True,0.98,3,THM,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:2 with similarity 0.96
+% The original and final NL have similarity: 0.92
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The economist, identifiable as a professional analyst specializing in financial and market systems, was actively experiencing a state of concern regarding the current stability of the global economic infrastructure.
+Which specific individual or clearly identified entity, described as a professional analyst specializing in financial and market systems, was actively experiencing a state of concern regarding the current stability of the global economic infrastructure?
+% -------------------------------------------------------------------------
+% The final NL is :
+Financial market systems is an entity.
+State of concern is an entity.
+Global economic infrastructure is an entity.
+Professional analyst is an entity.
+Current stability of global economic infrastructure is an entity.
+Identified as is a relation between two entities.
+Specializing in is a relation between two entities.
+Experiencing is a relation between two entities.
+Regarding is a relation between two entities.
+Is an economist is a property of an entity.
+Is a professional analyst is a property of an entity.
+Specializes in financial and market systems is a property of an entity.
+Experiences concern is a property of an entity.
+Concern regarding global economic infrastructure is a property of an entity.
+Is concerned about stability is a property of an entity.
+An entity is an economist if and only if it is identified as a professional analyst and specializes in financial market systems.
+An entity experiences concern if and only if it is experiencing a state of concern and that state of concern is regarding the current stability of global economic infrastructure.
+There exists an entity that is an economist and experiences concern.
+Does there exist an entity that is identified as a professional analyst, specializes in financial market systems, is experiencing a state of concern, and that state of concern is regarding the current stability of global economic infrastructure?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe essentially the same situation: an economist (a professional analyst specializing in financial and market systems) who is concerned about the stability of the global economic infrastructure. The first text expresses this in natural language and asks which individual fits that description, while the second formalizes the same content in logical or ontological terms and asks whether such an entity exists. The difference lies mainly in style and representation (natural language vs. formal logical structure), not in underlying meaning.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(type_declaration_financial_market_systems,type,
+    financial_market_systems: $i ).
+
+tff(type_declaration_state_of_concern,type,
+    state_of_concern: $i ).
+
+tff(type_declaration_global_economic_infrastructure,type,
+    global_economic_infrastructure: $i ).
+
+tff(type_declaration_professional_analyst_concept,type,
+    professional_analyst: $i ).
+
+tff(type_declaration_current_stability_of_global_economic_infrastructure,type,
+    current_stability_of_global_economic_infrastructure: $i ).
+
+tff(type_declaration_identified_as,type,
+    identified_as: ( $i * $i ) > $o ).
+
+tff(type_declaration_specializing_in,type,
+    specializing_in: ( $i * $i ) > $o ).
+
+tff(type_declaration_experiencing,type,
+    experiencing: ( $i * $i ) > $o ).
+
+tff(type_declaration_regarding,type,
+    regarding: ( $i * $i ) > $o ).
+
+tff(type_declaration_is_an_economist,type,
+    is_an_economist: $i > $o ).
+
+tff(type_declaration_is_a_professional_analyst,type,
+    is_a_professional_analyst: $i > $o ).
+
+tff(type_declaration_specializes_in_financial_and_market_systems,type,
+    specializes_in_financial_and_market_systems: $i > $o ).
+
+tff(type_declaration_experiences_concern,type,
+    experiences_concern: $i > $o ).
+
+tff(type_declaration_concern_regarding_global_economic_infrastructure,type,
+    concern_regarding_global_economic_infrastructure: $i > $o ).
+
+tff(type_declaration_is_concerned_about_stability,type,
+    is_concerned_about_stability: $i > $o ).
+
+tff(axiom_economist_definition,axiom,
+    ! [X: $i] :
+      ( is_an_economist(X)
+    <=> ( identified_as(X,professional_analyst)
+        & specializing_in(X,financial_market_systems) ) ) ).
+
+tff(axiom_experiences_concern_definition,axiom,
+    ! [X: $i] :
+      ( experiences_concern(X)
+    <=> ( experiencing(X,state_of_concern)
+        & regarding(state_of_concern,current_stability_of_global_economic_infrastructure) ) ) ).
+
+tff(axiom_economist_with_concern_exists,axiom,
+    ? [E: $i] :
+      ( is_an_economist(E)
+      & experiences_concern(E) ) ).
+
+tff(conjecture_professional_analyst_concern_exists,conjecture,
+    ? [X: $i] :
+      ( identified_as(X,professional_analyst)
+      & specializing_in(X,financial_market_systems)
+      & experiencing(X,state_of_concern)
+      & regarding(state_of_concern,current_stability_of_global_economic_infrastructure) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+fof(f51,plain,(
+  $false),
+  inference(avatar_sat_refutation,[],[f28,f32,f34,f46,f48,f50])).
+fof(f50,plain,(
+  spl1_4),
+  inference(avatar_split_clause,[],[f49,f39])).
+fof(f39,definition,(
+  spl1_4 <=> experiencing(sK0,state_of_concern)),
+  introduced(definition,[new_symbols(naming,[spl1_4])],[avatar_definition])).
+fof(f49,plain,(
+  experiencing(sK0,state_of_concern)),
+  inference(resolution,[],[f16,f19])).
+fof(f19,plain,(
+  experiences_concern(sK0)),
+  inference(cnf_transformation,[],[f13])).
+fof(f13,plain,(
+  experiences_concern(sK0) & is_an_economist(sK0)),
+  inference(skolemisation,[status(esa),new_symbols(skolem,[sK0])],[f6,f12])).
+fof(f12,plain,(
+  ? [X0] : (experiences_concern(X0) & is_an_economist(X0)) => (experiences_concern(sK0) & is_an_economist(sK0))),
+  introduced(definition,[],[choice_axiom])).
+fof(f6,plain,(
+  ? [X0] : (experiences_concern(X0) & is_an_economist(X0))),
+  inference(rectify,[],[f3])).
+fof(f3,axiom,(
+  ? [X1] : (experiences_concern(X1) & is_an_economist(X1))),
+  file('/tmp/xPhvQt2Bz1/SOT_oHlfZ6',unknown)).
+fof(f16,plain,(
+  ( ! [X0] : (~experiences_concern(X0) | experiencing(X0,state_of_concern)) )),
+  inference(cnf_transformation,[],[f10])).
+fof(f10,plain,(
+  ! [X0] : ((regarding(state_of_concern,current_stability_of_global_economic_infrastructure) & experiencing(X0,state_of_concern)) | ~experiences_concern(X0))),
+  inference(ennf_transformation,[],[f7])).
+fof(f7,plain,(
+  ! [X0] : (experiences_concern(X0) => (regarding(state_of_concern,current_stability_of_global_economic_infrastructure) & experiencing(X0,state_of_concern)))),
+  inference(unused_predicate_definition_removal,[],[f2])).
+fof(f2,axiom,(
+  ! [X0] : (experiences_concern(X0) <=> (regarding(state_of_concern,current_stability_of_global_economic_infrastructure) & experiencing(X0,state_of_concern)))),
+  file('/tmp/xPhvQt2Bz1/SOT_oHlfZ6',unknown)).
+fof(f48,plain,(
+  spl1_5),
+  inference(avatar_contradiction_clause,[],[f47])).
+fof(f47,plain,(
+  $false | spl1_5),
+  inference(resolution,[],[f45,f35])).
+fof(f35,plain,(
+  identified_as(sK0,professional_analyst)),
+  inference(resolution,[],[f14,f18])).
+fof(f18,plain,(
+  is_an_economist(sK0)),
+  inference(cnf_transformation,[],[f13])).
+fof(f14,plain,(
+  ( ! [X0] : (~is_an_economist(X0) | identified_as(X0,professional_analyst)) )),
+  inference(cnf_transformation,[],[f9])).
+fof(f9,plain,(
+  ! [X0] : ((specializing_in(X0,financial_market_systems) & identified_as(X0,professional_analyst)) | ~is_an_economist(X0))),
+  inference(ennf_transformation,[],[f8])).
+fof(f8,plain,(
+  ! [X0] : (is_an_economist(X0) => (specializing_in(X0,financial_market_systems) & identified_as(X0,professional_analyst)))),
+  inference(unused_predicate_definition_removal,[],[f1])).
+fof(f1,axiom,(
+  ! [X0] : (is_an_economist(X0) <=> (specializing_in(X0,financial_market_systems) & identified_as(X0,professional_analyst)))),
+  file('/tmp/xPhvQt2Bz1/SOT_oHlfZ6',unknown)).
+fof(f45,plain,(
+  ~identified_as(sK0,professional_analyst) | spl1_5),
+  inference(avatar_component_clause,[],[f43])).
+fof(f43,definition,(
+  spl1_5 <=> identified_as(sK0,professional_analyst)),
+  introduced(definition,[new_symbols(naming,[spl1_5])],[avatar_definition])).
+fof(f46,plain,(
+  ~spl1_4 | ~spl1_5 | ~spl1_1),
+  inference(avatar_split_clause,[],[f37,f22,f43,f39])).
+fof(f22,definition,(
+  spl1_1 <=> ! [X0] : (~experiencing(X0,state_of_concern) | ~identified_as(X0,professional_analyst) | ~specializing_in(X0,financial_market_systems))),
+  introduced(definition,[new_symbols(naming,[spl1_1])],[avatar_definition])).
+fof(f37,plain,(
+  ~identified_as(sK0,professional_analyst) | ~experiencing(sK0,state_of_concern) | ~spl1_1),
+  inference(resolution,[],[f36,f23])).
+fof(f23,plain,(
+  ( ! [X0] : (~specializing_in(X0,financial_market_systems) | ~identified_as(X0,professional_analyst) | ~experiencing(X0,state_of_concern)) ) | ~spl1_1),
+  inference(avatar_component_clause,[],[f22])).
+fof(f36,plain,(
+  specializing_in(sK0,financial_market_systems)),
+  inference(resolution,[],[f15,f18])).
+fof(f15,plain,(
+  ( ! [X0] : (~is_an_economist(X0) | specializing_in(X0,financial_market_systems)) )),
+  inference(cnf_transformation,[],[f9])).
+fof(f34,plain,(
+  ~spl1_3),
+  inference(avatar_contradiction_clause,[],[f33])).
+fof(f33,plain,(
+  $false | ~spl1_3),
+  inference(resolution,[],[f31,f19])).
+fof(f31,plain,(
+  ( ! [X0] : (~experiences_concern(X0)) ) | ~spl1_3),
+  inference(avatar_component_clause,[],[f30])).
+fof(f30,definition,(
+  spl1_3 <=> ! [X0] : ~experiences_concern(X0)),
+  introduced(definition,[new_symbols(naming,[spl1_3])],[avatar_definition])).
+fof(f32,plain,(
+  spl1_3 | spl1_2),
+  inference(avatar_split_clause,[],[f17,f25,f30])).
+fof(f25,definition,(
+  spl1_2 <=> regarding(state_of_concern,current_stability_of_global_economic_infrastructure)),
+  introduced(definition,[new_symbols(naming,[spl1_2])],[avatar_definition])).
+fof(f17,plain,(
+  ( ! [X0] : (regarding(state_of_concern,current_stability_of_global_economic_infrastructure) | ~experiences_concern(X0)) )),
+  inference(cnf_transformation,[],[f10])).
+fof(f28,plain,(
+  spl1_1 | ~spl1_2),
+  inference(avatar_split_clause,[],[f20,f25,f22])).
+fof(f20,plain,(
+  ( ! [X0] : (~regarding(state_of_concern,current_stability_of_global_economic_infrastructure) | ~experiencing(X0,state_of_concern) | ~specializing_in(X0,financial_market_systems) | ~identified_as(X0,professional_analyst)) )),
+  inference(cnf_transformation,[],[f11])).
+fof(f11,plain,(
+  ! [X0] : (~regarding(state_of_concern,current_stability_of_global_economic_infrastructure) | ~experiencing(X0,state_of_concern) | ~specializing_in(X0,financial_market_systems) | ~identified_as(X0,professional_analyst))),
+  inference(ennf_transformation,[],[f5])).
+fof(f5,negated_conjecture,(
+  ~? [X0] : (regarding(state_of_concern,current_stability_of_global_economic_infrastructure) & experiencing(X0,state_of_concern) & specializing_in(X0,financial_market_systems) & identified_as(X0,professional_analyst))),
+  inference(negated_conjecture,[status(cth)],[f4])).
+fof(f4,conjecture,(
+  ? [X0] : (regarding(state_of_concern,current_stability_of_global_economic_infrastructure) & experiencing(X0,state_of_concern) & specializing_in(X0,financial_market_systems) & identified_as(X0,professional_analyst))),
+  file('/tmp/xPhvQt2Bz1/SOT_oHlfZ6',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.92,3,True,0.96,2,THM,Unknown,2,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 3:3 with similarity 0.95
+% The original and final NL have similarity: 0.85
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+The economist felt concern.
+Who felt concern?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The economist experienced a feeling of concern.
+Which person experienced a feeling of concern?
+% -------------------------------------------------------------------------
+% The final NL is :
+There exists a type called person.
+There exists a type called feeling.
+The economist is a person.
+Concern is a feeling.
+Experienced is a relation between a person and a feeling.
+The economist experienced concern.
+Does there exist a person who experienced concern?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe the same situation—an economist (a person) experiencing concern (a feeling)—and both end with a question about whether such a person exists. The second segment, however, expresses this in a more formal, logical, ontology-like style, explicitly defining types and relations, while the first uses natural language. The meaning is nearly equivalent, but the second adds meta-level structure and definitions not present in the first.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tType ).
+
+tff(feeling_type,type,
+    feeling: $tType ).
+
+tff(economist_decl,type,
+    economist: person ).
+
+tff(concern_decl,type,
+    concern: feeling ).
+
+tff(experienced_decl,type,
+    experienced: ( person * feeling ) > $o ).
+
+tff(axiom1,axiom,
+    experienced(economist,concern) ).
+
+tff(conjecture1,conjecture,
+    ? [X: person] : experienced(X,concern) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is THM with output
+tff(type_def_5, type, person: $tType).
+tff(type_def_6, type, feeling: $tType).
+tff(func_def_0, type, economist: person).
+tff(func_def_1, type, concern: feeling).
+tff(pred_def_1, type, experienced: (person * feeling) > $o).
+tff(f7,plain,(
+  $false),
+  inference(subsumption_resolution,[],[f5,f6])).
+tff(f6,plain,(
+  ( ! [X0 : person] : (~experienced(X0,concern)) )),
+  inference(cnf_transformation,[],[f4])).
+tff(f4,plain,(
+  ! [X0 : person] : ~experienced(X0,concern)),
+  inference(ennf_transformation,[],[f3])).
+tff(f3,negated_conjecture,(
+  ~? [X0 : person] : experienced(X0,concern)),
+  inference(negated_conjecture,[status(cth)],[f2])).
+tff(f2,conjecture,(
+  ? [X0 : person] : experienced(X0,concern)),
+  file('/tmp/gc35QIE5HL/SOT_TLbBwY',unknown)).
+tff(f5,plain,(
+  experienced(economist,concern)),
+  inference(cnf_transformation,[],[f1])).
+tff(f1,axiom,(
+  experienced(economist,concern)),
+  file('/tmp/gc35QIE5HL/SOT_TLbBwY',unknown)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-AP/01-Economist.THM.txt,False,0.85,3,True,0.95,3,THM,Unknown,0,0,0,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

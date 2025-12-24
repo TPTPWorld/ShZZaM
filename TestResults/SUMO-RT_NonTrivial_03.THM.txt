@@ -1,9 +1,10 @@
 % -------------------------------------------------------------------------
 % Converged at ZigZag number 1:1 with similarity 0.95
 % The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 If a country is a member of NATO, it will protect any member that is attacked.
@@ -11,150 +12,107 @@ Sweden is a member of NATO.
 Germany is a member of NATO
 Russia attacked Germany.
 Will Sweden protect Germany?
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+- NATO is a military alliance in which all member countries agree to defend any member that is attacked.  
+- Sweden is a member of NATO.  
+- Germany is a member of NATO.  
+- Russia has attacked Germany.  
+- Will Sweden, as a NATO member, protect Germany in response to the attack?
 % -------------------------------------------------------------------------
 % The final NL is :
-There is a type of thing called a country.  
-
-“Member” is a relation between two countries.  
-
-“Attacked” is a relation between two countries.  
-
-“Protects” is a relation between two countries.  
-
-NATO is a country.  
-
-Sweden is a country.  
-
-Germany is a country.  
-
-Russia is a country.  
-
-For every country C, if C is a member of NATO, then for all countries A and M, if M is a member of NATO and A has attacked M, then C protects M.  
-
-Sweden is a member of NATO.  
-
-Germany is a member of NATO.  
-
+NATO Alliance is a military alliance.  
+If two countries are members of the NATO Alliance, then the first country agrees to defend the second country under the NATO Alliance.  
+Sweden is a member of the NATO Alliance.  
+Germany is a member of the NATO Alliance.  
 Russia has attacked Germany.  
-
 Does Sweden protect Germany?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both texts describe the same logical situation: NATO membership implies mutual protection among members when one is attacked, and they ask whether Sweden will protect Germany after Russia attacks Germany. The second text is more formal and explicit about the logical structure (defining relations and quantifiers), while the first is a natural-language version. The only minor difference is that the second explicitly defines “NATO” as a country and formalizes the relations, but the underlying meaning and question are effectively identical.
+Both segments describe the same scenario: NATO’s mutual defense principle, Sweden and Germany as members, and Russia attacking Germany, leading to the question of whether Sweden will defend Germany. The only differences are stylistic and structural — the second text restates the defense rule more formally and uses “NATO Alliance” instead of “NATO,” but the meaning remains nearly identical.
 % -------------------------------------------------------------------------
 % The final logic is :
+tff(type_nato,type,
+    nato: $tType ).
+
 tff(type_country,type,
     country: $tType ).
 
-tff(type_member,type,
-    member: ( country * country ) > $o ).
+tff(type_attack,type,
+    attack: $tType ).
 
-tff(type_attacked,type,
+tff(const_natoAlliance,type,
+    natoAlliance: nato ).
+
+tff(pred_isMilitaryAlliance,type,
+    isMilitaryAlliance: nato > $o ).
+
+tff(pred_memberOf,type,
+    memberOf: ( country * nato ) > $o ).
+
+tff(pred_agreeToDefend,type,
+    agreeToDefend: ( country * country * nato ) > $o ).
+
+tff(pred_attacked,type,
     attacked: ( country * country ) > $o ).
 
-tff(type_protects,type,
-    protects: ( country * country ) > $o ).
+tff(pred_protect,type,
+    protect: ( country * country ) > $o ).
 
-tff(type_nato,type,
-    nato: country ).
-
-tff(type_sweden,type,
+tff(const_sweden,type,
     sweden: country ).
 
-tff(type_germany,type,
+tff(const_germany,type,
     germany: country ).
 
-tff(type_russia,type,
+tff(const_russia,type,
     russia: country ).
 
-tff(axiom_nato_protection,axiom,
-    ! [C: country] :
-      ( member(C,nato)
-     => ! [A: country,M: country] :
-          ( ( member(M,nato)
-            & attacked(A,M) )
-         => protects(C,M) ) ) ).
+tff(ax1,axiom,
+    isMilitaryAlliance(natoAlliance) ).
 
-tff(axiom_sweden_member,axiom,
-    member(sweden,nato) ).
+tff(ax2,axiom,
+    ! [C1: country,C2: country] :
+      ( ( memberOf(C1,natoAlliance)
+        & memberOf(C2,natoAlliance) )
+     => agreeToDefend(C1,C2,natoAlliance) ) ).
 
-tff(axiom_germany_member,axiom,
-    member(germany,nato) ).
+tff(ax3,axiom,
+    memberOf(sweden,natoAlliance) ).
 
-tff(axiom_russia_attacked_germany,axiom,
+tff(ax4,axiom,
+    memberOf(germany,natoAlliance) ).
+
+tff(ax5,axiom,
     attacked(russia,germany) ).
 
-tff(conjecture_sweden_protects_germany,conjecture,
-    protects(sweden,germany) ).
+tff(conj1,conjecture,
+    protect(sweden,germany) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is THM with output
-tff(type_def_5, type, country: $tType).
-tff(func_def_0, type, nato: country).
-tff(func_def_1, type, sweden: country).
-tff(func_def_2, type, germany: country).
-tff(func_def_3, type, russia: country).
-tff(pred_def_1, type, member: (country * country) > $o).
-tff(pred_def_2, type, attacked: (country * country) > $o).
-tff(pred_def_3, type, protects: (country * country) > $o).
-tff(pred_def_4, type, sP0: country > $o).
-tff(pred_def_5, type, sP1: country > $o).
-tff(pred_def_6, type, sP2: country > $o).
-tff(f26,plain,(
-  $false),
-  inference(finite_model_not_found_:_exhaustively_excluded_all_possible_domain_size_assignments,[],[f10,f11,f12,f13,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/UzZgHPkFWO/SOT_awcSxt',unknown)).
-tff(f13,plain,(
-  attacked(russia,germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(russia,germany)),
-  file('/tmp/UzZgHPkFWO/SOT_awcSxt',unknown)).
-tff(f12,plain,(
-  member(germany,nato)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member(germany,nato)),
-  file('/tmp/UzZgHPkFWO/SOT_awcSxt',unknown)).
-tff(f11,plain,(
-  member(sweden,nato)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member(sweden,nato)),
-  file('/tmp/UzZgHPkFWO/SOT_awcSxt',unknown)).
-tff(f10,plain,(
-  ( ! [X2 : country,X0 : country,X1 : country] : (protects(X0,X2) | ~attacked(X1,X2) | ~member(X2,nato) | ~member(X0,nato)) )),
-  inference(cnf_transformation,[],[f9])).
-tff(f9,plain,(
-  ! [X0 : country] : (! [X1 : country,X2 : country] : (protects(X0,X2) | ~attacked(X1,X2) | ~member(X2,nato)) | ~member(X0,nato))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country] : (! [X1 : country,X2 : country] : (protects(X0,X2) | (~attacked(X1,X2) | ~member(X2,nato))) | ~member(X0,nato))),
-  inference(ennf_transformation,[],[f1])).
-tff(f1,axiom,(
-  ! [X0 : country] : (member(X0,nato) => ! [X1 : country,X2 : country] : ((attacked(X1,X2) & member(X2,nato)) => protects(X0,X2)))),
-  file('/tmp/UzZgHPkFWO/SOT_awcSxt',unknown)).
+% The ATP SZS status is CSA with output
+% SZS output end Saturation.
+% SZS output start Definitions and Model Updates.
+for all inputs,
+    define isMilitaryAlliance(X0) := $true
+for all inputs,
+    define memberOf(X0,X1) := $true
+for all inputs,
+    define agreeToDefend(X0,X1,X2) := $true
+for all inputs,
+    define attacked(X0,X1) := $true
+for all inputs,
+    define protect(X0,X1) := $false
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,1,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,CSA,Unknown,1,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
+% Converged at ZigZag number 2:1 with similarity 0.95
 % The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 If a country is a member of NATO, it will protect any member that is attacked.
@@ -162,21 +120,42 @@ Sweden is a member of NATO.
 Germany is a member of NATO
 Russia attacked Germany.
 Will Sweden protect Germany?
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+Article 5 of the North Atlantic Treaty states that an armed attack against one member country of the North Atlantic Treaty Organization (NATO) is considered an attack against all members, obligating each member to assist the attacked member.
+Sweden is a member country of the North Atlantic Treaty Organization (NATO).
+Germany is a member country of the North Atlantic Treaty Organization (NATO).
+Russia has launched an armed attack against Germany.
+Given that Germany is a member country of the North Atlantic Treaty Organization (NATO) and has been subjected to an armed attack by Russia, and Sweden is also a member country of NATO, will Sweden protect Germany?
 % -------------------------------------------------------------------------
 % The final NL is :
-For every country, if that country is a member of NATO, then for all countries M and A, if M is a member of NATO and A attacks M, then that country protects M.  
-
-Sweden is a member of NATO.  
-
-Germany is a member of NATO.  
-
-Russia attacked Germany.  
-
-Does Sweden protect Germany?
+Country is a type.
+Organization is a type.
+Event is a type.
+MemberOf is a relation between a country and an organization.
+Attack is a relation between an event, an attacking country, and a targeted country.
+ArmedAttack is a property of an event.
+AttackAgainstAllMembers is a relation between an event and an organization.
+ObligatesToAssist is a relation where an event obligates an organization for a country to assist another country.
+Protects is a relation between a country and another country.
+IsConsidered is a relation between a proposition and another proposition.
+Nato is an organization.
+Sweden is a country.
+Germany is a country.
+Russia is a country.
+E1 is an event.
+For any country C, any event A, and any country R, if C is a member of Nato, and A is an armed attack, and A is an attack by R on C, then the attack by R on C is considered an attack against all members of Nato.
+For any country C1, any country C2, any event A, and any country R, if C1 is a member of Nato, and C2 is a member of Nato, and A is an armed attack, and A is an attack by R on C1, and the attack by R on C1 is considered an attack against all members of Nato, then A obligates C2 to assist C1 on behalf of Nato.
+For any event A, any country C1, and any country C2, if A obligates C1 to assist C2 on behalf of Nato, then C1 protects C2.
+Sweden is a member of Nato.
+Germany is a member of Nato.
+E1 is an armed attack by Russia on Germany.
+If Germany is a member of Nato, and E1 is an armed attack by Russia on Germany, and Sweden is a member of Nato, does Sweden protect Germany?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments express the same logical structure: NATO membership implies mutual defense among members, and the scenario tests whether Sweden will protect Germany after Russia attacks Germany. The second segment is more formal and generalized, using quantifiers (“for every country,” “for all countries M and A”) to express the rule, while the first uses a more natural-language conditional. The meaning, however, is nearly identical.
+Both segments express essentially the same scenario and reasoning: under Article 5 of the North Atlantic Treaty, an armed attack on one NATO member (Germany) by a non‑member (Russia) is considered an attack on all members, obligating other members (such as Sweden) to assist or protect the attacked member.  
+
+The first segment states this in natural language, while the second formalizes it in logical or ontological terms (defining types, relations, and inference rules). The only minor difference is that the second text is more abstract and formal, introducing explicit predicates and variables, whereas the first is a narrative description. The underlying meaning and conclusion are the same.
 % -------------------------------------------------------------------------
 % The final logic is :
 tff(type_country,type,
@@ -185,145 +164,344 @@ tff(type_country,type,
 tff(type_organization,type,
     organization: $tType ).
 
-tff(type_member,type,
-    member: ( country * organization ) > $o ).
+tff(type_event,type,
+    event: $tType ).
 
-tff(type_attacked,type,
-    attacked: ( country * country ) > $o ).
+tff(memberOf_type,type,
+    memberOf: ( country * organization ) > $o ).
 
-tff(type_protects,type,
+tff(attack_type,type,
+    attack: ( event * country * country ) > $o ).
+
+tff(armedAttack_type,type,
+    armedAttack: event > $o ).
+
+tff(attackAgainstAllMembers_type,type,
+    attackAgainstAllMembers: ( event * organization ) > $o ).
+
+tff(obligatesToAssist_type,type,
+    obligatesToAssist: ( event * organization * country * country ) > $o ).
+
+tff(protects_type,type,
     protects: ( country * country ) > $o ).
 
-tff(type_nato,type,
+tff(isConsidered_type,type,
+    isConsidered: ( $o * $o ) > $o ).
+
+tff(nato_type,type,
     nato: organization ).
 
-tff(type_sweden,type,
+tff(sweden_type,type,
     sweden: country ).
 
-tff(type_germany,type,
+tff(germany_type,type,
     germany: country ).
 
-tff(type_russia,type,
+tff(russia_type,type,
     russia: country ).
 
-tff(ax1,axiom,
-    ! [C: country] :
-      ( member(C,nato)
-     => ! [M: country,A: country] :
-          ( ( member(M,nato)
-            & attacked(A,M) )
-         => protects(C,M) ) ) ).
+tff(e1_type,type,
+    e1: event ).
 
-tff(ax2,axiom,
-    member(sweden,nato) ).
+tff(north_atlantic_treaty_organization_declaration,axiom,
+    ! [C: country,A: event,R: country] :
+      ( ( memberOf(C,nato)
+        & armedAttack(A)
+        & attack(A,R,C) )
+     => isConsidered(attack(A,R,C),attackAgainstAllMembers(A,nato)) ) ).
 
-tff(ax3,axiom,
-    member(germany,nato) ).
+tff(article_5_obligation_declaration,axiom,
+    ! [C1: country,C2: country,A: event,R: country] :
+      ( ( memberOf(C1,nato)
+        & memberOf(C2,nato)
+        & armedAttack(A)
+        & attack(A,R,C1)
+        & isConsidered(attack(A,R,C1),attackAgainstAllMembers(A,nato)) )
+     => obligatesToAssist(A,nato,C2,C1) ) ).
 
-tff(ax4,axiom,
-    attacked(russia,germany) ).
+tff(obligation_to_assist_implies_protection,axiom,
+    ! [A: event,C1: country,C2: country] :
+      ( obligatesToAssist(A,nato,C1,C2)
+     => protects(C1,C2) ) ).
 
-tff(conj,conjecture,
-    protects(sweden,germany) ).
+tff(sweden_is_a_member_of_nato,axiom,
+    memberOf(sweden,nato) ).
+
+tff(germany_is_a_member_of_nato,axiom,
+    memberOf(germany,nato) ).
+
+tff(russia_attacked_germany,axiom,
+    ( armedAttack(e1)
+    & attack(e1,russia,germany) ) ).
+
+tff(sweden_protects_germany_conjecture,conjecture,
+    ( ( memberOf(germany,nato)
+      & armedAttack(e1)
+      & attack(e1,russia,germany)
+      & memberOf(sweden,nato) )
+   => protects(sweden,germany) ) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is THM with output
 tff(type_def_5, type, country: $tType).
 tff(type_def_6, type, organization: $tType).
+tff(type_def_7, type, event: $tType).
 tff(func_def_0, type, nato: organization).
 tff(func_def_1, type, sweden: country).
 tff(func_def_2, type, germany: country).
 tff(func_def_3, type, russia: country).
-tff(pred_def_1, type, member: (country * organization) > $o).
-tff(pred_def_2, type, attacked: (country * country) > $o).
-tff(pred_def_3, type, protects: (country * country) > $o).
-tff(f39,plain,(
+tff(func_def_4, type, e1: event).
+tff(pred_def_1, type, memberOf: (country * organization) > $o).
+tff(pred_def_2, type, attack: (event * country * country) > $o).
+tff(pred_def_3, type, armedAttack: event > $o).
+tff(pred_def_4, type, attackAgainstAllMembers: (event * organization) > $o).
+tff(pred_def_5, type, obligatesToAssist: (event * organization * country * country) > $o).
+tff(pred_def_6, type, protects: (country * country) > $o).
+tff(pred_def_7, type, isConsidered: ($o * $o) > $o).
+tff(f101,plain,(
   $false),
-  inference(avatar_sat_refutation,[],[f26,f36,f38])).
-tff(f38,plain,(
-  ~spl0_1),
-  inference(avatar_contradiction_clause,[],[f37])).
-tff(f37,plain,(
-  $false | ~spl0_1),
-  inference(resolution,[],[f22,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/lTIRAUHYGP/SOT_kg1SWY',unknown)).
-tff(f22,plain,(
-  protects(sweden,germany) | ~spl0_1),
-  inference(avatar_component_clause,[],[f20])).
-tff(f20,definition,(
-  spl0_1 <=> protects(sweden,germany)),
-  introduced(definition,[new_symbols(naming,[spl0_1])],[avatar_definition])).
-tff(f36,plain,(
-  ~spl0_2),
-  inference(avatar_contradiction_clause,[],[f35])).
-tff(f35,plain,(
-  $false | ~spl0_2),
-  inference(resolution,[],[f25,f13])).
-tff(f13,plain,(
-  attacked(russia,germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(russia,germany)),
-  file('/tmp/lTIRAUHYGP/SOT_kg1SWY',unknown)).
-tff(f25,plain,(
-  ( ! [X0 : country] : (~attacked(X0,germany)) ) | ~spl0_2),
-  inference(avatar_component_clause,[],[f24])).
-tff(f24,definition,(
-  spl0_2 <=> ! [X0 : country] : ~attacked(X0,germany)),
+  inference(avatar_sat_refutation,[],[f48,f59,f63,f67,f76,f86,f97,f100])).
+tff(f100,plain,(
+  ~spl0_2 | ~spl0_4),
+  inference(avatar_contradiction_clause,[],[f99])).
+tff(f99,plain,(
+  $false | (~spl0_2 | ~spl0_4)),
+  inference(subsumption_resolution,[],[f51,f90])).
+tff(f90,plain,(
+  ~attackAgainstAllMembers(e1,nato) | ~spl0_4),
+  inference(subsumption_resolution,[],[f89,f27])).
+tff(f27,plain,(
+  memberOf(germany,nato)),
+  inference(cnf_transformation,[],[f17])).
+tff(f17,plain,(
+  ~protects(sweden,germany) & memberOf(sweden,nato) & attack(e1,russia,germany) & armedAttack(e1) & memberOf(germany,nato)),
+  inference(flattening,[],[f16])).
+tff(f16,plain,(
+  ~protects(sweden,germany) & (memberOf(sweden,nato) & attack(e1,russia,germany) & armedAttack(e1) & memberOf(germany,nato))),
+  inference(ennf_transformation,[],[f8])).
+tff(f8,negated_conjecture,(
+  ~((memberOf(sweden,nato) & attack(e1,russia,germany) & armedAttack(e1) & memberOf(germany,nato)) => protects(sweden,germany))),
+  inference(negated_conjecture,[status(cth)],[f7])).
+tff(f7,conjecture,(
+  (memberOf(sweden,nato) & attack(e1,russia,germany) & armedAttack(e1) & memberOf(germany,nato)) => protects(sweden,germany)),
+  file('/tmp/MnQgqQwiYE/SOT_bq4ZT_',unknown)).
+tff(f89,plain,(
+  ~memberOf(germany,nato) | ~attackAgainstAllMembers(e1,nato) | ~spl0_4),
+  inference(subsumption_resolution,[],[f88,f40])).
+tff(f40,plain,(
+  ~armedAttack(e1)),
+  inference(consistent_polarity_flipping,[],[f28])).
+tff(f28,plain,(
+  armedAttack(e1)),
+  inference(cnf_transformation,[],[f17])).
+tff(f88,plain,(
+  armedAttack(e1) | ~memberOf(germany,nato) | ~attackAgainstAllMembers(e1,nato) | ~spl0_4),
+  inference(resolution,[],[f58,f39])).
+tff(f39,plain,(
+  ~attack(e1,russia,germany)),
+  inference(consistent_polarity_flipping,[],[f29])).
+tff(f29,plain,(
+  attack(e1,russia,germany)),
+  inference(cnf_transformation,[],[f17])).
+tff(f58,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (attack(X1,X2,X0) | armedAttack(X1) | ~memberOf(X0,nato) | ~attackAgainstAllMembers(X1,nato)) ) | ~spl0_4),
+  inference(avatar_component_clause,[],[f57])).
+tff(f57,definition,(
+  spl0_4 <=> ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | armedAttack(X1) | attack(X1,X2,X0) | ~attackAgainstAllMembers(X1,nato))),
+  introduced(definition,[new_symbols(naming,[spl0_4])],[avatar_definition])).
+tff(f51,plain,(
+  attackAgainstAllMembers(e1,nato) | ~spl0_2),
+  inference(subsumption_resolution,[],[f50,f27])).
+tff(f50,plain,(
+  ~memberOf(germany,nato) | attackAgainstAllMembers(e1,nato) | ~spl0_2),
+  inference(subsumption_resolution,[],[f49,f40])).
+tff(f49,plain,(
+  armedAttack(e1) | ~memberOf(germany,nato) | attackAgainstAllMembers(e1,nato) | ~spl0_2),
+  inference(resolution,[],[f47,f39])).
+tff(f47,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (attack(X1,X2,X0) | armedAttack(X1) | ~memberOf(X0,nato) | attackAgainstAllMembers(X1,nato)) ) | ~spl0_2),
+  inference(avatar_component_clause,[],[f46])).
+tff(f46,definition,(
+  spl0_2 <=> ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | armedAttack(X1) | attack(X1,X2,X0) | attackAgainstAllMembers(X1,nato))),
   introduced(definition,[new_symbols(naming,[spl0_2])],[avatar_definition])).
-tff(f26,plain,(
-  spl0_1 | spl0_2),
-  inference(avatar_split_clause,[],[f18,f24,f20])).
-tff(f18,plain,(
-  ( ! [X0 : country] : (~attacked(X0,germany) | protects(sweden,germany)) )),
-  inference(resolution,[],[f15,f12])).
-tff(f12,plain,(
-  member(germany,nato)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member(germany,nato)),
-  file('/tmp/lTIRAUHYGP/SOT_kg1SWY',unknown)).
+tff(f97,plain,(
+  ~spl0_4 | ~spl0_5),
+  inference(avatar_contradiction_clause,[],[f96])).
+tff(f96,plain,(
+  $false | (~spl0_4 | ~spl0_5)),
+  inference(subsumption_resolution,[],[f95,f31])).
+tff(f31,plain,(
+  ~protects(sweden,germany)),
+  inference(cnf_transformation,[],[f17])).
+tff(f95,plain,(
+  protects(sweden,germany) | (~spl0_4 | ~spl0_5)),
+  inference(resolution,[],[f93,f30])).
+tff(f30,plain,(
+  memberOf(sweden,nato)),
+  inference(cnf_transformation,[],[f17])).
+tff(f93,plain,(
+  ( ! [X0 : country] : (~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_4 | ~spl0_5)),
+  inference(subsumption_resolution,[],[f92,f27])).
+tff(f92,plain,(
+  ( ! [X0 : country] : (~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_4 | ~spl0_5)),
+  inference(subsumption_resolution,[],[f91,f40])).
+tff(f91,plain,(
+  ( ! [X0 : country] : (armedAttack(e1) | ~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_4 | ~spl0_5)),
+  inference(resolution,[],[f87,f39])).
+tff(f87,plain,(
+  ( ! [X2 : country,X3 : country,X0 : country,X1 : event] : (attack(X1,X2,X0) | armedAttack(X1) | ~memberOf(X0,nato) | ~memberOf(X3,nato) | protects(X3,X0)) ) | (~spl0_4 | ~spl0_5)),
+  inference(subsumption_resolution,[],[f79,f58])).
+tff(f79,plain,(
+  ( ! [X2 : country,X3 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | armedAttack(X1) | attack(X1,X2,X0) | attackAgainstAllMembers(X1,nato) | ~memberOf(X3,nato) | protects(X3,X0)) ) | ~spl0_5),
+  inference(resolution,[],[f62,f36])).
+tff(f36,plain,(
+  ( ! [X2 : country,X0 : event,X1 : country] : (obligatesToAssist(X0,nato,X1,X2) | protects(X1,X2)) )),
+  inference(consistent_polarity_flipping,[],[f22])).
+tff(f22,plain,(
+  ( ! [X2 : country,X0 : event,X1 : country] : (~obligatesToAssist(X0,nato,X1,X2) | protects(X1,X2)) )),
+  inference(cnf_transformation,[],[f15])).
 tff(f15,plain,(
-  ( ! [X0 : country,X1 : country] : (~member(X1,nato) | ~attacked(X0,X1) | protects(sweden,X1)) )),
-  inference(resolution,[],[f10,f11])).
-tff(f11,plain,(
-  member(sweden,nato)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member(sweden,nato)),
-  file('/tmp/lTIRAUHYGP/SOT_kg1SWY',unknown)).
+  ! [X0 : event,X1 : country,X2 : country] : (protects(X1,X2) | ~obligatesToAssist(X0,nato,X1,X2))),
+  inference(ennf_transformation,[],[f10])).
 tff(f10,plain,(
-  ( ! [X2 : country,X0 : country,X1 : country] : (~member(X0,nato) | ~attacked(X2,X1) | ~member(X1,nato) | protects(X0,X1)) )),
-  inference(cnf_transformation,[],[f9])).
+  ! [X0 : event,X1 : country,X2 : country] : (obligatesToAssist(X0,nato,X1,X2) => protects(X1,X2))),
+  inference(rectify,[],[f3])).
+tff(f3,axiom,(
+  ! [X1 : event,X3 : country,X4 : country] : (obligatesToAssist(X1,nato,X3,X4) => protects(X3,X4))),
+  file('/tmp/MnQgqQwiYE/SOT_bq4ZT_',unknown)).
+tff(f62,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~obligatesToAssist(X2,nato,X1,X0) | ~memberOf(X0,nato) | armedAttack(X2) | attack(X2,X3,X0) | attackAgainstAllMembers(X2,nato) | ~memberOf(X1,nato)) ) | ~spl0_5),
+  inference(avatar_component_clause,[],[f61])).
+tff(f61,definition,(
+  spl0_5 <=> ! [X0 : country,X3 : country,X2 : event,X1 : country] : (~memberOf(X0,nato) | ~obligatesToAssist(X2,nato,X1,X0) | armedAttack(X2) | attack(X2,X3,X0) | attackAgainstAllMembers(X2,nato) | ~memberOf(X1,nato))),
+  introduced(definition,[new_symbols(naming,[spl0_5])],[avatar_definition])).
+tff(f86,plain,(
+  ~spl0_5 | ~spl0_6),
+  inference(avatar_contradiction_clause,[],[f85])).
+tff(f85,plain,(
+  $false | (~spl0_5 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f84,f31])).
+tff(f84,plain,(
+  protects(sweden,germany) | (~spl0_5 | ~spl0_6)),
+  inference(resolution,[],[f82,f30])).
+tff(f82,plain,(
+  ( ! [X0 : country] : (~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_5 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f81,f27])).
+tff(f81,plain,(
+  ( ! [X0 : country] : (~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_5 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f80,f40])).
+tff(f80,plain,(
+  ( ! [X0 : country] : (armedAttack(e1) | ~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_5 | ~spl0_6)),
+  inference(resolution,[],[f78,f39])).
+tff(f78,plain,(
+  ( ! [X2 : country,X3 : country,X0 : country,X1 : event] : (attack(X1,X2,X0) | armedAttack(X1) | ~memberOf(X0,nato) | ~memberOf(X3,nato) | protects(X3,X0)) ) | (~spl0_5 | ~spl0_6)),
+  inference(resolution,[],[f77,f36])).
+tff(f77,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~obligatesToAssist(X2,nato,X1,X0) | ~memberOf(X0,nato) | armedAttack(X2) | attack(X2,X3,X0) | ~memberOf(X1,nato)) ) | (~spl0_5 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f66,f62])).
+tff(f66,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~memberOf(X0,nato) | ~obligatesToAssist(X2,nato,X1,X0) | armedAttack(X2) | attack(X2,X3,X0) | ~attackAgainstAllMembers(X2,nato) | ~memberOf(X1,nato)) ) | ~spl0_6),
+  inference(avatar_component_clause,[],[f65])).
+tff(f65,definition,(
+  spl0_6 <=> ! [X0 : country,X3 : country,X2 : event,X1 : country] : (~memberOf(X0,nato) | ~obligatesToAssist(X2,nato,X1,X0) | armedAttack(X2) | attack(X2,X3,X0) | ~attackAgainstAllMembers(X2,nato) | ~memberOf(X1,nato))),
+  introduced(definition,[new_symbols(naming,[spl0_6])],[avatar_definition])).
+tff(f76,plain,(
+  ~spl0_2 | ~spl0_6),
+  inference(avatar_contradiction_clause,[],[f75])).
+tff(f75,plain,(
+  $false | (~spl0_2 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f74,f31])).
+tff(f74,plain,(
+  protects(sweden,germany) | (~spl0_2 | ~spl0_6)),
+  inference(resolution,[],[f72,f30])).
+tff(f72,plain,(
+  ( ! [X0 : country] : (~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_2 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f71,f27])).
+tff(f71,plain,(
+  ( ! [X0 : country] : (~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_2 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f70,f40])).
+tff(f70,plain,(
+  ( ! [X0 : country] : (armedAttack(e1) | ~memberOf(germany,nato) | ~memberOf(X0,nato) | protects(X0,germany)) ) | (~spl0_2 | ~spl0_6)),
+  inference(resolution,[],[f69,f39])).
+tff(f69,plain,(
+  ( ! [X2 : country,X3 : country,X0 : country,X1 : event] : (attack(X1,X2,X0) | armedAttack(X1) | ~memberOf(X0,nato) | ~memberOf(X3,nato) | protects(X3,X0)) ) | (~spl0_2 | ~spl0_6)),
+  inference(resolution,[],[f68,f36])).
+tff(f68,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~obligatesToAssist(X2,nato,X1,X0) | ~memberOf(X0,nato) | armedAttack(X2) | attack(X2,X3,X0) | ~memberOf(X1,nato)) ) | (~spl0_2 | ~spl0_6)),
+  inference(subsumption_resolution,[],[f66,f47])).
+tff(f67,plain,(
+  ~spl0_3 | spl0_6),
+  inference(avatar_split_clause,[],[f35,f65,f53])).
+tff(f53,definition,(
+  spl0_3 <=> isConsidered($true,$false)),
+  introduced(definition,[new_symbols(naming,[spl0_3])],[avatar_definition])).
+tff(f35,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~memberOf(X0,nato) | ~memberOf(X1,nato) | armedAttack(X2) | ~attackAgainstAllMembers(X2,nato) | attack(X2,X3,X0) | ~isConsidered($true,$false) | ~obligatesToAssist(X2,nato,X1,X0)) )),
+  inference(consistent_polarity_flipping,[],[f20])).
+tff(f20,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~memberOf(X0,nato) | ~memberOf(X1,nato) | ~armedAttack(X2) | attackAgainstAllMembers(X2,nato) | ~attack(X2,X3,X0) | ~isConsidered($true,$false) | obligatesToAssist(X2,nato,X1,X0)) )),
+  inference(cnf_transformation,[],[f14])).
+tff(f14,plain,(
+  ! [X0 : country,X1 : country,X2 : event,X3 : country] : (obligatesToAssist(X2,nato,X1,X0) | ~isConsidered(attack(X2,X3,X0),attackAgainstAllMembers(X2,nato)) | ~attack(X2,X3,X0) | ~armedAttack(X2) | ~memberOf(X1,nato) | ~memberOf(X0,nato))),
+  inference(flattening,[],[f13])).
+tff(f13,plain,(
+  ! [X0 : country,X1 : country,X2 : event,X3 : country] : (obligatesToAssist(X2,nato,X1,X0) | (~isConsidered(attack(X2,X3,X0),attackAgainstAllMembers(X2,nato)) | ~attack(X2,X3,X0) | ~armedAttack(X2) | ~memberOf(X1,nato) | ~memberOf(X0,nato)))),
+  inference(ennf_transformation,[],[f9])).
 tff(f9,plain,(
-  ! [X0 : country] : (! [X1 : country,X2 : country] : (protects(X0,X1) | ~attacked(X2,X1) | ~member(X1,nato)) | ~member(X0,nato))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country] : (! [X1 : country,X2 : country] : (protects(X0,X1) | (~attacked(X2,X1) | ~member(X1,nato))) | ~member(X0,nato))),
+  ! [X0 : country,X1 : country,X2 : event,X3 : country] : ((isConsidered(attack(X2,X3,X0),attackAgainstAllMembers(X2,nato)) & attack(X2,X3,X0) & armedAttack(X2) & memberOf(X1,nato) & memberOf(X0,nato)) => obligatesToAssist(X2,nato,X1,X0))),
+  inference(rectify,[],[f2])).
+tff(f2,axiom,(
+  ! [X3 : country,X4 : country,X1 : event,X2 : country] : ((isConsidered(attack(X1,X2,X3),attackAgainstAllMembers(X1,nato)) & attack(X1,X2,X3) & armedAttack(X1) & memberOf(X4,nato) & memberOf(X3,nato)) => obligatesToAssist(X1,nato,X4,X3))),
+  file('/tmp/MnQgqQwiYE/SOT_bq4ZT_',unknown)).
+tff(f63,plain,(
+  ~spl0_1 | spl0_5),
+  inference(avatar_split_clause,[],[f34,f61,f42])).
+tff(f42,definition,(
+  spl0_1 <=> isConsidered($true,$true)),
+  introduced(definition,[new_symbols(naming,[spl0_1])],[avatar_definition])).
+tff(f34,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~memberOf(X0,nato) | ~memberOf(X1,nato) | armedAttack(X2) | attackAgainstAllMembers(X2,nato) | attack(X2,X3,X0) | ~isConsidered($true,$true) | ~obligatesToAssist(X2,nato,X1,X0)) )),
+  inference(consistent_polarity_flipping,[],[f21])).
+tff(f21,plain,(
+  ( ! [X2 : event,X3 : country,X0 : country,X1 : country] : (~memberOf(X0,nato) | ~memberOf(X1,nato) | ~armedAttack(X2) | ~attackAgainstAllMembers(X2,nato) | ~attack(X2,X3,X0) | ~isConsidered($true,$true) | obligatesToAssist(X2,nato,X1,X0)) )),
+  inference(cnf_transformation,[],[f14])).
+tff(f59,plain,(
+  spl0_3 | spl0_4),
+  inference(avatar_split_clause,[],[f33,f57,f53])).
+tff(f33,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | armedAttack(X1) | ~attackAgainstAllMembers(X1,nato) | attack(X1,X2,X0) | isConsidered($true,$false)) )),
+  inference(consistent_polarity_flipping,[],[f18])).
+tff(f18,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | ~armedAttack(X1) | attackAgainstAllMembers(X1,nato) | ~attack(X1,X2,X0) | isConsidered($true,$false)) )),
+  inference(cnf_transformation,[],[f12])).
+tff(f12,plain,(
+  ! [X0 : country,X1 : event,X2 : country] : (isConsidered(attack(X1,X2,X0),attackAgainstAllMembers(X1,nato)) | ~attack(X1,X2,X0) | ~armedAttack(X1) | ~memberOf(X0,nato))),
+  inference(flattening,[],[f11])).
+tff(f11,plain,(
+  ! [X0 : country,X1 : event,X2 : country] : (isConsidered(attack(X1,X2,X0),attackAgainstAllMembers(X1,nato)) | (~attack(X1,X2,X0) | ~armedAttack(X1) | ~memberOf(X0,nato)))),
   inference(ennf_transformation,[],[f1])).
 tff(f1,axiom,(
-  ! [X0 : country] : (member(X0,nato) => ! [X1 : country,X2 : country] : ((attacked(X2,X1) & member(X1,nato)) => protects(X0,X1)))),
-  file('/tmp/lTIRAUHYGP/SOT_kg1SWY',unknown)).
+  ! [X0 : country,X1 : event,X2 : country] : ((attack(X1,X2,X0) & armedAttack(X1) & memberOf(X0,nato)) => isConsidered(attack(X1,X2,X0),attackAgainstAllMembers(X1,nato)))),
+  file('/tmp/MnQgqQwiYE/SOT_bq4ZT_',unknown)).
+tff(f48,plain,(
+  spl0_1 | spl0_2),
+  inference(avatar_split_clause,[],[f32,f46,f42])).
+tff(f32,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | armedAttack(X1) | attackAgainstAllMembers(X1,nato) | attack(X1,X2,X0) | isConsidered($true,$true)) )),
+  inference(consistent_polarity_flipping,[],[f19])).
+tff(f19,plain,(
+  ( ! [X2 : country,X0 : country,X1 : event] : (~memberOf(X0,nato) | ~armedAttack(X1) | ~attackAgainstAllMembers(X1,nato) | ~attack(X1,X2,X0) | isConsidered($true,$true)) )),
+  inference(cnf_transformation,[],[f12])).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,1,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,2,True,0.95,1,THM,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 1:1 with similarity 0.97
+% The original and final NL have similarity: 0.97
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 If a country is a member of NATO, it will protect any member that is attacked.
@@ -331,534 +509,74 @@ Sweden is a member of NATO.
 Germany is a member of NATO
 Russia attacked Germany.
 Will Sweden protect Germany?
+% -------------------------------------------------------------------------
+% The normalized NL is :
+If a country is a member of the North Atlantic Treaty Organization (NATO), then that country is obligated under Article 5 of the NATO treaty to protect any other NATO member country that is attacked by a non-member state.
 
+Sweden is a member of the North Atlantic Treaty Organization (NATO).
+
+Germany is a member of the North Atlantic Treaty Organization (NATO).
+
+Russia, which is not a member of the North Atlantic Treaty Organization (NATO), attacked Germany.
+
+Will Sweden protect Germany?
 % -------------------------------------------------------------------------
 % The final NL is :
-For every country, if that country is a member of NATO, then for every country M, if M is a member of NATO and Russia attacks M, that country protects M.  
-
-Sweden is a member of NATO.  
-
-Germany is a member of NATO.  
-
-Russia attacked Germany.  
-
+For any countries C1, C2, and C3, if C1 is a NATO member and C2 is a NATO member and C3 is not a NATO member and C3 attacked C2, then C1 protects C2.
+Sweden is a NATO member.
+Germany is a NATO member.
+Russia is not a NATO member and Russia attacked Germany.
 Does Sweden protect Germany?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments express the same logical structure: NATO membership implies mutual protection among members if one is attacked. The second text is a more formal, generalized version using quantifiers (“for every country”), while the first uses a more natural, narrative phrasing. The meaning is nearly identical, differing only in style and explicit logical formulation.
+Both segments express the same logical structure: NATO members are obligated to defend other NATO members if attacked by a non-member. The only differences are stylistic and in the level of formality—segment one uses natural language and references Article 5 explicitly, while segment two expresses the same rule in a more abstract, logical form using variables (C1, C2, C3). The meaning and conclusion are effectively identical.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(type_country,type,
-    country: $tType ).
+tff(country_type,type,
+    country: $tptp_t ).
 
-tff(type_member,type,
-    member: ( country * country ) > $o ).
-
-tff(type_attacked,type,
-    attacked: ( country * country ) > $o ).
-
-tff(type_protects,type,
-    protects: ( country * country ) > $o ).
-
-tff(type_nato,type,
-    nato: country ).
-
-tff(type_sweden,type,
+tff(sweden_decl,type,
     sweden: country ).
 
-tff(type_germany,type,
+tff(germany_decl,type,
     germany: country ).
 
-tff(type_russia,type,
+tff(russia_decl,type,
     russia: country ).
+
+tff(nato_member_decl,type,
+    nato_member: country > $o ).
+
+tff(attacked_decl,type,
+    attacked: ( country * country ) > $o ).
+
+tff(protects_decl,type,
+    protects: ( country * country ) > $o ).
 
 tff(axiom1,axiom,
-    ! [C: country] :
-      ( member(C,nato)
-     => ! [M: country] :
-          ( ( member(M,nato)
-            & attacked(russia,M) )
-         => protects(C,M) ) ) ).
+    ! [C1: country,C2: country,C3: country] :
+      ( ( nato_member(C1)
+        & nato_member(C2)
+        & ~ nato_member(C3)
+        & attacked(C3,C2) )
+     => protects(C1,C2) ) ).
 
 tff(axiom2,axiom,
-    member(sweden,nato) ).
+    nato_member(sweden) ).
 
 tff(axiom3,axiom,
-    member(germany,nato) ).
+    nato_member(germany) ).
 
 tff(axiom4,axiom,
-    attacked(russia,germany) ).
+    ( ~ nato_member(russia)
+    & attacked(russia,germany) ) ).
 
-tff(conjecture1,conjecture,
+tff(conjecture,conjecture,
     protects(sweden,germany) ).
 
 %
 % -------------------------------------------------------------------------
-% The ATP SZS status is THM with output
-tff(type_def_5, type, country: $tType).
-tff(func_def_0, type, nato: country).
-tff(func_def_1, type, sweden: country).
-tff(func_def_2, type, germany: country).
-tff(func_def_3, type, russia: country).
-tff(pred_def_1, type, member: (country * country) > $o).
-tff(pred_def_2, type, attacked: (country * country) > $o).
-tff(pred_def_3, type, protects: (country * country) > $o).
-tff(f19,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f17,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/scKtVPturJ/SOT_3INJ71',unknown)).
-tff(f17,plain,(
-  protects(sweden,germany)),
-  inference(resolution,[],[f16,f11])).
-tff(f11,plain,(
-  member(sweden,nato)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member(sweden,nato)),
-  file('/tmp/scKtVPturJ/SOT_3INJ71',unknown)).
-tff(f16,plain,(
-  ( ! [X0 : country] : (~member(X0,nato) | protects(X0,germany)) )),
-  inference(subsumption_resolution,[],[f15,f12])).
-tff(f12,plain,(
-  member(germany,nato)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member(germany,nato)),
-  file('/tmp/scKtVPturJ/SOT_3INJ71',unknown)).
-tff(f15,plain,(
-  ( ! [X0 : country] : (protects(X0,germany) | ~member(germany,nato) | ~member(X0,nato)) )),
-  inference(resolution,[],[f10,f13])).
-tff(f13,plain,(
-  attacked(russia,germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(russia,germany)),
-  file('/tmp/scKtVPturJ/SOT_3INJ71',unknown)).
-tff(f10,plain,(
-  ( ! [X0 : country,X1 : country] : (~attacked(russia,X1) | protects(X0,X1) | ~member(X1,nato) | ~member(X0,nato)) )),
-  inference(cnf_transformation,[],[f9])).
-tff(f9,plain,(
-  ! [X0 : country] : (! [X1 : country] : (protects(X0,X1) | ~attacked(russia,X1) | ~member(X1,nato)) | ~member(X0,nato))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country] : (! [X1 : country] : (protects(X0,X1) | (~attacked(russia,X1) | ~member(X1,nato))) | ~member(X0,nato))),
-  inference(ennf_transformation,[],[f1])).
-tff(f1,axiom,(
-  ! [X0 : country] : (member(X0,nato) => ! [X1 : country] : ((attacked(russia,X1) & member(X1,nato)) => protects(X0,X1)))),
-  file('/tmp/scKtVPturJ/SOT_3INJ71',unknown)).
+% The ATP SZS status is NON with output
+None
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,2,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-If a country is a member of NATO, it will protect any member that is attacked.
-Sweden is a member of NATO.
-Germany is a member of NATO
-Russia attacked Germany.
-Will Sweden protect Germany?
-
-% -------------------------------------------------------------------------
-% The final NL is :
-"country" is a type.
-"member_of_NATO" is a predicate that applies to a country.
-"protects" is a predicate that applies to two countries.
-"attacked" is a predicate that applies to a country.
-Sweden is a country.
-Germany is a country.
-Russia is a country.
-For every country C and every country M, if C is a member of NATO, then if M is a member of NATO and M is attacked, C protects M.
-Sweden is a member of NATO.
-Germany is a member of NATO.
-Germany is attacked.
-Does Sweden protect Germany?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical content: NATO members protect other members that are attacked, and the question is whether Sweden will protect Germany after Russia attacks Germany.  
-The first segment uses natural language, while the second formalizes the same information in logical or predicate form, explicitly defining types and predicates. The only minor difference is that the second text is more explicit and formal, but the meaning conveyed is essentially identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(country_type,type,
-    country: $tType ).
-
-tff(member_of_NATO_type,type,
-    member_of_NATO: country > $o ).
-
-tff(protects_type,type,
-    protects: ( country * country ) > $o ).
-
-tff(attacked_type,type,
-    attacked: country > $o ).
-
-tff(sweden_declaration,type,
-    sweden: country ).
-
-tff(germany_declaration,type,
-    germany: country ).
-
-tff(russia_declaration,type,
-    russia: country ).
-
-tff(axiom_if_country_is_member_of_NATO_it_protects_any_member_that_is_attacked,axiom,
-    ! [C: country,M: country] :
-      ( member_of_NATO(C)
-     => ( ( member_of_NATO(M)
-          & attacked(M) )
-       => protects(C,M) ) ) ).
-
-tff(axiom_sweden_is_a_member_of_NATO,axiom,
-    member_of_NATO(sweden) ).
-
-tff(axiom_germany_is_a_member_of_NATO,axiom,
-    member_of_NATO(germany) ).
-
-tff(axiom_russia_attacked_germany,axiom,
-    attacked(germany) ).
-
-tff(conjecture_will_sweden_protect_germany,conjecture,
-    protects(sweden,germany) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is THM with output
-tff(type_def_5, type, country: $tType).
-tff(func_def_0, type, sweden: country).
-tff(func_def_1, type, germany: country).
-tff(func_def_2, type, russia: country).
-tff(pred_def_1, type, member_of_NATO: country > $o).
-tff(pred_def_2, type, protects: (country * country) > $o).
-tff(pred_def_3, type, attacked: country > $o).
-tff(f19,plain,(
-  $false),
-  inference(finite_model_not_found_:_exhaustively_excluded_all_possible_domain_size_assignments,[],[f10,f11,f12,f13,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/q3BIAXEsX2/SOT_rgmBHz',unknown)).
-tff(f13,plain,(
-  attacked(germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(germany)),
-  file('/tmp/q3BIAXEsX2/SOT_rgmBHz',unknown)).
-tff(f12,plain,(
-  member_of_NATO(germany)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member_of_NATO(germany)),
-  file('/tmp/q3BIAXEsX2/SOT_rgmBHz',unknown)).
-tff(f11,plain,(
-  member_of_NATO(sweden)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member_of_NATO(sweden)),
-  file('/tmp/q3BIAXEsX2/SOT_rgmBHz',unknown)).
-tff(f10,plain,(
-  ( ! [X0 : country,X1 : country] : (protects(X0,X1) | ~attacked(X1) | ~member_of_NATO(X1) | ~member_of_NATO(X0)) )),
-  inference(cnf_transformation,[],[f9])).
-tff(f9,plain,(
-  ! [X0 : country,X1 : country] : (protects(X0,X1) | ~attacked(X1) | ~member_of_NATO(X1) | ~member_of_NATO(X0))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country,X1 : country] : ((protects(X0,X1) | (~attacked(X1) | ~member_of_NATO(X1))) | ~member_of_NATO(X0))),
-  inference(ennf_transformation,[],[f1])).
-tff(f1,axiom,(
-  ! [X0 : country,X1 : country] : (member_of_NATO(X0) => ((attacked(X1) & member_of_NATO(X1)) => protects(X0,X1)))),
-  file('/tmp/q3BIAXEsX2/SOT_rgmBHz',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,1,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-If a country is a member of NATO, it will protect any member that is attacked.
-Sweden is a member of NATO.
-Germany is a member of NATO
-Russia attacked Germany.
-Will Sweden protect Germany?
-
-% -------------------------------------------------------------------------
-% The final NL is :
-Country is a type.
-Sweden is a country.
-Germany is a country.
-Russia is a country.
-Member of NATO is a property of countries.
-Attacked is a property of countries.
-Protects is a relation between two countries.
-For any country C and any country M, if C is a member of NATO, and M is a member of NATO, and M is attacked, then C protects M.
-Sweden is a member of NATO.
-Germany is a member of NATO.
-Germany is attacked.
-Does Sweden protect Germany?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical content: that NATO membership entails mutual protection among members, and they apply this to Sweden and Germany when Germany is attacked.  
-The first text uses natural language and a narrative form, while the second formalizes the same information in logical or ontological terms (defining types, properties, and relations). The only minor difference is that the second explicitly defines the logical structure and predicates, while the first assumes them implicitly.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(country_type,type,
-    country: $tType ).
-
-tff(sweden_type,type,
-    sweden: country ).
-
-tff(germany_type,type,
-    germany: country ).
-
-tff(russia_type,type,
-    russia: country ).
-
-tff(member_of_nato_type,type,
-    member_of_nato: country > $o ).
-
-tff(attacked_type,type,
-    attacked: country > $o ).
-
-tff(protects_type,type,
-    protects: ( country * country ) > $o ).
-
-tff(s1,axiom,
-    ! [C: country,M: country] :
-      ( ( member_of_nato(C)
-        & member_of_nato(M)
-        & attacked(M) )
-     => protects(C,M) ) ).
-
-tff(s2,axiom,
-    member_of_nato(sweden) ).
-
-tff(s3,axiom,
-    member_of_nato(germany) ).
-
-tff(s4,axiom,
-    attacked(germany) ).
-
-tff(s5,conjecture,
-    protects(sweden,germany) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is THM with output
-tff(type_def_5, type, country: $tType).
-tff(func_def_0, type, sweden: country).
-tff(func_def_1, type, germany: country).
-tff(func_def_2, type, russia: country).
-tff(pred_def_1, type, member_of_nato: country > $o).
-tff(pred_def_2, type, attacked: country > $o).
-tff(pred_def_3, type, protects: (country * country) > $o).
-tff(f19,plain,(
-  $false),
-  inference(subsumption_resolution,[],[f17,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/_tuzWjGqvL/SOT_E5Zjwa',unknown)).
-tff(f17,plain,(
-  protects(sweden,germany)),
-  inference(resolution,[],[f16,f11])).
-tff(f11,plain,(
-  member_of_nato(sweden)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member_of_nato(sweden)),
-  file('/tmp/_tuzWjGqvL/SOT_E5Zjwa',unknown)).
-tff(f16,plain,(
-  ( ! [X0 : country] : (~member_of_nato(X0) | protects(X0,germany)) )),
-  inference(subsumption_resolution,[],[f15,f12])).
-tff(f12,plain,(
-  member_of_nato(germany)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member_of_nato(germany)),
-  file('/tmp/_tuzWjGqvL/SOT_E5Zjwa',unknown)).
-tff(f15,plain,(
-  ( ! [X0 : country] : (protects(X0,germany) | ~member_of_nato(germany) | ~member_of_nato(X0)) )),
-  inference(resolution,[],[f10,f13])).
-tff(f13,plain,(
-  attacked(germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(germany)),
-  file('/tmp/_tuzWjGqvL/SOT_E5Zjwa',unknown)).
-tff(f10,plain,(
-  ( ! [X0 : country,X1 : country] : (~attacked(X1) | protects(X0,X1) | ~member_of_nato(X1) | ~member_of_nato(X0)) )),
-  inference(cnf_transformation,[],[f9])).
-tff(f9,plain,(
-  ! [X0 : country,X1 : country] : (protects(X0,X1) | ~attacked(X1) | ~member_of_nato(X1) | ~member_of_nato(X0))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country,X1 : country] : (protects(X0,X1) | (~attacked(X1) | ~member_of_nato(X1) | ~member_of_nato(X0)))),
-  inference(ennf_transformation,[],[f1])).
-tff(f1,axiom,(
-  ! [X0 : country,X1 : country] : ((attacked(X1) & member_of_nato(X1) & member_of_nato(X0)) => protects(X0,X1))),
-  file('/tmp/_tuzWjGqvL/SOT_E5Zjwa',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-If a country is a member of NATO, it will protect any member that is attacked.
-Sweden is a member of NATO.
-Germany is a member of NATO
-Russia attacked Germany.
-Will Sweden protect Germany?
-
-% -------------------------------------------------------------------------
-% The final NL is :
-`country` is a type.
-`member_of_NATO` is a predicate that takes a country.
-`protects` is a predicate that takes two countries.
-`attacked` is a predicate that takes two countries.
-`sweden` is a country.
-`germany` is a country.
-`russia` is a country.
-For any country C and any country M, if C is a member of NATO, and M is a member of NATO, and there exists a country A such that A attacked M, then C protects M.
-Sweden is a member of NATO.
-Germany is a member of NATO.
-Russia attacked Germany.
-Does Sweden protect Germany?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments express the same logical content: NATO members protect other NATO members that are attacked, and the question is whether Sweden will protect Germany after Russia attacks Germany.  
-The first segment uses natural language, while the second formalizes the same information in logical or predicate notation. The only minor difference is that the second explicitly defines types and predicates, making the structure more formal but not changing the meaning.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(country_type,type,
-    country: $tType ).
-
-tff(member_of_NATO_type,type,
-    member_of_NATO: country > $o ).
-
-tff(protects_type,type,
-    protects: ( country * country ) > $o ).
-
-tff(attacked_type,type,
-    attacked: ( country * country ) > $o ).
-
-tff(sweden_type,type,
-    sweden: country ).
-
-tff(germany_type,type,
-    germany: country ).
-
-tff(russia_type,type,
-    russia: country ).
-
-tff(axiom_country_protects_member,axiom,
-    ! [C: country,M: country] :
-      ( ( member_of_NATO(C)
-        & member_of_NATO(M)
-        & ? [A: country] : attacked(A,M) )
-     => protects(C,M) ) ).
-
-tff(axiom_sweden_is_member,axiom,
-    member_of_NATO(sweden) ).
-
-tff(axiom_germany_is_member,axiom,
-    member_of_NATO(germany) ).
-
-tff(axiom_russia_attacked_germany,axiom,
-    attacked(russia,germany) ).
-
-tff(conjecture_sweden_protects_germany,conjecture,
-    protects(sweden,germany) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is THM with output
-tff(type_def_5, type, country: $tType).
-tff(func_def_0, type, sweden: country).
-tff(func_def_1, type, germany: country).
-tff(func_def_2, type, russia: country).
-tff(pred_def_1, type, member_of_NATO: country > $o).
-tff(pred_def_2, type, protects: (country * country) > $o).
-tff(pred_def_3, type, attacked: (country * country) > $o).
-tff(pred_def_4, type, sP0: country > $o).
-tff(f21,plain,(
-  $false),
-  inference(finite_model_not_found_:_exhaustively_excluded_all_possible_domain_size_assignments,[],[f10,f11,f12,f13,f14])).
-tff(f14,plain,(
-  ~protects(sweden,germany)),
-  inference(cnf_transformation,[],[f7])).
-tff(f7,plain,(
-  ~protects(sweden,germany)),
-  inference(flattening,[],[f6])).
-tff(f6,negated_conjecture,(
-  ~protects(sweden,germany)),
-  inference(negated_conjecture,[status(cth)],[f5])).
-tff(f5,conjecture,(
-  protects(sweden,germany)),
-  file('/tmp/KkZmZRlY1x/SOT_8ZFDz4',unknown)).
-tff(f13,plain,(
-  attacked(russia,germany)),
-  inference(cnf_transformation,[],[f4])).
-tff(f4,axiom,(
-  attacked(russia,germany)),
-  file('/tmp/KkZmZRlY1x/SOT_8ZFDz4',unknown)).
-tff(f12,plain,(
-  member_of_NATO(germany)),
-  inference(cnf_transformation,[],[f3])).
-tff(f3,axiom,(
-  member_of_NATO(germany)),
-  file('/tmp/KkZmZRlY1x/SOT_8ZFDz4',unknown)).
-tff(f11,plain,(
-  member_of_NATO(sweden)),
-  inference(cnf_transformation,[],[f2])).
-tff(f2,axiom,(
-  member_of_NATO(sweden)),
-  file('/tmp/KkZmZRlY1x/SOT_8ZFDz4',unknown)).
-tff(f10,plain,(
-  ( ! [X2 : country,X0 : country,X1 : country] : (protects(X0,X1) | ~attacked(X2,X1) | ~member_of_NATO(X1) | ~member_of_NATO(X0)) )),
-  inference(cnf_transformation,[],[f9])).
-tff(f9,plain,(
-  ! [X0 : country,X1 : country] : (protects(X0,X1) | ! [X2 : country] : ~attacked(X2,X1) | ~member_of_NATO(X1) | ~member_of_NATO(X0))),
-  inference(flattening,[],[f8])).
-tff(f8,plain,(
-  ! [X0 : country,X1 : country] : (protects(X0,X1) | (! [X2 : country] : ~attacked(X2,X1) | ~member_of_NATO(X1) | ~member_of_NATO(X0)))),
-  inference(ennf_transformation,[],[f1])).
-tff(f1,axiom,(
-  ! [X0 : country,X1 : country] : ((? [X2 : country] : attacked(X2,X1) & member_of_NATO(X1) & member_of_NATO(X0)) => protects(X0,X1))),
-  file('/tmp/KkZmZRlY1x/SOT_8ZFDz4',unknown)).
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.95,1,True,0.95,1,THM,Unknown,1,0,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/NonTrivial_03.THM.txt,True,0.97,1,True,0.97,1,NON,Unknown,0,0,0,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest

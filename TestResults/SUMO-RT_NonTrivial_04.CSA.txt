@@ -1,465 +1,359 @@
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 0.95
-% The original and final NL have similarity: 0.90
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:2 with similarity 0.98
+% The original and final NL have similarity: 0.93
+% Normalization model: OpenAI---gpt-5-chat-latest
+% NL2L model:          OpenAI---gpt-5-chat-latest
+% L2NL model:          OpenAI---gpt-5-chat-latest
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 Losing consciousness causes injury.
 Jon was driving.
 Jon fell asleep.
 Show that the falling asleep did not cause an injury.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+- Losing consciousness while driving can cause an injury because the driver may lose control of the vehicle.  
+- Jon was driving a vehicle.  
+- Jon fell asleep while driving.  
+- Demonstrate that Jon’s falling asleep did not cause an injury.
 % -------------------------------------------------------------------------
 % The final NL is :
-There are persons and events.  
-One event causes another event.  
-Injury is an event.  
-Losing consciousness is an event.  
-A person can fall asleep in an event.  
-A person can be driving in an event.  
-Jon is a person.  
-e1 and e2 are events.  
-Losing consciousness causes injury.  
-Jon was driving in event e1.  
-Jon fell asleep in event e2.  
-Is it true that event e2 does not cause injury?
+For every person, vehicle, and two events, if the person loses consciousness in the first event and is driving the vehicle in the second event, then the first event causes injury if and only if the person loses control of the vehicle in the first event.  
+There exists a vehicle that Jon is driving during the driving event.  
+Jon falls asleep during the sleep event.  
+For every person and event, if the person falls asleep during the event, then the person loses consciousness during that event.  
+Does the sleep event not cause injury?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same scenario: losing consciousness causes injury, Jon was driving, Jon fell asleep, and the question is whether Jon’s falling asleep caused an injury. The second segment restates the first in a more formal, logical framework with explicit references to events and entities, but the underlying meaning and question are essentially identical. The only difference is the level of abstraction and formalization.
+Both segments describe nearly the same logical situation: Jon is driving, falls asleep (which implies losing consciousness), and the question is whether that event causes an injury. The second text formalizes the first in logical terms, adding explicit quantifiers and a rule linking sleep to loss of consciousness. The only minor difference is that the first text uses natural language and explicitly mentions “losing control of the vehicle,” while the second encodes that condition in a general rule. Overall, they express the same meaning with slightly different levels of formality.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(person_type,type,
+tff(type_person,type,
     person: $tType ).
 
-tff(event_type,type,
+tff(type_vehicle,type,
+    vehicle: $tType ).
+
+tff(type_event,type,
     event: $tType ).
 
-tff(causes_type,type,
-    causes: ( event * event ) > $o ).
+tff(pred_loses_consciousness,type,
+    loses_consciousness: ( person * event ) > $o ).
 
-tff(injury_decl,axiom,
-    $true ).
+tff(pred_driving,type,
+    driving: ( person * vehicle * event ) > $o ).
 
-tff(injury_type,type,
-    injury: event ).
+tff(pred_causes_injury,type,
+    causes_injury: event > $o ).
 
-tff(losing_consciousness_type,type,
-    losing_consciousness: event ).
+tff(pred_loses_control,type,
+    loses_control: ( person * vehicle * event ) > $o ).
 
-tff(fell_asleep_type,type,
-    fell_asleep: ( person * event ) > $o ).
+tff(pred_falls_asleep,type,
+    falls_asleep: ( person * event ) > $o ).
 
-tff(driving_type,type,
-    driving: ( person * event ) > $o ).
-
-tff(jon_type,type,
+tff(const_jon,type,
     jon: person ).
 
-tff(e1_type,type,
-    e1: event ).
+tff(const_driving_event,type,
+    driving_event: event ).
 
-tff(e2_type,type,
-    e2: event ).
+tff(const_sleep_event,type,
+    sleep_event: event ).
 
-tff(losing_consciousness_causes_injury,axiom,
-    causes(losing_consciousness,injury) ).
+tff(ax1,axiom,
+    ! [P: person,V: vehicle,E1: event,E2: event] :
+      ( ( loses_consciousness(P,E1)
+        & driving(P,V,E2) )
+     => ( causes_injury(E1)
+      <=> loses_control(P,V,E1) ) ) ).
 
-tff(jon_driving_e1,axiom,
-    driving(jon,e1) ).
+tff(ax2,axiom,
+    ? [V: vehicle] : driving(jon,V,driving_event) ).
 
-tff(jon_fell_asleep_e2,axiom,
-    fell_asleep(jon,e2) ).
+tff(ax3,axiom,
+    falls_asleep(jon,sleep_event) ).
 
-tff(question,conjecture,
-    ~ causes(e2,injury) ).
+tff(ax4,axiom,
+    ! [P: person,E: event] :
+      ( falls_asleep(P,E)
+     => loses_consciousness(P,E) ) ).
+
+tff(conj1,conjecture,
+    ~ causes_injury(sleep_event) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define causes(X0,X1) := $true
-for all inputs,
-    define fell_asleep(X0,X1) := $true
-for all inputs,
-    define driving(X0,X1) := $true
+cnf(u27,axiom,
+    causes_injury(sleep_event)).
+
+cnf(u32,axiom,
+    loses_control(jon,sK0,sleep_event)).
+
+cnf(u20,axiom,
+    ~falls_asleep(X0,X1) | loses_consciousness(X0,X1)).
+
+cnf(u23,axiom,
+    ~loses_consciousness(jon,X0) | loses_control(jon,sK0,X0) | ~causes_injury(X0)).
+
+cnf(u22,axiom,
+    loses_consciousness(jon,sleep_event)).
+
+cnf(u17,axiom,
+    ~driving(X0,X1,X3) | ~loses_control(X0,X1,X2) | causes_injury(X2) | ~loses_consciousness(X0,X2)).
+
+cnf(u16,axiom,
+    ~driving(X0,X1,X3) | ~causes_injury(X2) | loses_control(X0,X1,X2) | ~loses_consciousness(X0,X2)).
+
+cnf(u19,axiom,
+    falls_asleep(jon,sleep_event)).
+
+cnf(u18,axiom,
+    driving(jon,sK0,driving_event)).
+
+cnf(u36,axiom,
+    ~loses_control(jon,sK0,X0) | causes_injury(X0) | ~loses_consciousness(jon,X0)).
+
+cnf(u21,negated_conjecture,
+    causes_injury(sleep_event)).
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.95,2,CSA,Unknown,0,1,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.93,3,True,0.98,2,CSA,Unknown,4,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
-% Converged at ZigZag number 1:1 with similarity 0.95
-% The original and final NL have similarity: 0.95
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
+% Converged at ZigZag number 3:4 with similarity 0.96
+% The original and final NL have similarity: 0.92
+% Normalization model: Google---gemini-2.5-flash
+% NL2L model:          Google---gemini-2.5-flash
+% L2NL model:          Google---gemini-2.5-flash
+% Similarity model:    OpenAI---gpt-5-chat-latest
 % -------------------------------------------------------------------------
 % The original NL is :
 Losing consciousness causes injury.
 Jon was driving.
 Jon fell asleep.
 Show that the falling asleep did not cause an injury.
-
+% -------------------------------------------------------------------------
+% The normalized NL is :
+The physiological event of an individual losing consciousness is a direct causal factor for the occurrence of a physical injury to that individual.
+The individual identified as Jon was engaged in the act of operating a motor vehicle on a public thoroughfare.
+While operating the motor vehicle, the individual identified as Jon involuntarily transitioned from a state of wakefulness to a state of sleep.
+Provide a reasoned argument or evidence demonstrating that the involuntary transition of Jon to sleep while operating the motor vehicle did not result in any physical injury to Jon.
 % -------------------------------------------------------------------------
 % The final NL is :
-Losing consciousness causes injury.  
-Jon is driving.  
-Jon is falling asleep.  
-Is it true that falling asleep by Jon does not cause injury?
+If an event is a physiological event where an individual I loses consciousness, then there exists a physical injury to individual I that occurred, and the physiological event is a direct causal factor of that injury.
+Every event is Jon operating a motor vehicle and is on a public thoroughfare.
+If event EO is Jon operating a motor vehicle and event ET is an involuntary transition, then there exist events SO1 and SO2 such that ET is Jon transitioning to sleep while operating a motor vehicle EO, and ET is a transition from a wakefulness state SO1 to a sleep state SO2.
+Is there no involuntary transition where Jon transitions to sleep while operating a motor vehicle, which results in a physical injury to Jon?
 % -------------------------------------------------------------------------
 % The differences between the original and final NL are:
-Both segments describe the same situation—Jon driving, losing consciousness (falling asleep), and questioning whether that loss of consciousness causes injury. The only differences are in tense (“was driving” vs. “is driving,” “fell asleep” vs. “is falling asleep”) and in phrasing of the final question (“Show that…” vs. “Is it true that…”). These are stylistic and grammatical variations rather than changes in meaning.
+Both segments describe nearly identical scenarios: Jon is driving a motor vehicle, loses consciousness (or involuntarily falls asleep), and the question concerns whether this event caused a physical injury. The main difference is stylistic and structural—the first text uses natural language and requests an argument showing no injury occurred, while the second expresses the same content in a more formal, logical, and quantified style, ending with a question about the existence of such an event. The meaning conveyed is essentially the same, with only minor differences in phrasing and logical framing.
 % -------------------------------------------------------------------------
 % The final logic is :
-tff(person_type,type,
-    person: $tType ).
+tff(individual_type,type,
+    individual: $tType ).
 
 tff(event_type,type,
     event: $tType ).
 
-tff(causes_type,type,
-    causes: ( event * event ) > $o ).
+tff(causal_factor_type,type,
+    causal_factor: $tType ).
 
-tff(losing_consciousness_type,type,
-    losing_consciousness: event ).
+tff(physiological_event_predicate,type,
+    physiological_event: event > $o ).
 
-tff(injury_type,type,
-    injury: event ).
+tff(losing_consciousness_predicate,type,
+    losing_consciousness: event > $o ).
 
-tff(falling_asleep_type,type,
-    falling_asleep: person > event ).
+tff(physical_injury_predicate,type,
+    physical_injury: event > $o ).
 
-tff(driving_type,type,
-    driving: person > event ).
+tff(occurrence_predicate,type,
+    occurrence: event > $o ).
 
-tff(jon_type,type,
+tff(direct_causal_factor_predicate,type,
+    direct_causal_factor: ( event * event ) > $o ).
+
+tff(jon_constant,type,
+    jon: individual ).
+
+tff(operating_a_motor_vehicle_predicate,type,
+    operating_a_motor_vehicle: ( event * individual ) > $o ).
+
+tff(public_thoroughfare_predicate,type,
+    public_thoroughfare: event > $o ).
+
+tff(transitioned_to_sleep_predicate,type,
+    transitioned_to_sleep: ( event * individual ) > $o ).
+
+tff(involuntary_transition_predicate,type,
+    involuntary_transition: event > $o ).
+
+tff(while_operating_a_motor_vehicle_predicate,type,
+    while_operating_a_motor_vehicle: ( event * event ) > $o ).
+
+tff(wakefulness_predicate,type,
+    wakefulness: event > $o ).
+
+tff(sleep_predicate,type,
+    sleep: event > $o ).
+
+tff(wakefulness_state_predicate,type,
+    wakefulness_state: event > $o ).
+
+tff(sleep_state_predicate,type,
+    sleep_state: event > $o ).
+
+tff(from_a_state_of_predicate,type,
+    from_a_state_of: ( event * event ) > $o ).
+
+tff(to_a_state_of_predicate,type,
+    to_a_state_of: ( event * event ) > $o ).
+
+tff(individual_losing_consciousness_predicate,type,
+    individual_losing_consciousness: ( event * individual ) > $o ).
+
+tff(injury_to_an_individual_predicate,type,
+    injury_to_an_individual: ( event * individual ) > $o ).
+
+tff(occurred_predicate,type,
+    occurred: event > $o ).
+
+tff(result_in_predicate,type,
+    result_in: ( event * event ) > $o ).
+
+tff(on_a_public_thoroughfare_predicate,type,
+    on_a_public_thoroughfare: event > $o ).
+
+tff(physiological_event_causes_injury,axiom,
+    ! [E1: event,I: individual] :
+      ( ( physiological_event(E1)
+        & individual_losing_consciousness(E1,I) )
+     => ? [E2: event] :
+          ( physical_injury(E2)
+          & injury_to_an_individual(E2,I)
+          & occurred(E2)
+          & direct_causal_factor(E1,E2) ) ) ).
+
+tff(every_event_jon_operating_motor_vehicle_public_thoroughfare,axiom,
+    ! [E: event] :
+      ( operating_a_motor_vehicle(E,jon)
+      & on_a_public_thoroughfare(E) ) ).
+
+tff(jon_motor_vehicle_transition_details,axiom,
+    ! [EO: event,ET: event] :
+      ( ( operating_a_motor_vehicle(EO,jon)
+        & involuntary_transition(ET) )
+     => ? [SO1: event,SO2: event] :
+          ( operating_a_motor_vehicle(EO,jon)
+          & while_operating_a_motor_vehicle(ET,EO)
+          & involuntary_transition(ET)
+          & transitioned_to_sleep(ET,jon)
+          & from_a_state_of(ET,SO1)
+          & wakefulness_state(SO1)
+          & to_a_state_of(ET,SO2)
+          & sleep_state(SO2) ) ) ).
+
+tff(no_involuntary_transition_conjecture,conjecture,
+    ~ ? [E_transition: event,E_injury: event,E_operating: event] :
+        ( involuntary_transition(E_transition)
+        & transitioned_to_sleep(E_transition,jon)
+        & while_operating_a_motor_vehicle(E_transition,E_operating)
+        & operating_a_motor_vehicle(E_operating,jon)
+        & result_in(E_transition,E_injury)
+        & physical_injury(E_injury)
+        & injury_to_an_individual(E_injury,jon) ) ).
+
+%
+% -------------------------------------------------------------------------
+% The ATP SZS status is CSA with output
+cnf(u35,negated_conjecture,
+    operating_a_motor_vehicle(sK1,jon)).
+
+cnf(u34,negated_conjecture,
+    involuntary_transition(sK0)).
+
+cnf(u31,axiom,
+    operating_a_motor_vehicle(X0,jon)).
+% -------------------------------------------------------------------------
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.92,3,True,0.96,4,CSA,Unknown,18,2,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% Converged at ZigZag number 1:1 with similarity 0.95
+% The original and final NL have similarity: 0.95
+% Normalization model: Anthropic---claude-sonnet-4-5
+% NL2L model:          Anthropic---claude-sonnet-4-5
+% L2NL model:          Anthropic---claude-sonnet-4-5
+% Similarity model:    OpenAI---gpt-5-chat-latest
+% -------------------------------------------------------------------------
+% The original NL is :
+Losing consciousness causes injury.
+Jon was driving.
+Jon fell asleep.
+Show that the falling asleep did not cause an injury.
+% -------------------------------------------------------------------------
+% The normalized NL is :
+Losing consciousness causes injury to occur.
+
+Jon was driving a vehicle.
+
+Jon fell asleep while driving.
+
+Demonstrate that Jon's falling asleep while driving did not cause an injury to occur.
+% -------------------------------------------------------------------------
+% The final NL is :
+For any person and event, if the person loses consciousness in the event, then the event causes injury.
+There exists a vehicle and an event such that Jon is driving the vehicle in the event.
+There exists an event such that Jon falls asleep while driving in the event.
+Is it false that there exists an event such that Jon falls asleep while driving in the event and the event causes injury?
+% -------------------------------------------------------------------------
+% The differences between the original and final NL are:
+Both segments describe nearly the same logical situation: a rule linking loss of consciousness to injury, facts about Jon driving and falling asleep, and a request to show (or question) that Jon’s falling asleep while driving did not cause injury.  
+The main difference is stylistic and formal: the first is phrased in natural language as a demonstration task, while the second expresses the same content in quantified logical form and asks whether a certain existential statement is false. The meaning conveyed—testing whether Jon’s falling asleep caused injury—is essentially identical.
+% -------------------------------------------------------------------------
+% The final logic is :
+tff(person_type,type,
+    person: $tprop ).
+
+tff(event_type,type,
+    event: $tprop ).
+
+tff(vehicle_type,type,
+    vehicle: $tprop ).
+
+tff(jon_decl,type,
     jon: person ).
 
-tff(ax1,axiom,
-    causes(losing_consciousness,injury) ).
+tff(loses_consciousness_decl,type,
+    loses_consciousness: ( person * event ) > $o ).
 
-tff(ax2,axiom,
-    driving(jon) ).
+tff(causes_injury_decl,type,
+    causes_injury: event > $o ).
 
-tff(ax3,axiom,
-    falling_asleep(jon) ).
+tff(driving_decl,type,
+    driving: ( person * vehicle * event ) > $o ).
 
-tff(conj,conjecture,
-    ~ causes(falling_asleep(jon),injury) ).
+tff(falls_asleep_while_driving_decl,type,
+    falls_asleep_while_driving: ( person * event ) > $o ).
+
+tff(axiom1,axiom,
+    ! [P: person,E: event] :
+      ( loses_consciousness(P,E)
+     => causes_injury(E) ) ).
+
+tff(axiom2,axiom,
+    ? [V: vehicle,E: event] : driving(jon,V,E) ).
+
+tff(axiom3,axiom,
+    ? [E: event] : falls_asleep_while_driving(jon,E) ).
+
+tff(conjecture,conjecture,
+    ~ ? [E: event] :
+        ( falls_asleep_while_driving(jon,E)
+        & causes_injury(E) ) ).
 
 %
 % -------------------------------------------------------------------------
 % The ATP SZS status is NON with output
 None
 % -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,True,0.95,1,True,0.95,1,NON,Unknown,0,0,0,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 1.00
-% The original and final NL have similarity: 0.93
-% NL2L model:       OpenAI---gpt-5-chat-latest
-% L2NL model:       OpenAI---gpt-5-chat-latest
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-Losing consciousness causes injury.
-Jon was driving.
-Jon fell asleep.
-Show that the falling asleep did not cause an injury.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-Losing consciousness causes injury.  
-Jon did driving.  
-Jon did falling asleep.  
-Is it true that falling asleep does not cause injury?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same situation—Jon drives, falls asleep, and there is a question about whether that caused injury. The main difference is stylistic: the first uses natural phrasing and an imperative “Show that…,” while the second uses simplified “did driving / did falling asleep” constructions and poses the final statement as a question rather than a directive. The meaning remains nearly identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(event_type,type,
-    event: $tType ).
-
-tff(person_type,type,
-    person: $tType ).
-
-tff(causes_type,type,
-    causes: ( event * event ) > $o ).
-
-tff(did_type,type,
-    did: ( person * event ) > $o ).
-
-tff(losing_consciousness_const,type,
-    losing_consciousness: event ).
-
-tff(injury_const,type,
-    injury: event ).
-
-tff(jon_const,type,
-    jon: person ).
-
-tff(driving_const,type,
-    driving: event ).
-
-tff(falling_asleep_const,type,
-    falling_asleep: event ).
-
-tff(ax1,axiom,
-    causes(losing_consciousness,injury) ).
-
-tff(ax2,axiom,
-    did(jon,driving) ).
-
-tff(ax3,axiom,
-    did(jon,falling_asleep) ).
-
-tff(conj,conjecture,
-    ~ causes(falling_asleep,injury) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define causes(X0,X1) := $true
-for all inputs,
-    define did(X0,X1) := $true
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.93,3,True,1.00,2,CSA,Unknown,0,0,1,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 0.97
-% The original and final NL have similarity: 0.90
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-Losing consciousness causes injury.
-Jon was driving.
-Jon fell asleep.
-Show that the falling asleep did not cause an injury.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-`person` is a type.
-`jon` is a person.
-`loses_consciousness` is a property of a person.
-`has_injury` is a property of a person.
-`was_driving` is a property of a person.
-`fell_asleep` is a property of a person.
-If a person loses consciousness, then that person has an injury.
-`jon` was driving.
-`jon` fell asleep.
-Did `jon` fall asleep and not have an injury?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same logical situation: a person named Jon was driving, fell asleep, and there is a rule that losing consciousness causes injury. The task or question in both is to determine whether Jon’s falling asleep led to an injury or not.  
-The main difference is in form: the first is written in natural language, while the second expresses the same content in a formal, logic-like structure with explicit typing and properties. The meaning conveyed—testing whether falling asleep implies injury—is nearly identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(person_type,type,
-    person: $tType ).
-
-tff(jon_decl,type,
-    jon: person ).
-
-tff(loses_consciousness_decl,type,
-    loses_consciousness: person > $o ).
-
-tff(has_injury_decl,type,
-    has_injury: person > $o ).
-
-tff(was_driving_decl,type,
-    was_driving: person > $o ).
-
-tff(fell_asleep_decl,type,
-    fell_asleep: person > $o ).
-
-tff(loses_consciousness_implies_has_injury,axiom,
-    ! [X: person] :
-      ( loses_consciousness(X)
-     => has_injury(X) ) ).
-
-tff(jon_was_driving,axiom,
-    was_driving(jon) ).
-
-tff(jon_fell_asleep,axiom,
-    fell_asleep(jon) ).
-
-tff(jon_fell_asleep_and_not_has_injury_conjecture,conjecture,
-    ( fell_asleep(jon)
-    & ~ has_injury(jon) ) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define loses_consciousness(X0) := $true
-for all inputs,
-    define fell_asleep(X0) := $true
-for all inputs,
-    define has_injury(X0) := $true
-for all inputs,
-    define was_driving(X0) := $true
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.97,2,CSA,Unknown,1,1,0,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 0.98
-% The original and final NL have similarity: 0.90
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-Losing consciousness causes injury.
-Jon was driving.
-Jon fell asleep.
-Show that the falling asleep did not cause an injury.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-"person" is a type.
-"jon" is a person.
-"losing_consciousness" is a property of a person.
-"injury" is a property of a person.
-"driving" is a property of a person.
-"fell_asleep" is a property of a person.
-Every person who is losing consciousness has an injury.
-Jon is driving.
-Jon fell asleep.
-Did Jon fall asleep and not have an injury?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe a scenario involving Jon, driving, falling asleep, and the relationship between losing consciousness and injury. The first is phrased in natural language and asks to show that falling asleep did not cause injury; the second formalizes the same situation in logical terms, defining types and properties and posing a similar question. The main difference is that the second text explicitly encodes the information in a logical schema, while the first uses plain English. The meaning and intent are nearly identical.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(person_type,type,
-    person: $tType ).
-
-tff(jon_declaration,type,
-    jon: person ).
-
-tff(losing_consciousness_type,type,
-    losing_consciousness: person > $o ).
-
-tff(injury_type,type,
-    injury: person > $o ).
-
-tff(driving_type,type,
-    driving: person > $o ).
-
-tff(fell_asleep_type,type,
-    fell_asleep: person > $o ).
-
-tff(every_person_losing_consciousness_has_injury,axiom,
-    ! [P: person] :
-      ( losing_consciousness(P)
-     => injury(P) ) ).
-
-tff(jon_is_driving,axiom,
-    driving(jon) ).
-
-tff(jon_fell_asleep,axiom,
-    fell_asleep(jon) ).
-
-tff(jon_fell_asleep_and_does_not_have_injury,conjecture,
-    ( fell_asleep(jon)
-    & ~ injury(jon) ) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define losing_consciousness(X0) := $true
-for all inputs,
-    define fell_asleep(X0) := $true
-for all inputs,
-    define injury(X0) := $true
-for all inputs,
-    define driving(X0) := $true
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.98,2,CSA,Unknown,1,0,1,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% Converged at ZigZag number 3:2 with similarity 0.99
-% The original and final NL have similarity: 0.90
-% NL2L model:       Google---gemini-2.5-flash
-% L2NL model:       Google---gemini-2.5-flash
-% Similarity model: OpenAI---gpt-5-chat-latest
-% -------------------------------------------------------------------------
-% The original NL is :
-Losing consciousness causes injury.
-Jon was driving.
-Jon fell asleep.
-Show that the falling asleep did not cause an injury.
-
-% -------------------------------------------------------------------------
-% The final NL is :
-`individual` is a type.
-`jon` is an individual.
-`loses_consciousness` is a property of an individual.
-`has_injury` is a property of an individual.
-`was_driving` is a property of an individual.
-`fell_asleep` is a property of an individual.
-For all individuals X, if X loses consciousness, then X has an injury.
-Jon was driving.
-Jon fell asleep.
-Did Jon fall asleep and not have an injury?
-% -------------------------------------------------------------------------
-% The differences between the original and final NL are:
-Both segments describe the same scenario: a rule that losing consciousness causes injury, Jon was driving and fell asleep, and the question is whether Jon’s falling asleep led to injury. The second text expresses this in formal logical terms (types, properties, quantifiers), while the first uses natural language. The only difference is stylistic and representational, not conceptual.
-% -------------------------------------------------------------------------
-% The final logic is :
-tff(individual_type,type,
-    individual: $tType ).
-
-tff(jon_type,type,
-    jon: individual ).
-
-tff(loses_consciousness_type,type,
-    loses_consciousness: individual > $o ).
-
-tff(has_injury_type,type,
-    has_injury: individual > $o ).
-
-tff(was_driving_type,type,
-    was_driving: individual > $o ).
-
-tff(fell_asleep_type,type,
-    fell_asleep: individual > $o ).
-
-tff(axiom_1,axiom,
-    ! [X: individual] :
-      ( loses_consciousness(X)
-     => has_injury(X) ) ).
-
-tff(axiom_2,axiom,
-    was_driving(jon) ).
-
-tff(axiom_3,axiom,
-    fell_asleep(jon) ).
-
-tff(conjecture_1,conjecture,
-    ( fell_asleep(jon)
-    & ~ has_injury(jon) ) ).
-
-%
-% -------------------------------------------------------------------------
-% The ATP SZS status is CSA with output
-% SZS output end Saturation.
-% SZS output start Definitions and Model Updates.
-for all inputs,
-    define loses_consciousness(X0) := $true
-for all inputs,
-    define fell_asleep(X0) := $true
-for all inputs,
-    define has_injury(X0) := $true
-for all inputs,
-    define was_driving(X0) := $true
-% -------------------------------------------------------------------------
-RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,False,0.90,3,True,0.99,2,CSA,Unknown,0,0,2,Google---gemini-2.5-flash,Google---gemini-2.5-flash,OpenAI---gpt-5-chat-latest
+RESULT: TestFiles/SUMO-RT/NonTrivial_04.CSA.txt,True,0.95,1,True,0.95,1,NON,Unknown,0,0,0,Anthropic---claude-sonnet-4-5,Anthropic---claude-sonnet-4-5,OpenAI---gpt-5-chat-latest
